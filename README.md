@@ -21,6 +21,7 @@ GitVora is a practical web app that helps developers go from beginner to expert 
   - Terminal trainer
   - GitHub procedure checklist
   - Mission ladder + `.gitignore` generator
+- Added **Git Handbook panel** with 155+ book-style learning pages
 - Improved responsive layout for mobile devices
 
 ---
@@ -72,6 +73,16 @@ Structured progression:
 - Level 4: History mastery
 - Level 5: Release operations
 - Level 6: Expert debugging
+- Mark levels complete with progress tracking
+
+#### 📘 Git Handbook (New)
+
+Book-paper style responsive notes:
+- 155+ pages
+- What is Git/GitHub, why it exists, who built Git, and when
+- Command meaning, where to use commands, and memory tips
+- Workflow notes from basic to expert
+- Troubleshooting notes mapped to common error families
 
 #### 🛰️ Visual Coach (New)
 
@@ -86,8 +97,12 @@ Complete visual learning from starter to expert:
 #### 🔧 Error Detective
 
 - Paste an error
-- Get likely diagnosis and fix commands
+- Get likely diagnosis and calm fix commands
 - Browse common error catalogue
+- Pattern matching supports multi-line real terminal output and 100+ common Git error variants
+- Mode selector: `Auto`, `Explain Only`, or `Explain + Solve`
+- Multi-issue breakdown: each detected issue gets its own explanation and solution
+- If an issue is not confidently detected, external links are shown automatically (GitHub Docs, Stack Overflow, Git docs search)
 
 #### 📚 Command Reference
 
@@ -101,6 +116,7 @@ Complete visual learning from starter to expert:
 - Works even if external network is unavailable
 - Gives practical commands and explanations
 - Supports quick prompts and chat flow
+- Uses handbook-backed answers for foundational learning questions (what/why/who/when/meaning/how to remember)
 
 ---
 

@@ -556,6 +556,35 @@ body {
   gap: 14px;
   margin-bottom: 24px;
 }
+.academy-progress-wrap {
+  margin-bottom: 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+.academy-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text2);
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+.academy-progress {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--surface2);
+}
+.academy-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.25s ease;
+}
 .academy-card {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -590,6 +619,21 @@ body {
   font-size: 0.82rem;
   line-height: 1.55;
 }
+.academy-complete {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  color: var(--text2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 10px;
+}
+.academy-complete input {
+  accent-color: var(--accent);
+}
 .academy-checklist {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -609,6 +653,103 @@ body {
 }
 .academy-checklist li strong {
   color: var(--text);
+}
+
+/* ---- HANDBOOK ---- */
+.handbook-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.handbook-page-info {
+  font-size: 0.76rem;
+  color: var(--text2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 10px;
+  white-space: nowrap;
+}
+.handbook-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 12px;
+  min-height: 62vh;
+}
+.handbook-toc {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg3);
+  padding: 10px;
+  overflow-y: auto;
+}
+.handbook-toc-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text2);
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+.handbook-toc-item:hover,
+.handbook-toc-item.active {
+  border-color: var(--accent2);
+  color: var(--accent2);
+  background: rgba(0, 207, 255, 0.08);
+}
+.book-paper {
+  border: 1px solid #d8cfb8;
+  background: linear-gradient(180deg, #fffef7 0%, #fff9ec 100%);
+  border-radius: 6px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  color: #332818;
+  padding: 26px;
+  overflow-y: auto;
+}
+.book-title {
+  font-family: var(--font-head);
+  font-size: 1.55rem;
+  margin-bottom: 6px;
+  color: #2a1f12;
+}
+.book-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.book-chip {
+  border: 1px solid #cabfa5;
+  background: #fff4df;
+  color: #664e34;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+}
+.book-body {
+  color: #3a2d1d;
+  line-height: 1.75;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+}
+.book-body code {
+  background: #efe5d2;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: #533c24;
+  font-family: var(--font-mono);
+}
+[data-theme="dark"] .book-paper {
+  border-color: #665948;
+  background: linear-gradient(180deg, #f5ecd9 0%, #f0e4cd 100%);
 }
 
 /* ---- VISUAL MASTERCLASS ---- */
@@ -955,6 +1096,27 @@ body {
 .error-input-area {
   margin-bottom: 24px;
 }
+.error-mode-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.error-mode-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  color: var(--text2);
+  background: var(--surface);
+  cursor: pointer;
+}
+.error-mode-option input {
+  accent-color: var(--accent);
+}
 .error-input-area textarea {
   width: 100%;
   background: var(--bg3);
@@ -1035,6 +1197,68 @@ body {
   line-height: 1.8;
   margin-top: 6px;
   white-space: pre-wrap;
+}
+.er-issue {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 14px;
+}
+.er-links {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.er-link {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(0, 207, 255, 0.3);
+  color: var(--accent2);
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.74rem;
+  background: rgba(0, 207, 255, 0.08);
+}
+.er-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.er-step-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.er-step-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text2);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.74rem;
+  cursor: pointer;
+}
+.er-step-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.er-confidence {
+  margin-top: 8px;
+  font-size: 0.73rem;
+  color: var(--text3);
+}
+.er-validator {
+  margin-top: 10px;
+  border: 1px dashed rgba(255, 184, 108, 0.4);
+  background: rgba(255, 184, 108, 0.08);
+  color: var(--accent4);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.77rem;
+  line-height: 1.5;
 }
 .cat-title {
   font-family: var(--font-head);
@@ -1544,6 +1768,16 @@ kbd {
   .academy-grid {
     grid-template-columns: 1fr;
   }
+  .handbook-layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .handbook-toc {
+    max-height: 220px;
+  }
+  .book-paper {
+    min-height: 420px;
+  }
   .visual-layout {
     grid-template-columns: 1fr;
   }
@@ -1585,6 +1819,13 @@ kbd {
   .chat-hint {
     font-size: 0.68rem;
   }
+  .error-mode-group {
+    flex-direction: column;
+  }
+  .error-mode-option {
+    width: 100%;
+    border-radius: 8px;
+  }
   .wf-grid {
     grid-template-columns: 1fr;
   }
@@ -1596,6 +1837,19 @@ kbd {
   }
   .modal {
     width: calc(100vw - 24px);
+  }
+  .handbook-toolbar {
+    flex-wrap: wrap;
+  }
+  .handbook-page-info {
+    width: 100%;
+    text-align: center;
+  }
+  .book-paper {
+    padding: 16px;
+  }
+  .book-title {
+    font-size: 1.24rem;
   }
   .visual-track-btn {
     width: 100%;

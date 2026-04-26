@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GitVora App — Git Mastery Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/app.css"/>
+</head>
+<body>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" class="logo"><span class="logo-icon">⬡</span> GitVora</a>
+    <button class="sidebar-close" id="sidebarClose">✕</button>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-panel="push"><span>🚀</span> Push Guide</a>
+    <a href="#" class="nav-item" data-panel="workflow"><span>🔄</span> Workflow Builder</a>
+    <a href="#" class="nav-item" data-panel="academy"><span>🧠</span> Skill Path</a>
+    <a href="#" class="nav-item" data-panel="visual"><span>🛰️</span> Visual Coach</a>
+    <a href="#" class="nav-item" data-panel="errors"><span>🔧</span> Error Detective</a>
+    <a href="#" class="nav-item" data-panel="reference"><span>📚</span> Command Ref</a>
+    <a href="#" class="nav-item" data-panel="chat"><span>🤖</span> AI Assistant</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="index.html" class="sidebar-link">← Back to Landing</a>
+    <div class="sidebar-version">v2.0.0 • GitVora</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="app-container">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn">☰</button>
+    <div class="topbar-title" id="topbarTitle">🚀 Push Guide</div>
+    <div class="topbar-actions">
+      <button class="icon-btn" title="Toggle light mode" id="themeToggleApp">☀️</button>
+      <button class="icon-btn" title="Keyboard shortcuts" id="shortcutsBtn">⌨️</button>
+    </div>
+  </header>
+
+  <!-- PANELS -->
+  <main class="main-content">
+
+    <!-- ===== PUSH GUIDE PANEL ===== -->
+    <div class="panel active" id="panel-push">
+      <div class="panel-header">
+        <h1>🚀 Step-by-Step Push Guide</h1>
+        <p>Follow these steps to push your code to GitHub without errors.</p>
+      </div>
+      <div class="scenario-selector">
+        <div class="scenario-label">What's your situation?</div>
+        <div class="scenario-btns">
+          <button class="scenario-btn active" data-scenario="first">First Push Ever</button>
+          <button class="scenario-btn" data-scenario="regular">Regular Push</button>
+          <button class="scenario-btn" data-scenario="branch">Push a Branch</button>
+          <button class="scenario-btn" data-scenario="fork">Fork & PR</button>
+        </div>
+      </div>
+      <div class="steps-container" id="pushSteps"></div>
+      <div class="push-tips">
+        <div class="tip-card">💡 <strong>Pro Tip:</strong> Always run <code>git status</code> before committing so you know exactly what's being staged.</div>
+      </div>
+    </div>
+
+    <!-- ===== WORKFLOW BUILDER PANEL ===== -->
+    <div class="panel" id="panel-workflow">
+      <div class="panel-header">
+        <h1>🔄 Workflow Builder</h1>
+        <p>Tell me what you want to do. I'll give you the exact commands.</p>
+      </div>
+      <div class="workflow-selector">
+        <div class="wf-grid" id="workflowGrid"></div>
+      </div>
+      <div class="workflow-result" id="workflowResult" style="display:none">
+        <div class="wf-result-header">
+          <span id="wfResultTitle">Commands for your workflow</span>
+          <button class="close-result" id="closeResult">✕</button>
+        </div>
+        <div class="wf-commands" id="wfCommands"></div>
+      </div>
+    </div>
+
+    <!-- ===== SKILL PATH PANEL ===== -->
+    <div class="panel" id="panel-academy">
+      <div class="panel-header">
+        <h1>🧠 Beginner to Expert Skill Path</h1>
+        <p>Follow this roadmap to become a strong and practical Git/GitHub developer.</p>
+      </div>
+      <div class="academy-grid" id="academyGrid"></div>
+      <div class="academy-checklist">
+        <h2>Daily 15-Minute Practice Blueprint</h2>
+        <ul>
+          <li><strong>Day 1-7:</strong> Practice status/add/commit/push and read your own commit history.</li>
+          <li><strong>Day 8-14:</strong> Create branches, open PRs, resolve one simulated conflict.</li>
+          <li><strong>Day 15-21:</strong> Use rebase, stash, and cherry-pick on a test repo.</li>
+          <li><strong>Day 22-30:</strong> Tag releases, recover from mistakes with reflog, and run bisect.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== VISUAL MASTERCLASS PANEL ===== -->
+    <div class="panel" id="panel-visual">
+      <div class="panel-header">
+        <h1>🛰️ Visual Git + GitHub Masterclass</h1>
+        <p>Learn everything in one place: visual roadmap, terminal training, GitHub procedure, and practical missions from beginner to expert.</p>
+      </div>
+
+      <div class="visual-track-tabs" id="visualTrackTabs"></div>
+
+      <div class="visual-layout">
+        <section class="visual-card">
+          <h2>Roadmap</h2>
+          <div id="visualRoadmap" class="visual-roadmap"></div>
+        </section>
+        <section class="visual-card">
+          <h2>Branch Graph</h2>
+          <div id="visualGraph" class="visual-graph"></div>
+        </section>
+      </div>
+
+      <div class="visual-layout">
+        <section class="visual-card">
+          <h2>Terminal Trainer</h2>
+          <p class="visual-sub">Type each command and complete the scenario, step-by-step.</p>
+          <div class="terminal-sandbox">
+            <div class="terminal-screen" id="sandboxOutput"></div>
+            <div class="terminal-input-row">
+              <span class="terminal-prefix">$</span>
+              <input type="text" id="sandboxInput" placeholder="Type command here..." />
+            </div>
+            <div class="terminal-actions">
+              <button class="btn-detect" id="sandboxRunBtn">Run Command</button>
+              <button class="icon-btn visual-action-btn" id="sandboxHintBtn" title="Show hint">💡</button>
+              <button class="icon-btn visual-action-btn" id="sandboxResetBtn" title="Reset trainer">↺</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="visual-card">
+          <h2>GitHub Procedure Coach</h2>
+          <p class="visual-sub">Follow tiny UI steps so beginners and experts can both move faster with fewer mistakes.</p>
+          <div class="procedure-progress">
+            <div class="procedure-progress-inner" id="procedureProgressBar"></div>
+          </div>
+          <div id="githubProcedure" class="github-procedure"></div>
+        </section>
+      </div>
+
+      <div class="visual-layout">
+        <section class="visual-card">
+          <h2>Mission Ladder (Small Steps)</h2>
+          <div id="missionList" class="mission-list"></div>
+        </section>
+
+        <section class="visual-card">
+          <h2>.gitignore Generator</h2>
+          <p class="visual-sub">Pick your stacks and generate a clean `.gitignore` instantly.</p>
+          <div id="gitignoreStacks" class="stack-select"></div>
+          <pre id="gitignorePreview" class="gitignore-preview"></pre>
+          <button class="btn-detect" id="copyGitignoreBtn">Copy .gitignore</button>
+        </section>
+      </div>
+    </div>
+
+    <!-- ===== ERROR DETECTIVE PANEL ===== -->
+    <div class="panel" id="panel-errors">
+      <div class="panel-header">
+        <h1>🔧 Error Detective</h1>
+        <p>Paste your error below. We'll explain it and fix it.</p>
+      </div>
+      <div class="error-input-area">
+        <textarea id="errorPasteBox" placeholder="Paste your Git error message here...&#10;&#10;Example:&#10;error: failed to push some refs to 'origin'&#10;hint: Updates were rejected because the remote contains work that you do&#10;hint: not have locally." rows="6"></textarea>
+        <button class="btn-detect" id="detectBtn">🔍 Detect & Fix</button>
+      </div>
+      <div class="error-result" id="errorResult" style="display:none"></div>
+      <div class="errors-catalogue">
+        <div class="cat-title">📋 Browse All Common Errors</div>
+        <div class="errors-cat-list" id="errorsCatList"></div>
+      </div>
+    </div>
+
+    <!-- ===== COMMAND REFERENCE PANEL ===== -->
+    <div class="panel" id="panel-reference">
+      <div class="panel-header">
+        <h1>📚 Command Reference</h1>
+        <p>Every Git command explained with examples.</p>
+      </div>
+      <div class="ref-search-bar">
+        <input type="text" id="refSearch" placeholder="Search commands..." class="ref-search"/>
+      </div>
+      <div class="ref-categories" id="refCategories"></div>
+    </div>
+
+    <!-- ===== AI CHAT PANEL ===== -->
+    <div class="panel" id="panel-chat">
+    <div class="panel-header">
+        <h1>🤖 AI Git Assistant</h1>
+        <p>Ask anything about Git, GitHub, or errors. Works even when internet is unstable.</p>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg ai">
+            <div class="msg-avatar">⬡</div>
+            <div class="msg-content">
+              <div class="msg-name">GitVora AI</div>
+              <div class="msg-text">
+                👋 Hi! I'm your Git assistant. I can help you with:
+                <ul>
+                  <li>Fixing push/pull errors</li>
+                  <li>Explaining Git commands</li>
+                  <li>Merge conflict resolution</li>
+                  <li>GitHub workflows & best practices</li>
+                  <li>Any Git question you have!</li>
+                </ul>
+                What can I help you with today?
+              </div>
+              <div class="quick-prompts">
+                <button class="qp-btn" onclick="sendQuickPrompt('How do I push my code to GitHub for the first time?')">First push?</button>
+                <button class="qp-btn" onclick="sendQuickPrompt('What does git pull --rebase do?')">git pull --rebase?</button>
+                <button class="qp-btn" onclick="sendQuickPrompt('How do I resolve a merge conflict?')">Merge conflict?</button>
+                <button class="qp-btn" onclick="sendQuickPrompt('What is .gitignore and how do I use it?')">.gitignore?</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-input-row">
+            <textarea id="chatInput" placeholder="Ask anything about Git or GitHub..." rows="1" maxlength="1000"></textarea>
+            <button class="send-btn" id="sendBtn">Send ↑</button>
+          </div>
+          <div class="chat-hint">Press Enter to send • Shift+Enter for new line</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- SHORTCUTS MODAL -->
+<div class="modal-overlay" id="shortcutsModal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">⌨️ Keyboard Shortcuts <button class="modal-close" id="shortcutsClose">✕</button></div>
+    <div class="modal-body">
+      <div class="shortcut-row"><kbd>1</kbd> Push Guide</div>
+      <div class="shortcut-row"><kbd>2</kbd> Workflow Builder</div>
+      <div class="shortcut-row"><kbd>3</kbd> Skill Path</div>
+      <div class="shortcut-row"><kbd>4</kbd> Visual Coach</div>
+      <div class="shortcut-row"><kbd>5</kbd> Error Detective</div>
+      <div class="shortcut-row"><kbd>6</kbd> Command Ref</div>
+      <div class="shortcut-row"><kbd>7</kbd> AI Assistant</div>
+      <div class="shortcut-row"><kbd>Enter</kbd> Send chat message</div>
+      <div class="shortcut-row"><kbd>Shift+Enter</kbd> New line in chat</div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

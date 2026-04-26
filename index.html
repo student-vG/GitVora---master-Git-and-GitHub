@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitVora — Git & GitHub Mastery Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/landing.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="logo"
+          ><span class="logo-icon">⬡</span> GitVora</a
+        >
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#journey">Learning Path</a></li>
+          <li><a href="#commands">Commands</a></li>
+          <li><a href="#errors">Error Fix</a></li>
+          <li>
+            <button class="theme-toggle" id="themeToggleLanding">
+              ☀️ Light
+            </button>
+          </li>
+          <li><a href="app.html" class="btn-nav">Launch App →</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger">☰</button>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#features">Features</a>
+        <a href="#journey">Learning Path</a>
+        <a href="#commands">Commands</a>
+        <a href="#errors">Error Fix</a>
+        <button
+          class="theme-toggle mobile-toggle"
+          id="themeToggleLandingMobile"
+        >
+          ☀️ Light Mode
+        </button>
+        <a href="app.html">Launch App →</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg-grid"></div>
+      <div class="hero-content">
+        <div class="hero-badge">🚀 For beginners & experts</div>
+        <h1 class="hero-title">
+          Stop Guessing<br />
+          <span class="accent">Git Commands</span><br />
+          Build Confidence Fast.
+        </h1>
+        <p class="hero-sub">
+          GitVora guides you step-by-step through every Git & GitHub workflow —
+          push code, fix errors, learn commands, and level up from beginner to
+          pro in one place.
+        </p>
+        <div class="hero-ctas">
+          <a href="app.html" class="btn-primary">Open App Free →</a>
+          <a href="#features" class="btn-ghost">See How It Works</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-n">50+</span
+            ><span class="stat-l">Common Errors Solved</span>
+          </div>
+          <div class="stat">
+            <span class="stat-n">120+</span
+            ><span class="stat-l">Git Commands</span>
+          </div>
+          <div class="stat">
+            <span class="stat-n">6</span
+            ><span class="stat-l">Learning Levels</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="terminal-card">
+          <div class="terminal-bar">
+            <span class="dot red"></span><span class="dot yellow"></span
+            ><span class="dot green"></span>
+            <span class="terminal-title">terminal</span>
+          </div>
+          <div class="terminal-body" id="heroTerminal"></div>
+        </div>
+        <div class="floating-badge badge1">✓ Push Successful!</div>
+        <div class="floating-badge badge2">⚡ AI Fix Ready</div>
+        <div class="floating-badge badge3">🔥 No More Errors</div>
+      </div>
+    </section>
+
+    <!-- PROBLEM SECTION -->
+    <section class="problem-section" id="problems">
+      <div class="container">
+        <div class="section-tag">The Real Problem</div>
+        <h2 class="section-title">Sound Familiar?</h2>
+        <div class="problems-grid">
+          <div class="problem-card">
+            <div class="problem-emoji">😭</div>
+            <h3>"fatal: refusing to merge unrelated histories"</h3>
+            <p>Spent 2 hours Googling this on your first push ever.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-emoji">🤯</div>
+            <h3>"Which command do I run first — add, commit or push?"</h3>
+            <p>Every tutorial says something slightly different.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-emoji">💀</div>
+            <h3>"error: failed to push some refs to origin"</h3>
+            <p>Works on your friend's machine. Not yours.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-emoji">🧠</div>
+            <h3>"I just want to push my code. Why is this so hard?"</h3>
+            <p>Exactly why we built GitVora.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-tag">What GitVora Does</div>
+        <h2 class="section-title">Everything You Need</h2>
+        <div class="features-grid">
+          <div class="feature-card featured">
+            <div class="feature-icon">🤖</div>
+            <h3>AI Git Assistant (Always-On)</h3>
+            <p>
+              Paste your error message or ask a Git question. Get practical
+              fixes with clear explanations even when internet is unstable.
+            </p>
+            <div class="feature-demo">
+              <div class="mini-chat">
+                <div class="mc-msg user">
+                  My push is rejected. How do I fix it?
+                </div>
+                <div class="mc-msg ai">
+                  Run <code>git pull --rebase origin main</code>, then
+                  <code>git push</code>. Use
+                  <code>git push --force-with-lease</code> only when rebasing
+                  your own branch.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Step-by-Step Push Guide</h3>
+            <p>
+              From <code>git init</code> to successful push with recovery steps
+              for upstream and branch mismatches.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>Error Detective</h3>
+            <p>
+              50+ common Git errors pre-loaded with causes, fixes, and
+              prevention tips.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>Command Reference</h3>
+            <p>
+              Every Git command with real examples, options, and when to use it.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Workflow Builder</h3>
+            <p>
+              Tell us what you want to do. We give you the exact commands in
+              order.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🛰️</div>
+            <h3>Visual Git + GitHub Coach</h3>
+            <p>
+              Learn with visual roadmap, branch graph, terminal trainer, and
+              GitHub UI procedure checklists in one panel.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Beginner → Expert Path</h3>
+            <p>
+              Structured roadmap with checkpoints, practice goals, and advanced
+              skills every serious developer needs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARNING JOURNEY -->
+    <section class="journey-section" id="journey">
+      <div class="container">
+        <div class="section-tag">Learning Journey</div>
+        <h2 class="section-title">Beginner to Expert Roadmap</h2>
+        <p class="section-sub">
+          Follow this progression and become a powerful Git/GitHub developer
+          with confidence.
+        </p>
+        <div class="journey-grid">
+          <div class="journey-card">
+            <div class="journey-level">Level 1</div>
+            <h3>Starter</h3>
+            <p>
+              Master <code>status</code>, <code>add</code>, <code>commit</code>,
+              and first push setup.
+            </p>
+          </div>
+          <div class="journey-card">
+            <div class="journey-level">Level 2</div>
+            <h3>Builder</h3>
+            <p>
+              Use feature branches, pull requests, and clean commit messages.
+            </p>
+          </div>
+          <div class="journey-card">
+            <div class="journey-level">Level 3</div>
+            <h3>Collaborator</h3>
+            <p>
+              Handle rebasing, conflict resolution, remote sync, and review
+              workflows.
+            </p>
+          </div>
+          <div class="journey-card">
+            <div class="journey-level">Level 4</div>
+            <h3>Advanced</h3>
+            <p>
+              Use stash, cherry-pick, bisect, tags, and release flows in real
+              projects.
+            </p>
+          </div>
+          <div class="journey-card">
+            <div class="journey-level">Level 5</div>
+            <h3>Git Guardian</h3>
+            <p>
+              Recover from mistakes with reflog, safe force push strategy, and
+              branch hygiene.
+            </p>
+          </div>
+          <div class="journey-card">
+            <div class="journey-level">Level 6</div>
+            <h3>Team Lead</h3>
+            <p>
+              Design branching strategies, enforce standards, and mentor others
+              effectively.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMANDS SECTION -->
+    <section class="commands-section" id="commands">
+      <div class="container">
+        <div class="section-tag">Learn Git</div>
+        <h2 class="section-title">Essential Commands</h2>
+        <p class="section-sub">
+          The commands every developer uses daily. Click any to see full
+          details.
+        </p>
+        <div class="commands-tabs">
+          <button class="cmd-tab active" data-cat="basics">Basics</button>
+          <button class="cmd-tab" data-cat="branch">Branching</button>
+          <button class="cmd-tab" data-cat="remote">Remote</button>
+          <button class="cmd-tab" data-cat="undo">Undo</button>
+        </div>
+        <div class="commands-list" id="commandsList"></div>
+      </div>
+    </section>
+
+    <!-- ERRORS SECTION -->
+    <section class="errors-section" id="errors">
+      <div class="container">
+        <div class="section-tag">Error Solver</div>
+        <h2 class="section-title">Common Errors, Fixed</h2>
+        <div class="errors-search">
+          <input
+            type="text"
+            id="errorSearch"
+            placeholder="Paste your error message here..."
+            class="error-input"
+          />
+        </div>
+        <div class="errors-list" id="errorsList"></div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+      <div class="container">
+        <div class="section-tag">How It Works</div>
+        <h2 class="section-title">Three Simple Steps</h2>
+        <div class="steps-grid">
+          <div class="step">
+            <div class="step-num">01</div>
+            <h3>Describe Your Goal</h3>
+            <p>
+              Tell GitVora what you're trying to do — push code, create a
+              branch, fix a merge, anything.
+            </p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step">
+            <div class="step-num">02</div>
+            <h3>Get Exact Commands</h3>
+            <p>
+              Receive step-by-step commands with explanations, tailored to your
+              situation.
+            </p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step">
+            <div class="step-num">03</div>
+            <h3>Run & Succeed</h3>
+            <p>
+              Copy, run, done. If anything fails, the AI Error Detective has you
+              covered instantly.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2>Ready to Push Without Fear?</h2>
+        <p>
+          Build real Git power with GitVora and ship confidently on every
+          project.
+        </p>
+        <a href="app.html" class="btn-primary large">Launch GitVora Free →</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <span class="logo-icon">⬡</span> GitVora
+            <p>Making Git accessible for every developer.</p>
+          </div>
+          <div class="footer-links">
+            <a href="app.html">App</a>
+            <a href="#commands">Commands</a>
+            <a href="#errors">Errors</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          @copyright 2026 , Developed By vikram G <br />
+          GitVora Made for developers who want to master Git and GitHub with
+          clarity.
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/landing.js"></script>
+  </body>
+</html>

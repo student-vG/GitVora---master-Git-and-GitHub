@@ -1718,6 +1718,16 @@ kbd {
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 768px) {
+  .workflow-result {
+    padding: 0;
+    background: var(--bg3);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: var(--radius);
+    /* overflow: scroll; */
+    height: auto;
+    animation: panelIn 0.2s ease-out;
+  }
+
   .sidebar {
     transform: translateX(-100%);
   }

@@ -24,6 +24,39 @@ themeToggleApp?.addEventListener('click', () => {
   applyTheme(nextTheme);
 });
 
+function initLaunchSplash() {
+  const splash = document.getElementById('launchSplash');
+  if (!splash) return;
+
+  let shouldShow = false;
+  try {
+    shouldShow = sessionStorage.getItem('gitvora-show-launch-splash') === '1';
+    sessionStorage.removeItem('gitvora-show-launch-splash');
+  } catch {
+    shouldShow = false;
+  }
+
+  if (!shouldShow) {
+    splash.classList.add('is-hidden');
+    return;
+  }
+
+  document.body.classList.add('splash-active');
+  requestAnimationFrame(() => {
+    splash.classList.remove('is-hidden');
+  });
+
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+  const holdMs = reduceMotion ? 420 : 760;
+
+  setTimeout(() => {
+    splash.classList.add('is-hidden');
+    document.body.classList.remove('splash-active');
+  }, holdMs);
+}
+
+initLaunchSplash();
+
 // ---- NAVIGATION ----
 const panels = document.querySelectorAll('.panel');
 const navItems = document.querySelectorAll('.nav-item');
@@ -239,6 +272,45 @@ const scenarios = {
       note: 'If push fails after rebase on your own branch: git push --force-with-lease',
     },
   ],
+  update: [
+    {
+      title: 'Check branch and status',
+      explanation: 'Make sure you are on the correct branch and see your current local state.',
+      cmd: 'git branch --show-current\ngit status',
+    },
+    {
+      title: 'Save local work before pull',
+      explanation: 'Before bringing remote updates, commit or stash your local edits to avoid pull errors.',
+      cmd: 'git add .\ngit commit -m "wip: save local changes"\n# OR temporary:\n# git stash',
+    },
+    {
+      title: 'Pull latest project updates',
+      explanation: 'Sync remote changes first so your local branch is up to date.',
+      cmd: 'git pull --rebase origin main',
+      note: 'Use your branch name if you are not on main.',
+    },
+    {
+      title: 'If you used stash, restore it',
+      explanation: 'Bring your temporary saved work back after pull completes.',
+      cmd: 'git stash pop\n# resolve conflicts if shown',
+    },
+    {
+      title: 'Add your new project changes',
+      explanation: 'Make edits, test, then stage only what you want to push.',
+      cmd: 'git add .',
+    },
+    {
+      title: 'Commit your update',
+      explanation: 'Use a clear commit message for this update cycle.',
+      cmd: 'git commit -m "feat: update project changes"',
+    },
+    {
+      title: 'Push to GitHub',
+      explanation: 'Push after pull/rebase is clean.',
+      cmd: 'git push',
+      note: 'If you rebased your own branch and push is rejected, use git push --force-with-lease.',
+    },
+  ],
   branch: [
     {
       title: 'Create feature branch',
@@ -366,6 +438,18 @@ const workflows = [
       { cmd: 'git branch -M main', desc: 'Use main branch name' },
       { cmd: 'git push -u origin main', desc: 'Push and set upstream' },
       { cmd: 'git push', desc: 'Future pushes after upstream is set' },
+    ],
+  },
+  {
+    icon: '⬇️',
+    title: 'Pull Latest Project Updates',
+    desc: 'Safely sync remote changes before coding',
+    steps: [
+      { cmd: 'git status', desc: 'Check if you have local edits' },
+      { cmd: 'git stash', desc: 'Optional: stash if you need a clean pull first' },
+      { cmd: 'git pull --rebase origin main', desc: 'Download and replay local commits cleanly' },
+      { cmd: 'git stash pop', desc: 'Optional: re-apply stashed work' },
+      { cmd: 'git status', desc: 'Confirm clean state before new commits' },
     ],
   },
   {
@@ -2646,6 +2730,42 @@ function getRoadmapReply() {
 Practice 15 minutes daily and ask me for drills anytime.`;
 }
 
+function getPullGuideReply() {
+  return `Use this safe pull guide:
+
+\`\`\`
+git status
+# if you have unfinished edits:
+# git stash
+git pull --rebase origin main
+# if you stashed:
+# git stash pop
+\`\`\`
+
+If conflict appears:
+- fix files
+- \`git add <file>\`
+- \`git rebase --continue\``;
+}
+
+function getDailyUpdateReply() {
+  return `After your first push, use this **project update flow** every time:
+
+\`\`\`
+git status
+git pull --rebase origin main
+# make code changes
+git add .
+git commit -m "feat: your update"
+git push
+\`\`\`
+
+If you rebased your own branch and push is rejected:
+\`\`\`
+git push --force-with-lease
+\`\`\``;
+}
+
 function getHandbookReply(userText) {
   const lower = userText.toLowerCase();
   const handbookIntent =
@@ -2674,12 +2794,25 @@ Related pages:
 
 function localAssistantReply(userText) {
   const lower = userText.toLowerCase();
+  const mentionsPullRequest = lower.includes('pull request') || lower.includes('create pr');
+  const asksPullGuide =
+    !mentionsPullRequest &&
+    (/\bpull\b/.test(lower) ||
+      lower.includes('latest changes') ||
+      lower.includes('sync from github') ||
+      lower.includes('update from github'));
+  const asksPushGuide = /\bpush\b/.test(lower);
+  const asksDailyUpdate =
+    lower.includes('project update') ||
+    lower.includes('after first push') ||
+    lower.includes('after once starting push') ||
+    lower.includes('pull and push');
 
   if (/\b(hi|hello|hey)\b/.test(lower)) {
     return 'Hi! I am GitVora AI. Ask me any Git/GitHub question and I will give you step-by-step commands.';
   }
 
-  if (lower.includes('first push') || lower.includes('push my code first time')) {
+  if ((lower.includes('first push') || lower.includes('push my code first time')) && !asksDailyUpdate) {
     return `Use this first-push flow:
 
 \`\`\`
@@ -2695,6 +2828,14 @@ After that, use just:
 \`\`\`
 git push
 \`\`\``;
+  }
+
+  if (asksDailyUpdate || (asksPullGuide && asksPushGuide)) {
+    return getDailyUpdateReply();
+  }
+
+  if (asksPullGuide) {
+    return getPullGuideReply();
   }
 
   if (lower.includes('--force') || lower.includes('force push') || lower.includes('force')) {

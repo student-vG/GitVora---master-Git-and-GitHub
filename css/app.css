@@ -58,6 +58,69 @@ body {
   display: flex;
   overflow: hidden;
 }
+body.splash-active {
+  overflow: hidden;
+}
+
+/* ---- LAUNCH SPLASH ---- */
+.launch-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 207, 255, 0.14), transparent 48%),
+    radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.12), transparent 50%),
+    var(--bg);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.26s ease,
+    visibility 0.26s ease;
+}
+.launch-splash.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.launch-splash-card {
+  min-width: min(420px, 86vw);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--bg2);
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.36);
+}
+.launch-splash-logo {
+  font-size: 2.1rem;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+  animation: splashPulse 0.95s ease-in-out infinite;
+}
+.launch-splash-name {
+  font-family: var(--font-head);
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+}
+.launch-splash-sub {
+  color: var(--text2);
+  font-size: 0.86rem;
+}
+@keyframes splashPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
 
 /* ---- SIDEBAR ---- */
 .sidebar {

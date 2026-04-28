@@ -48,6 +48,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
+// -- LAUNCH APP SPLASH FLAG --
+document.querySelectorAll('a[href="app.html"]').forEach(link => {
+  link.addEventListener('click', () => {
+    try {
+      sessionStorage.setItem('gitvora-show-launch-splash', '1');
+    } catch {
+      // ignored
+    }
+  });
+});
+
 // -- TERMINAL ANIMATION --
 const terminalLines = [
   { type: 'prompt', text: '$ git add .' },

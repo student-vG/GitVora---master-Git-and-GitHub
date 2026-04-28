@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="css/app.css" />
   </head>
   <body>
+    <div class="launch-splash is-hidden" id="launchSplash" aria-hidden="true">
+      <div class="launch-splash-card">
+        <div class="launch-splash-logo">⬡</div>
+        <div class="launch-splash-name">GitVora</div>
+        <div class="launch-splash-sub">Loading your Git guide...</div>
+      </div>
+    </div>
+
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -90,6 +98,9 @@
               </button>
               <button class="scenario-btn" data-scenario="regular">
                 Regular Push
+              </button>
+              <button class="scenario-btn" data-scenario="update">
+                Project Update (Pull + Push)
               </button>
               <button class="scenario-btn" data-scenario="branch">
                 Push a Branch
@@ -384,6 +395,7 @@
                     👋 Hi! I'm your Git assistant. I can help you with:
                     <ul>
                       <li>Fixing push/pull errors</li>
+                      <li>Daily project update flow (pull then push)</li>
                       <li>Explaining Git commands</li>
                       <li>Merge conflict resolution</li>
                       <li>GitHub workflows & best practices</li>
@@ -409,6 +421,26 @@
                       "
                     >
                       git pull --rebase?
+                    </button>
+                    <button
+                      class="qp-btn"
+                      onclick="
+                        sendQuickPrompt(
+                          'I already did first push. How do I pull and push new updates?',
+                        )
+                      "
+                    >
+                      Daily update flow?
+                    </button>
+                    <button
+                      class="qp-btn"
+                      onclick="
+                        sendQuickPrompt(
+                          'How do I pull latest changes from GitHub safely?',
+                        )
+                      "
+                    >
+                      Safe pull guide?
                     </button>
                     <button
                       class="qp-btn"

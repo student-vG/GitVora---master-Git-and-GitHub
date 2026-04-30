@@ -5,148 +5,170 @@
 // ============================================================
 
 // ---- THEME ----
-const THEME_KEY = 'gitvora-theme';
-const themeToggleApp = document.getElementById('themeToggleApp');
+const THEME_KEY = "gitvora-theme";
+const themeToggleApp = document.getElementById("themeToggleApp");
 
 function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  const isLight = theme === 'light';
+  document.documentElement.setAttribute("data-theme", theme);
+  const isLight = theme === "light";
   if (themeToggleApp) {
-    themeToggleApp.textContent = isLight ? '🌙' : '☀️';
-    themeToggleApp.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+    themeToggleApp.textContent = isLight ? "🌙" : "☀️";
+    themeToggleApp.title = isLight
+      ? "Switch to dark mode"
+      : "Switch to light mode";
   }
 }
 
-applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
-themeToggleApp?.addEventListener('click', () => {
-  const nextTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+applyTheme(localStorage.getItem(THEME_KEY) || "dark");
+themeToggleApp?.addEventListener("click", () => {
+  const nextTheme =
+    document.documentElement.getAttribute("data-theme") === "light"
+      ? "dark"
+      : "light";
   localStorage.setItem(THEME_KEY, nextTheme);
   applyTheme(nextTheme);
 });
 
 function initLaunchSplash() {
-  const splash = document.getElementById('launchSplash');
+  const splash = document.getElementById("launchSplash");
   if (!splash) return;
 
   let shouldShow = false;
   try {
-    shouldShow = sessionStorage.getItem('gitvora-show-launch-splash') === '1';
-    sessionStorage.removeItem('gitvora-show-launch-splash');
+    shouldShow = sessionStorage.getItem("gitvora-show-launch-splash") === "1";
+    sessionStorage.removeItem("gitvora-show-launch-splash");
   } catch {
     shouldShow = false;
   }
 
   if (!shouldShow) {
-    splash.classList.add('is-hidden');
+    splash.classList.add("is-hidden");
     return;
   }
 
-  document.body.classList.add('splash-active');
+  document.body.classList.add("splash-active");
   requestAnimationFrame(() => {
-    splash.classList.remove('is-hidden');
+    splash.classList.remove("is-hidden");
   });
 
-  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+  const reduceMotion = window.matchMedia?.(
+    "(prefers-reduced-motion: reduce)",
+  )?.matches;
   const holdMs = reduceMotion ? 420 : 760;
 
   setTimeout(() => {
-    splash.classList.add('is-hidden');
-    document.body.classList.remove('splash-active');
+    splash.classList.add("is-hidden");
+    document.body.classList.remove("splash-active");
   }, holdMs);
 }
 
 initLaunchSplash();
 
 // ---- NAVIGATION ----
-const panels = document.querySelectorAll('.panel');
-const navItems = document.querySelectorAll('.nav-item');
-const topbarTitle = document.getElementById('topbarTitle');
+const panels = document.querySelectorAll(".panel");
+const navItems = document.querySelectorAll(".nav-item");
+const topbarTitle = document.getElementById("topbarTitle");
 
 const panelTitles = {
-  push: '🚀 Push Guide',
-  workflow: '🔄 Workflow Builder',
-  academy: '🧠 Skill Path',
-  visual: '🛰️ Visual Coach',
-  handbook: '📘 Git Handbook',
-  errors: '🔧 Error Detective',
-  reference: '📚 Command Reference',
-  chat: '🤖 AI Assistant',
+  push: "🚀 Push Guide",
+  pull: "⬇️ Pull Guide",
+  workflow: "🔄 Workflow Builder",
+  academy: "🧠 Skill Path",
+  visual: "🛰️ Visual Coach",
+  handbook: "📘 Git Handbook",
+  errors: "🔧 Error Detective",
+  reference: "📚 Command Reference",
+  chat: "🤖 AI Assistant",
 };
 
 function showPanel(name) {
-  panels.forEach((p) => p.classList.remove('active'));
-  navItems.forEach((n) => n.classList.remove('active'));
-  document.getElementById(`panel-${name}`)?.classList.add('active');
-  document.querySelector(`[data-panel="${name}"]`)?.classList.add('active');
-  topbarTitle.textContent = panelTitles[name] || 'GitVora';
-  document.getElementById('sidebar').classList.remove('open');
+  panels.forEach((p) => p.classList.remove("active"));
+  navItems.forEach((n) => n.classList.remove("active"));
+  document.getElementById(`panel-${name}`)?.classList.add("active");
+  document.querySelector(`[data-panel="${name}"]`)?.classList.add("active");
+  topbarTitle.textContent = panelTitles[name] || "GitVora";
+  document.getElementById("sidebar").classList.remove("open");
   const panelEl = document.getElementById(`panel-${name}`);
-  if (panelEl) panelEl.scrollTo({ top: 0, behavior: 'smooth' });
+  if (panelEl) panelEl.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 window.showPanel = showPanel;
 
 navItems.forEach((item) => {
-  item.addEventListener('click', (e) => {
+  item.addEventListener("click", (e) => {
     e.preventDefault();
     showPanel(item.dataset.panel);
   });
 });
 
 // Mobile sidebar toggle
-document.getElementById('menuBtn').addEventListener('click', () => {
-  document.getElementById('sidebar').classList.toggle('open');
+document.getElementById("menuBtn").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("open");
 });
-document.getElementById('sidebarClose').addEventListener('click', () => {
-  document.getElementById('sidebar').classList.remove('open');
+document.getElementById("sidebarClose").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.remove("open");
 });
 
 // Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-  const isTyping = document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT';
+document.addEventListener("keydown", (e) => {
+  const isTyping =
+    document.activeElement.tagName === "TEXTAREA" ||
+    document.activeElement.tagName === "INPUT";
   if (isTyping) return;
-  const panelOrder = ['push', 'workflow', 'academy', 'visual', 'handbook', 'errors', 'reference', 'chat'];
-  if (e.key >= '1' && e.key <= '8') {
+  const panelOrder = [
+    "push",
+    "workflow",
+    "academy",
+    "visual",
+    "handbook",
+    "errors",
+    "reference",
+    "chat",
+  ];
+  if (e.key >= "1" && e.key <= "8") {
     showPanel(panelOrder[parseInt(e.key, 10) - 1]);
   }
 });
 
 // Shortcuts modal
-document.getElementById('shortcutsBtn').addEventListener('click', () => {
-  document.getElementById('shortcutsModal').style.display = 'flex';
+document.getElementById("shortcutsBtn").addEventListener("click", () => {
+  document.getElementById("shortcutsModal").style.display = "flex";
 });
-document.getElementById('shortcutsClose').addEventListener('click', () => {
-  document.getElementById('shortcutsModal').style.display = 'none';
+document.getElementById("shortcutsClose").addEventListener("click", () => {
+  document.getElementById("shortcutsModal").style.display = "none";
 });
-document.getElementById('shortcutsModal').addEventListener('click', (e) => {
-  if (e.target === e.currentTarget) e.currentTarget.style.display = 'none';
+document.getElementById("shortcutsModal").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.style.display = "none";
 });
 
 // ---- HELPERS ----
 function escapeHtml(text) {
   return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function copyText(text, btn) {
   const onSuccess = () => {
     if (!btn) return;
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('copied');
+    btn.textContent = "✓ Copied!";
+    btn.classList.add("copied");
     setTimeout(() => {
-      btn.textContent = 'Copy';
-      btn.classList.remove('copied');
+      btn.textContent = "Copy";
+      btn.classList.remove("copied");
     }, 1800);
   };
 
   if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
-      fallbackCopy(text, onSuccess);
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(onSuccess)
+      .catch(() => {
+        fallbackCopy(text, onSuccess);
+      });
     return;
   }
 
@@ -154,15 +176,15 @@ function copyText(text, btn) {
 }
 
 function fallbackCopy(text, onSuccess) {
-  const temp = document.createElement('textarea');
+  const temp = document.createElement("textarea");
   temp.value = text;
-  temp.style.position = 'fixed';
-  temp.style.opacity = '0';
+  temp.style.position = "fixed";
+  temp.style.opacity = "0";
   document.body.appendChild(temp);
   temp.focus();
   temp.select();
   try {
-    document.execCommand('copy');
+    document.execCommand("copy");
     onSuccess();
   } catch {
     // ignored
@@ -174,7 +196,7 @@ function fallbackCopy(text, onSuccess) {
 function scrollPanelTo(panelEl, targetEl) {
   if (!panelEl || !targetEl) return;
   const top = Math.max(targetEl.offsetTop - 10, 0);
-  panelEl.scrollTo({ top, behavior: 'smooth' });
+  panelEl.scrollTo({ top, behavior: "smooth" });
 }
 
 window.copyText = copyText;
@@ -185,209 +207,220 @@ window.copyText = copyText;
 const scenarios = {
   first: [
     {
-      title: 'Install Git',
-      explanation: 'Make sure Git is installed on your machine. Open a terminal and check.',
-      cmd: 'git --version',
-      note: 'If not installed: git-scm.com/downloads',
+      title: "Install Git",
+      explanation:
+        "Make sure Git is installed on your machine. Open a terminal and check.",
+      cmd: "git --version",
+      note: "If not installed: git-scm.com/downloads",
     },
     {
-      title: 'Configure your identity',
-      explanation: 'Tell Git who you are. This info appears in every commit you make.',
+      title: "Configure your identity",
+      explanation:
+        "Tell Git who you are. This info appears in every commit you make.",
       cmd: 'git config --global user.name "Your Name"\ngit config --global user.email "you@email.com"',
     },
     {
-      title: 'Initialize your repository',
-      explanation: 'Navigate to your project folder and initialize a Git repository.',
-      cmd: 'cd /path/to/your-project\ngit init',
+      title: "Initialize your repository",
+      explanation:
+        "Navigate to your project folder and initialize a Git repository.",
+      cmd: "cd /path/to/your-project\ngit init",
     },
     {
-      title: 'Create a repo on GitHub',
-      explanation: 'Go to github.com → click "+" → "New repository". Keep it empty if you already have local files.',
-      cmd: '# No terminal command — do this on GitHub.com',
-      note: 'Copy the repo URL — you will need it in the next step.',
+      title: "Create a repo on GitHub",
+      explanation:
+        'Go to github.com → click "+" → "New repository". Keep it empty if you already have local files.',
+      cmd: "# No terminal command — do this on GitHub.com",
+      note: "Copy the repo URL — you will need it in the next step.",
     },
     {
-      title: 'Link local to GitHub',
-      explanation: 'Connect your local repository to the remote repository.',
-      cmd: 'git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git',
+      title: "Link local to GitHub",
+      explanation: "Connect your local repository to the remote repository.",
+      cmd: "git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git",
     },
     {
-      title: 'Stage your files',
-      explanation: 'Tell Git which files should be included in your first commit.',
-      cmd: 'git add .',
+      title: "Stage your files",
+      explanation:
+        "Tell Git which files should be included in your first commit.",
+      cmd: "git add .",
     },
     {
-      title: 'Create your first commit',
-      explanation: 'Save a snapshot of your files with a clear message.',
+      title: "Create your first commit",
+      explanation: "Save a snapshot of your files with a clear message.",
       cmd: 'git commit -m "Initial commit"',
     },
     {
-      title: 'Set branch name to main',
-      explanation: 'Use main as the default branch name if needed.',
-      cmd: 'git branch -M main',
+      title: "Set branch name to main",
+      explanation: "Use main as the default branch name if needed.",
+      cmd: "git branch -M main",
     },
     {
-      title: '🚀 Push and set upstream',
-      explanation: 'This links local main to origin/main. After this, future pushes are just `git push`.',
-      cmd: 'git push -u origin main\n# next time:\n# git push',
-      note: 'If push is rejected, first run: git pull --rebase origin main',
+      title: "🚀 Push and set upstream",
+      explanation:
+        "This links local main to origin/main. After this, future pushes are just `git push`.",
+      cmd: "git push -u origin main\n# next time:\n# git push",
+      note: "If push is rejected, first run: git pull --rebase origin main",
     },
     {
-      title: 'If rebase changed commit IDs',
-      explanation: 'After a rebase on your own branch, you might need a safe force push.',
-      cmd: 'git push --force-with-lease origin main',
-      note: 'Prefer --force-with-lease over --force. It protects teammates from accidental overwrite.',
+      title: "If rebase changed commit IDs",
+      explanation:
+        "After a rebase on your own branch, you might need a safe force push.",
+      cmd: "git push --force-with-lease origin main",
+      note: "Prefer --force-with-lease over --force. It protects teammates from accidental overwrite.",
     },
   ],
   regular: [
     {
-      title: 'Check status',
-      explanation: 'Always start by checking what changed locally.',
-      cmd: 'git status',
+      title: "Check status",
+      explanation: "Always start by checking what changed locally.",
+      cmd: "git status",
     },
     {
-      title: 'Pull latest updates',
-      explanation: 'Sync with remote first to avoid avoidable conflicts.',
-      cmd: 'git pull --rebase origin main',
+      title: "Pull latest updates",
+      explanation: "Sync with remote first to avoid avoidable conflicts.",
+      cmd: "git pull --rebase origin main",
     },
     {
-      title: 'Stage your changes',
-      explanation: 'Stage all changes or selected files.',
-      cmd: 'git add .\n# OR specific files:\n# git add src/components/Button.jsx',
+      title: "Stage your changes",
+      explanation: "Stage all changes or selected files.",
+      cmd: "git add .\n# OR specific files:\n# git add src/components/Button.jsx",
     },
     {
-      title: 'Review staged changes',
-      explanation: 'Confirm exactly what you are about to commit.',
-      cmd: 'git diff --staged',
+      title: "Review staged changes",
+      explanation: "Confirm exactly what you are about to commit.",
+      cmd: "git diff --staged",
     },
     {
-      title: 'Commit clearly',
-      explanation: 'Use clear commit messages with prefixes like feat:, fix:, docs:, refactor:',
+      title: "Commit clearly",
+      explanation:
+        "Use clear commit messages with prefixes like feat:, fix:, docs:, refactor:",
       cmd: 'git commit -m "feat: add profile settings page"',
     },
     {
-      title: 'Push updates',
-      explanation: 'Push to your tracked branch.',
-      cmd: 'git push',
-      note: 'If push fails after rebase on your own branch: git push --force-with-lease',
+      title: "Push updates",
+      explanation: "Push to your tracked branch.",
+      cmd: "git push",
+      note: "If push fails after rebase on your own branch: git push --force-with-lease",
     },
   ],
   update: [
     {
-      title: 'Check branch and status',
-      explanation: 'Make sure you are on the correct branch and see your current local state.',
-      cmd: 'git branch --show-current\ngit status',
+      title: "Check branch and status",
+      explanation:
+        "Make sure you are on the correct branch and see your current local state.",
+      cmd: "git branch --show-current\ngit status",
     },
     {
-      title: 'Save local work before pull',
-      explanation: 'Before bringing remote updates, commit or stash your local edits to avoid pull errors.',
+      title: "Save local work before pull",
+      explanation:
+        "Before bringing remote updates, commit or stash your local edits to avoid pull errors.",
       cmd: 'git add .\ngit commit -m "wip: save local changes"\n# OR temporary:\n# git stash',
     },
     {
-      title: 'Pull latest project updates',
-      explanation: 'Sync remote changes first so your local branch is up to date.',
-      cmd: 'git pull --rebase origin main',
-      note: 'Use your branch name if you are not on main.',
+      title: "Pull latest project updates",
+      explanation:
+        "Sync remote changes first so your local branch is up to date.",
+      cmd: "git pull --rebase origin main",
+      note: "Use your branch name if you are not on main.",
     },
     {
-      title: 'If you used stash, restore it',
-      explanation: 'Bring your temporary saved work back after pull completes.',
-      cmd: 'git stash pop\n# resolve conflicts if shown',
+      title: "If you used stash, restore it",
+      explanation: "Bring your temporary saved work back after pull completes.",
+      cmd: "git stash pop\n# resolve conflicts if shown",
     },
     {
-      title: 'Add your new project changes',
-      explanation: 'Make edits, test, then stage only what you want to push.',
-      cmd: 'git add .',
+      title: "Add your new project changes",
+      explanation: "Make edits, test, then stage only what you want to push.",
+      cmd: "git add .",
     },
     {
-      title: 'Commit your update',
-      explanation: 'Use a clear commit message for this update cycle.',
+      title: "Commit your update",
+      explanation: "Use a clear commit message for this update cycle.",
       cmd: 'git commit -m "feat: update project changes"',
     },
     {
-      title: 'Push to GitHub',
-      explanation: 'Push after pull/rebase is clean.',
-      cmd: 'git push',
-      note: 'If you rebased your own branch and push is rejected, use git push --force-with-lease.',
+      title: "Push to GitHub",
+      explanation: "Push after pull/rebase is clean.",
+      cmd: "git push",
+      note: "If you rebased your own branch and push is rejected, use git push --force-with-lease.",
     },
   ],
   branch: [
     {
-      title: 'Create feature branch',
-      explanation: 'Work in feature branches instead of directly on main.',
-      cmd: 'git checkout -b feature/your-feature-name',
+      title: "Create feature branch",
+      explanation: "Work in feature branches instead of directly on main.",
+      cmd: "git checkout -b feature/your-feature-name",
     },
     {
-      title: 'Build your feature',
-      explanation: 'Make changes, run tests, and keep commits focused.',
-      cmd: '# write code and test locally',
+      title: "Build your feature",
+      explanation: "Make changes, run tests, and keep commits focused.",
+      cmd: "# write code and test locally",
     },
     {
-      title: 'Commit your changes',
-      explanation: 'Stage and commit in small, meaningful units.',
+      title: "Commit your changes",
+      explanation: "Stage and commit in small, meaningful units.",
       cmd: 'git add .\ngit commit -m "feat: implement your feature"',
     },
     {
-      title: 'Push branch',
-      explanation: 'First push uses -u to set tracking.',
-      cmd: 'git push -u origin feature/your-feature-name',
+      title: "Push branch",
+      explanation: "First push uses -u to set tracking.",
+      cmd: "git push -u origin feature/your-feature-name",
     },
     {
-      title: 'Open pull request',
-      explanation: 'Describe what changed, why, and how it was tested.',
-      cmd: '# GitHub → Pull requests → New pull request',
+      title: "Open pull request",
+      explanation: "Describe what changed, why, and how it was tested.",
+      cmd: "# GitHub → Pull requests → New pull request",
     },
     {
-      title: 'After merge, clean up',
-      explanation: 'Keep local repo tidy after PR merge.',
-      cmd: 'git checkout main\ngit pull --rebase origin main\ngit branch -d feature/your-feature-name',
+      title: "After merge, clean up",
+      explanation: "Keep local repo tidy after PR merge.",
+      cmd: "git checkout main\ngit pull --rebase origin main\ngit branch -d feature/your-feature-name",
     },
   ],
   fork: [
     {
-      title: 'Fork repository on GitHub',
-      explanation: 'Create your copy of the original project.',
-      cmd: '# On GitHub.com → click Fork',
+      title: "Fork repository on GitHub",
+      explanation: "Create your copy of the original project.",
+      cmd: "# On GitHub.com → click Fork",
     },
     {
-      title: 'Clone your fork',
-      explanation: 'Download your fork to your local machine.',
-      cmd: 'git clone https://github.com/YOUR_USERNAME/FORKED_REPO.git\ncd FORKED_REPO',
+      title: "Clone your fork",
+      explanation: "Download your fork to your local machine.",
+      cmd: "git clone https://github.com/YOUR_USERNAME/FORKED_REPO.git\ncd FORKED_REPO",
     },
     {
-      title: 'Add upstream remote',
-      explanation: 'Track updates from the original repository.',
-      cmd: 'git remote add upstream https://github.com/ORIGINAL_OWNER/REPO.git\ngit remote -v',
+      title: "Add upstream remote",
+      explanation: "Track updates from the original repository.",
+      cmd: "git remote add upstream https://github.com/ORIGINAL_OWNER/REPO.git\ngit remote -v",
     },
     {
-      title: 'Create contribution branch',
-      explanation: 'Never commit directly to fork main.',
-      cmd: 'git checkout -b fix/your-contribution',
+      title: "Create contribution branch",
+      explanation: "Never commit directly to fork main.",
+      cmd: "git checkout -b fix/your-contribution",
     },
     {
-      title: 'Commit contribution',
-      explanation: 'Keep commit messages specific and review-ready.',
+      title: "Commit contribution",
+      explanation: "Keep commit messages specific and review-ready.",
       cmd: 'git add .\ngit commit -m "fix: describe your change"',
     },
     {
-      title: 'Push to your fork',
-      explanation: 'Push branch to your fork and create a pull request.',
-      cmd: 'git push -u origin fix/your-contribution',
+      title: "Push to your fork",
+      explanation: "Push branch to your fork and create a pull request.",
+      cmd: "git push -u origin fix/your-contribution",
     },
     {
-      title: 'Open PR to original repo',
-      explanation: 'Target the original repository main branch.',
-      cmd: '# GitHub → your fork → Compare & pull request',
+      title: "Open PR to original repo",
+      explanation: "Target the original repository main branch.",
+      cmd: "# GitHub → your fork → Compare & pull request",
     },
   ],
 };
 
 function renderPushSteps(scenario) {
-  const container = document.getElementById('pushSteps');
-  container.innerHTML = '';
+  const container = document.getElementById("pushSteps");
+  container.innerHTML = "";
   scenarios[scenario].forEach((step, i) => {
-    const card = document.createElement('div');
-    card.className = 'step-card';
+    const card = document.createElement("div");
+    card.className = "step-card";
     card.innerHTML = `
       <div class="step-card-header">
         <div class="step-num-badge">${i + 1}</div>
@@ -400,166 +433,441 @@ function renderPushSteps(scenario) {
           <span class="step-cmd-text">${step.cmd}</span>
           <button class="copy-btn" data-cmd="${encodeURIComponent(step.cmd)}">Copy</button>
         </div>
-        ${step.note ? `<div class="step-note">⚠️ ${step.note}</div>` : ''}
+        ${step.note ? `<div class="step-note">⚠️ ${step.note}</div>` : ""}
       </div>
     `;
-    card.querySelector('.step-card-done').addEventListener('click', () => {
-      card.classList.toggle('done');
+    card.querySelector(".step-card-done").addEventListener("click", () => {
+      card.classList.toggle("done");
     });
-    card.querySelector('.copy-btn').addEventListener('click', function () {
+    card.querySelector(".copy-btn").addEventListener("click", function () {
       copyText(decodeURIComponent(this.dataset.cmd), this);
     });
     container.appendChild(card);
   });
 }
 
-document.querySelectorAll('.scenario-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.scenario-btn').forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
+document.querySelectorAll(".scenario-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document
+      .querySelectorAll(".scenario-btn")
+      .forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
     renderPushSteps(btn.dataset.scenario);
   });
 });
-renderPushSteps('first');
+renderPushSteps("first");
+
+// ============================================================
+// PULL GUIDE
+// ============================================================
+const pullScenarios = {
+  "pull-fresh": [
+    {
+      title: "Check your current branch",
+      explanation: "Make sure you know which branch you are pulling into.",
+      cmd: "git branch --show-current",
+    },
+    {
+      title: "Check if working directory is clean",
+      explanation: "Verify you have no uncommitted changes before pulling.",
+      cmd: "git status",
+      note: "If dirty, commit changes first or use git stash.",
+    },
+    {
+      title: "Fetch latest from remote",
+      explanation: "Download all updates from GitHub without merging yet.",
+      cmd: "git fetch origin",
+    },
+    {
+      title: "Pull and rebase cleanly",
+      explanation:
+        "Download and integrate remote changes. Using --rebase keeps history linear.",
+      cmd: "git pull --rebase origin main",
+      note: 'Replace "main" with your branch name if different.',
+    },
+    {
+      title: "Verify pull success",
+      explanation: "Check the status after pulling.",
+      cmd: "git status",
+      note: 'If you see "up to date", you already had the latest changes.',
+    },
+  ],
+  "pull-local-changes": [
+    {
+      title: "Check what you have changed",
+      explanation: "See all your uncommitted modifications.",
+      cmd: "git status",
+    },
+    {
+      title: "Commit your local changes",
+      explanation: "Save your work before pulling remote updates.",
+      cmd: 'git add .\ngit commit -m "wip: save work before pulling"',
+      note: 'Use "wip:" (work in progress) if you plan more edits after pull.',
+    },
+    {
+      title: "Alternatively, stash if not ready to commit",
+      explanation: "Temporarily save changes without committing.",
+      cmd: "git stash",
+      note: "Stash stores your changes. You can pop them back later with git stash pop.",
+    },
+    {
+      title: "Now pull the latest updates",
+      explanation: "With a clean working directory, pull is safe.",
+      cmd: "git pull --rebase origin main",
+    },
+    {
+      title: "If you stashed, bring back your work",
+      explanation: "Restore your stashed changes after pull completes.",
+      cmd: "git stash pop",
+      note: "If conflicts appear after stash pop, resolve them manually.",
+    },
+    {
+      title: "Review merged updates",
+      explanation: "Look at what changed remotely.",
+      cmd: "git log --oneline origin/main..HEAD",
+    },
+  ],
+  "pull-conflict": [
+    {
+      title: "Attempt pull and see the conflict",
+      explanation: "Git will stop and mark conflicting files.",
+      cmd: "git pull --rebase origin main",
+      note: "Git shows which files have conflicts.",
+    },
+    {
+      title: "Check which files have conflicts",
+      explanation: "See the list of files with merge conflicts.",
+      cmd: "git status",
+      note: 'Look for files marked "both modified" or similar.',
+    },
+    {
+      title: "View the conflict in a file",
+      explanation:
+        "Open the conflicted file in your editor to see the conflict markers.",
+      cmd: "# Open the file in VS Code, Vim, or your editor\n# Look for <<<<<<, ======, >>>>>>",
+    },
+    {
+      title: "Edit to resolve the conflict",
+      explanation:
+        "Choose which changes to keep, remove conflict markers, and save.",
+      cmd: "# Conflict markers:\n# <<<<<<< HEAD (your changes)\n# your code\n# =======\n# remote code\n# >>>>>>> branch-name\n# Delete markers and keep what you want",
+    },
+    {
+      title: "Stage the resolved file",
+      explanation: "Tell Git the conflict is resolved.",
+      cmd: "git add <conflicted-file>",
+    },
+    {
+      title: "Complete the rebase",
+      explanation: "After resolving all conflicts, finish the rebase.",
+      cmd: "git rebase --continue",
+      note: "If more conflicts exist, repeat the resolve steps for each file.",
+    },
+    {
+      title: "Verify the merge is complete",
+      explanation: "Check status to confirm all conflicts are resolved.",
+      cmd: "git status",
+      note: "If successful, you should be up to date with remote.",
+    },
+  ],
+  "pull-upstream": [
+    {
+      title: "Check your remotes",
+      explanation:
+        "Verify you have both origin (your fork) and upstream (original repo).",
+      cmd: "git remote -v",
+      note: 'If you only see "origin", add upstream with the next step.',
+    },
+    {
+      title: "Add upstream if needed",
+      explanation: "Link to the original repository to sync updates.",
+      cmd: "git remote add upstream https://github.com/ORIGINAL_OWNER/REPO.git\ngit remote -v",
+    },
+    {
+      title: "Fetch from upstream",
+      explanation: "Download all updates from the original repository.",
+      cmd: "git fetch upstream",
+    },
+    {
+      title: "Check out your main branch",
+      explanation: "Switch to the branch you want to sync.",
+      cmd: "git checkout main",
+    },
+    {
+      title: "Rebase onto upstream main",
+      explanation: "Replay your commits on top of the latest upstream code.",
+      cmd: "git rebase upstream/main",
+      note: "If conflicts occur, resolve them and run git rebase --continue.",
+    },
+    {
+      title: "Force push to your fork",
+      explanation: "Update your fork with the synced changes.",
+      cmd: "git push --force-with-lease origin main",
+      note: "--force-with-lease is safer than --force; use only after rebase.",
+    },
+  ],
+  "pull-rebase": [
+    {
+      title: "Understand pull vs pull --rebase",
+      explanation:
+        "Regular pull creates merge commits. Pull --rebase replays commits cleanly.",
+      cmd: "# Regular pull: git pull origin main (creates merge commit)\n# Rebase pull: git pull --rebase origin main (replays commits)",
+    },
+    {
+      title: "Fetch from remote first",
+      explanation: "Download latest without making changes yet.",
+      cmd: "git fetch origin",
+    },
+    {
+      title: "Pull with rebase to keep history clean",
+      explanation:
+        "Rebase replays your local commits on top of remote updates.",
+      cmd: "git pull --rebase origin main",
+    },
+    {
+      title: "If rebase has conflicts, resolve them",
+      explanation: "Edit conflicted files and mark as resolved.",
+      cmd: "git add <file>\ngit rebase --continue",
+    },
+    {
+      title: "View your clean history",
+      explanation: "After rebase, your commits are replayed linearly.",
+      cmd: "git log --oneline -10",
+      note: "Notice no merge commits — just your commits on top of remote commits.",
+    },
+    {
+      title: "Make rebase default for all pulls",
+      explanation: "Optional: configure Git to always rebase on pull.",
+      cmd: "git config --global pull.rebase true",
+      note: "This makes git pull behave like git pull --rebase automatically.",
+    },
+  ],
+};
+
+function renderPullSteps(scenario) {
+  const container = document.getElementById("pullSteps");
+  container.innerHTML = "";
+  pullScenarios[scenario].forEach((step, i) => {
+    const card = document.createElement("div");
+    card.className = "step-card";
+    card.innerHTML = `
+      <div class="step-card-header">
+        <div class="step-num-badge">${i + 1}</div>
+        <div class="step-card-title">${step.title}</div>
+        <div class="step-card-done" title="Mark as done"></div>
+      </div>
+      <div class="step-card-body">
+        <div class="step-explanation">${step.explanation}</div>
+        <div class="step-cmd-block">
+          <span class="step-cmd-text">${step.cmd}</span>
+          <button class="copy-btn" data-cmd="${encodeURIComponent(step.cmd)}">Copy</button>
+        </div>
+        ${step.note ? `<div class="step-note">⚠️ ${step.note}</div>` : ""}
+      </div>
+    `;
+    card.querySelector(".step-card-done").addEventListener("click", () => {
+      card.classList.toggle("done");
+    });
+    card.querySelector(".copy-btn").addEventListener("click", function () {
+      copyText(decodeURIComponent(this.dataset.cmd), this);
+    });
+    container.appendChild(card);
+  });
+}
+
+// Event listeners for pull guide scenario buttons
+const pullScenarioBtns = document.querySelectorAll("#panel-pull .scenario-btn");
+pullScenarioBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    pullScenarioBtns.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderPullSteps(btn.dataset.scenario);
+  });
+});
+
+// Initialize first scenario
+renderPullSteps("pull-fresh");
 
 // ============================================================
 // WORKFLOW BUILDER
 // ============================================================
 const workflows = [
   {
-    icon: '✨',
-    title: 'Start a New Project',
-    desc: 'Init, connect, and push cleanly',
+    icon: "✨",
+    title: "Start a New Project",
+    desc: "Init, connect, and push cleanly",
     steps: [
-      { cmd: 'git init', desc: 'Initialize repository' },
-      { cmd: 'git remote add origin <repo-url>', desc: 'Connect to GitHub remote' },
-      { cmd: 'git add .', desc: 'Stage all files' },
-      { cmd: 'git commit -m "Initial commit"', desc: 'Create first commit' },
-      { cmd: 'git branch -M main', desc: 'Use main branch name' },
-      { cmd: 'git push -u origin main', desc: 'Push and set upstream' },
-      { cmd: 'git push', desc: 'Future pushes after upstream is set' },
+      { cmd: "git init", desc: "Initialize repository" },
+      {
+        cmd: "git remote add origin <repo-url>",
+        desc: "Connect to GitHub remote",
+      },
+      { cmd: "git add .", desc: "Stage all files" },
+      { cmd: 'git commit -m "Initial commit"', desc: "Create first commit" },
+      { cmd: "git branch -M main", desc: "Use main branch name" },
+      { cmd: "git push -u origin main", desc: "Push and set upstream" },
+      { cmd: "git push", desc: "Future pushes after upstream is set" },
     ],
   },
   {
-    icon: '⬇️',
-    title: 'Pull Latest Project Updates',
-    desc: 'Safely sync remote changes before coding',
+    icon: "⬇️",
+    title: "Pull Latest Project Updates",
+    desc: "Safely sync remote changes before coding",
     steps: [
-      { cmd: 'git status', desc: 'Check if you have local edits' },
-      { cmd: 'git stash', desc: 'Optional: stash if you need a clean pull first' },
-      { cmd: 'git pull --rebase origin main', desc: 'Download and replay local commits cleanly' },
-      { cmd: 'git stash pop', desc: 'Optional: re-apply stashed work' },
-      { cmd: 'git status', desc: 'Confirm clean state before new commits' },
+      { cmd: "git status", desc: "Check if you have local edits" },
+      {
+        cmd: "git stash",
+        desc: "Optional: stash if you need a clean pull first",
+      },
+      {
+        cmd: "git pull --rebase origin main",
+        desc: "Download and replay local commits cleanly",
+      },
+      { cmd: "git stash pop", desc: "Optional: re-apply stashed work" },
+      { cmd: "git status", desc: "Confirm clean state before new commits" },
     ],
   },
   {
-    icon: '🌿',
-    title: 'Create & Work on Branch',
-    desc: 'Clean feature branch workflow',
+    icon: "🌿",
+    title: "Create & Work on Branch",
+    desc: "Clean feature branch workflow",
     steps: [
-      { cmd: 'git checkout -b feature/name', desc: 'Create and switch to branch' },
-      { cmd: 'git add .', desc: 'Stage changes' },
-      { cmd: 'git commit -m "feat: your feature"', desc: 'Commit clearly' },
-      { cmd: 'git push -u origin feature/name', desc: 'Push feature branch' },
+      {
+        cmd: "git checkout -b feature/name",
+        desc: "Create and switch to branch",
+      },
+      { cmd: "git add .", desc: "Stage changes" },
+      { cmd: 'git commit -m "feat: your feature"', desc: "Commit clearly" },
+      { cmd: "git push -u origin feature/name", desc: "Push feature branch" },
     ],
   },
   {
-    icon: '🔀',
-    title: 'Merge a Branch',
-    desc: 'Safe merge into main',
+    icon: "🔀",
+    title: "Merge a Branch",
+    desc: "Safe merge into main",
     steps: [
-      { cmd: 'git checkout main', desc: 'Switch to main' },
-      { cmd: 'git pull --rebase origin main', desc: 'Sync latest main' },
-      { cmd: 'git merge feature/name', desc: 'Merge feature branch' },
-      { cmd: 'git push', desc: 'Push merged result' },
-      { cmd: 'git branch -d feature/name', desc: 'Delete merged branch locally' },
+      { cmd: "git checkout main", desc: "Switch to main" },
+      { cmd: "git pull --rebase origin main", desc: "Sync latest main" },
+      { cmd: "git merge feature/name", desc: "Merge feature branch" },
+      { cmd: "git push", desc: "Push merged result" },
+      {
+        cmd: "git branch -d feature/name",
+        desc: "Delete merged branch locally",
+      },
     ],
   },
   {
-    icon: '🛟',
-    title: 'Recover from Push Rejection',
-    desc: 'When remote has new commits',
+    icon: "🛟",
+    title: "Recover from Push Rejection",
+    desc: "When remote has new commits",
     steps: [
-      { cmd: 'git status', desc: 'Check working state first' },
-      { cmd: 'git pull --rebase origin main', desc: 'Reapply local commits on top of remote' },
-      { cmd: 'git push', desc: 'Push again after successful rebase' },
-      { cmd: 'git push --force-with-lease', desc: 'Only if history was rewritten and branch is yours' },
+      { cmd: "git status", desc: "Check working state first" },
+      {
+        cmd: "git pull --rebase origin main",
+        desc: "Reapply local commits on top of remote",
+      },
+      { cmd: "git push", desc: "Push again after successful rebase" },
+      {
+        cmd: "git push --force-with-lease",
+        desc: "Only if history was rewritten and branch is yours",
+      },
     ],
   },
   {
-    icon: '↩️',
-    title: 'Undo Last Commit',
-    desc: 'Keep or discard changes safely',
+    icon: "↩️",
+    title: "Undo Last Commit",
+    desc: "Keep or discard changes safely",
     steps: [
-      { cmd: 'git log --oneline -5', desc: 'View recent commits' },
-      { cmd: 'git reset --soft HEAD~1', desc: 'Undo commit, keep staged changes' },
-      { cmd: 'git reset --mixed HEAD~1', desc: 'Undo commit, keep unstaged changes' },
-      { cmd: 'git reset --hard HEAD~1', desc: 'Danger: remove commit and changes permanently' },
+      { cmd: "git log --oneline -5", desc: "View recent commits" },
+      {
+        cmd: "git reset --soft HEAD~1",
+        desc: "Undo commit, keep staged changes",
+      },
+      {
+        cmd: "git reset --mixed HEAD~1",
+        desc: "Undo commit, keep unstaged changes",
+      },
+      {
+        cmd: "git reset --hard HEAD~1",
+        desc: "Danger: remove commit and changes permanently",
+      },
     ],
   },
   {
-    icon: '🔄',
-    title: 'Sync Fork with Original',
-    desc: 'Keep fork up to date',
+    icon: "🔄",
+    title: "Sync Fork with Original",
+    desc: "Keep fork up to date",
     steps: [
-      { cmd: 'git remote add upstream <original-repo>', desc: 'Add original repo as upstream' },
-      { cmd: 'git fetch upstream', desc: 'Fetch upstream updates' },
-      { cmd: 'git checkout main', desc: 'Switch to your main branch' },
-      { cmd: 'git merge upstream/main', desc: 'Merge upstream changes' },
-      { cmd: 'git push origin main', desc: 'Update your fork on GitHub' },
+      {
+        cmd: "git remote add upstream <original-repo>",
+        desc: "Add original repo as upstream",
+      },
+      { cmd: "git fetch upstream", desc: "Fetch upstream updates" },
+      { cmd: "git checkout main", desc: "Switch to your main branch" },
+      { cmd: "git merge upstream/main", desc: "Merge upstream changes" },
+      { cmd: "git push origin main", desc: "Update your fork on GitHub" },
     ],
   },
   {
-    icon: '💾',
-    title: 'Stash & Switch Context',
-    desc: 'Pause and resume work quickly',
+    icon: "💾",
+    title: "Stash & Switch Context",
+    desc: "Pause and resume work quickly",
     steps: [
-      { cmd: 'git stash', desc: 'Save uncommitted work' },
-      { cmd: 'git checkout other-branch', desc: 'Switch branch' },
-      { cmd: '# ...do urgent task...', desc: 'Handle urgent work' },
-      { cmd: 'git checkout original-branch', desc: 'Return to original branch' },
-      { cmd: 'git stash pop', desc: 'Restore stashed changes' },
+      { cmd: "git stash", desc: "Save uncommitted work" },
+      { cmd: "git checkout other-branch", desc: "Switch branch" },
+      { cmd: "# ...do urgent task...", desc: "Handle urgent work" },
+      {
+        cmd: "git checkout original-branch",
+        desc: "Return to original branch",
+      },
+      { cmd: "git stash pop", desc: "Restore stashed changes" },
     ],
   },
   {
-    icon: '🏷️',
-    title: 'Tag a Release',
-    desc: 'Create and publish versions',
+    icon: "🏷️",
+    title: "Tag a Release",
+    desc: "Create and publish versions",
     steps: [
-      { cmd: 'git tag -a v1.0.0 -m "Release v1.0.0"', desc: 'Create annotated tag' },
-      { cmd: 'git push origin v1.0.0', desc: 'Push single tag' },
-      { cmd: 'git push origin --tags', desc: 'Push all tags when needed' },
+      {
+        cmd: 'git tag -a v1.0.0 -m "Release v1.0.0"',
+        desc: "Create annotated tag",
+      },
+      { cmd: "git push origin v1.0.0", desc: "Push single tag" },
+      { cmd: "git push origin --tags", desc: "Push all tags when needed" },
     ],
   },
   {
-    icon: '🔍',
-    title: 'Find Bug with Bisect',
-    desc: 'Binary search through history',
+    icon: "🔍",
+    title: "Find Bug with Bisect",
+    desc: "Binary search through history",
     steps: [
-      { cmd: 'git bisect start', desc: 'Start bisect mode' },
-      { cmd: 'git bisect bad HEAD', desc: 'Current commit is bad' },
-      { cmd: 'git bisect good <good-commit>', desc: 'Known good commit' },
-      { cmd: 'git bisect good  # or git bisect bad', desc: 'Mark each tested commit' },
-      { cmd: 'git bisect reset', desc: 'End bisect session' },
+      { cmd: "git bisect start", desc: "Start bisect mode" },
+      { cmd: "git bisect bad HEAD", desc: "Current commit is bad" },
+      { cmd: "git bisect good <good-commit>", desc: "Known good commit" },
+      {
+        cmd: "git bisect good  # or git bisect bad",
+        desc: "Mark each tested commit",
+      },
+      { cmd: "git bisect reset", desc: "End bisect session" },
     ],
   },
 ];
 
-const wfGrid = document.getElementById('workflowGrid');
-const wfResult = document.getElementById('workflowResult');
-const wfCommands = document.getElementById('wfCommands');
-const wfResultTitle = document.getElementById('wfResultTitle');
-const workflowPanel = document.getElementById('panel-workflow');
+const wfGrid = document.getElementById("workflowGrid");
+const wfResult = document.getElementById("workflowResult");
+const wfCommands = document.getElementById("wfCommands");
+const wfResultTitle = document.getElementById("wfResultTitle");
+const workflowPanel = document.getElementById("panel-workflow");
 
 workflows.forEach((wf) => {
-  const card = document.createElement('div');
-  card.className = 'wf-card';
+  const card = document.createElement("div");
+  card.className = "wf-card";
   card.innerHTML = `
     <div class="wf-icon">${wf.icon}</div>
     <h3>${wf.title}</h3>
     <p>${wf.desc}</p>
   `;
-  card.addEventListener('click', () => {
+  card.addEventListener("click", () => {
     wfResultTitle.textContent = `${wf.icon} ${wf.title}`;
     wfCommands.innerHTML = wf.steps
       .map(
@@ -571,27 +879,27 @@ workflows.forEach((wf) => {
             <span class="wf-cmd-text">${escapeHtml(s.cmd)}</span>
             <button class="copy-btn" data-wf-cmd="${encodeURIComponent(s.cmd)}">Copy</button>
           </div>
-          ${s.desc ? `<div class="wf-cmd-desc">${escapeHtml(s.desc)}</div>` : ''}
+          ${s.desc ? `<div class="wf-cmd-desc">${escapeHtml(s.desc)}</div>` : ""}
         </div>
       </div>
-    `
+    `,
       )
-      .join('');
+      .join("");
 
-    wfCommands.querySelectorAll('[data-wf-cmd]').forEach((btn) => {
-      btn.addEventListener('click', function () {
+    wfCommands.querySelectorAll("[data-wf-cmd]").forEach((btn) => {
+      btn.addEventListener("click", function () {
         copyText(decodeURIComponent(this.dataset.wfCmd), this);
       });
     });
 
-    wfResult.style.display = 'block';
+    wfResult.style.display = "block";
     scrollPanelTo(workflowPanel, wfResult);
   });
   wfGrid.appendChild(card);
 });
 
-document.getElementById('closeResult').addEventListener('click', () => {
-  wfResult.style.display = 'none';
+document.getElementById("closeResult").addEventListener("click", () => {
+  wfResult.style.display = "none";
 });
 
 // ============================================================
@@ -599,49 +907,77 @@ document.getElementById('closeResult').addEventListener('click', () => {
 // ============================================================
 const academyTracks = [
   {
-    level: 'Level 1',
-    title: 'Git Basics',
-    summary: 'Understand repository setup and day-one commands.',
-    items: ['git init', 'git status', 'git add', 'git commit', 'git push -u origin main'],
+    level: "Level 1",
+    title: "Git Basics",
+    summary: "Understand repository setup and day-one commands.",
+    items: [
+      "git init",
+      "git status",
+      "git add",
+      "git commit",
+      "git push -u origin main",
+    ],
   },
   {
-    level: 'Level 2',
-    title: 'Branch Confidence',
-    summary: 'Build features safely with branches and pull requests.',
-    items: ['git checkout -b', 'git pull --rebase', 'PR workflow', 'clean commit messages'],
+    level: "Level 2",
+    title: "Branch Confidence",
+    summary: "Build features safely with branches and pull requests.",
+    items: [
+      "git checkout -b",
+      "git pull --rebase",
+      "PR workflow",
+      "clean commit messages",
+    ],
   },
   {
-    level: 'Level 3',
-    title: 'Collaboration',
-    summary: 'Work with teams without breaking history.',
-    items: ['merge conflict resolution', 'git fetch', 'git remote -v', 'review-first workflow'],
+    level: "Level 3",
+    title: "Collaboration",
+    summary: "Work with teams without breaking history.",
+    items: [
+      "merge conflict resolution",
+      "git fetch",
+      "git remote -v",
+      "review-first workflow",
+    ],
   },
   {
-    level: 'Level 4',
-    title: 'History Mastery',
-    summary: 'Rewrite and recover history responsibly.',
-    items: ['git rebase -i', 'git cherry-pick', 'git reflog', 'git revert'],
+    level: "Level 4",
+    title: "History Mastery",
+    summary: "Rewrite and recover history responsibly.",
+    items: ["git rebase -i", "git cherry-pick", "git reflog", "git revert"],
   },
   {
-    level: 'Level 5',
-    title: 'Release Operations',
-    summary: 'Ship versions and keep stable delivery pipelines.',
-    items: ['git tag -a', 'release branches', 'hotfix workflow', 'git push --tags'],
+    level: "Level 5",
+    title: "Release Operations",
+    summary: "Ship versions and keep stable delivery pipelines.",
+    items: [
+      "git tag -a",
+      "release branches",
+      "hotfix workflow",
+      "git push --tags",
+    ],
   },
   {
-    level: 'Level 6',
-    title: 'Expert Debugging',
-    summary: 'Track down deep issues in large repositories.',
-    items: ['git bisect', 'git blame', 'git log --graph', 'safe force strategy'],
+    level: "Level 6",
+    title: "Expert Debugging",
+    summary: "Track down deep issues in large repositories.",
+    items: [
+      "git bisect",
+      "git blame",
+      "git log --graph",
+      "safe force strategy",
+    ],
   },
 ];
 
-const ACADEMY_PROGRESS_KEY = 'gitvora-academy-progress';
+const ACADEMY_PROGRESS_KEY = "gitvora-academy-progress";
 
 function getAcademyCompletion() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(ACADEMY_PROGRESS_KEY) || '{}');
-    return typeof parsed === 'object' && parsed ? parsed : {};
+    const parsed = JSON.parse(
+      localStorage.getItem(ACADEMY_PROGRESS_KEY) || "{}",
+    );
+    return typeof parsed === "object" && parsed ? parsed : {};
   } catch {
     return {};
   }
@@ -655,14 +991,14 @@ function updateAcademyProgressUI(state) {
   const total = academyTracks.length;
   const completed = academyTracks.filter((track) => state[track.level]).length;
   const percent = Math.round((completed / total) * 100);
-  const progressBar = document.getElementById('academyProgressBar');
-  const progressText = document.getElementById('academyProgressText');
+  const progressBar = document.getElementById("academyProgressBar");
+  const progressText = document.getElementById("academyProgressText");
   if (progressBar) progressBar.style.width = `${percent}%`;
   if (progressText) progressText.textContent = `${completed} / ${total} levels`;
 }
 
 function renderAcademy() {
-  const academyGrid = document.getElementById('academyGrid');
+  const academyGrid = document.getElementById("academyGrid");
   const completion = getAcademyCompletion();
   academyGrid.innerHTML = academyTracks
     .map(
@@ -671,18 +1007,18 @@ function renderAcademy() {
       <div class="academy-level">${track.level}</div>
       <h3>${track.title}</h3>
       <p>${track.summary}</p>
-      <p><strong>Focus:</strong> ${track.items.map((i) => `<code>${escapeHtml(i)}</code>`).join(', ')}</p>
+      <p><strong>Focus:</strong> ${track.items.map((i) => `<code>${escapeHtml(i)}</code>`).join(", ")}</p>
       <label class="academy-complete">
-        <input type="checkbox" data-academy-level="${escapeHtml(track.level)}" ${completion[track.level] ? 'checked' : ''}/>
+        <input type="checkbox" data-academy-level="${escapeHtml(track.level)}" ${completion[track.level] ? "checked" : ""}/>
         Mark level complete
       </label>
     </div>
-  `
+  `,
     )
-    .join('');
+    .join("");
 
-  academyGrid.querySelectorAll('[data-academy-level]').forEach((input) => {
-    input.addEventListener('change', () => {
+  academyGrid.querySelectorAll("[data-academy-level]").forEach((input) => {
+    input.addEventListener("change", () => {
       const next = getAcademyCompletion();
       next[input.dataset.academyLevel] = input.checked;
       saveAcademyCompletion(next);
@@ -700,336 +1036,529 @@ renderAcademy();
 // ============================================================
 const visualTracks = [
   {
-    id: 'starter',
-    label: 'Starter Path',
-    summary: 'First repo + first push + first PR',
+    id: "starter",
+    label: "Starter Path",
+    summary: "First repo + first push + first PR",
     roadmap: [
-      { title: 'Install & Configure', detail: 'Set identity and verify Git installation.' },
-      { title: 'Initialize Repo', detail: 'Create local Git history from your project folder.' },
-      { title: 'Connect to GitHub', detail: 'Create remote repository and add origin.' },
-      { title: 'First Push', detail: 'Use -u once, then future pushes are simpler.' },
-      { title: 'Open First PR', detail: 'Create your first review-friendly pull request.' },
+      {
+        title: "Install & Configure",
+        detail: "Set identity and verify Git installation.",
+      },
+      {
+        title: "Initialize Repo",
+        detail: "Create local Git history from your project folder.",
+      },
+      {
+        title: "Connect to GitHub",
+        detail: "Create remote repository and add origin.",
+      },
+      {
+        title: "First Push",
+        detail: "Use -u once, then future pushes are simpler.",
+      },
+      {
+        title: "Open First PR",
+        detail: "Create your first review-friendly pull request.",
+      },
     ],
     graph: [
-      { branch: 'main', nodes: ['A', 'B', 'C'] },
-      { branch: 'feature/docs', nodes: ['f1', 'f2', 'M*'] },
+      { branch: "main", nodes: ["A", "B", "C"] },
+      { branch: "feature/docs", nodes: ["f1", "f2", "M*"] },
     ],
     terminal: [
       {
-        accept: ['git init'],
-        output: 'Initialized empty Git repository in ./ .git/',
-        hint: 'Start by creating local git history with `git init`.',
+        accept: ["git init"],
+        output: "Initialized empty Git repository in ./ .git/",
+        hint: "Start by creating local git history with `git init`.",
       },
       {
-        accept: ['git add .'],
-        output: 'Staged all files.',
-        hint: 'Stage files with `git add .` before committing.',
+        accept: ["git add ."],
+        output: "Staged all files.",
+        hint: "Stage files with `git add .` before committing.",
       },
       {
-        accept: ['git commit -m*'],
-        output: '[main abc1234] Initial commit created.',
+        accept: ["git commit -m*"],
+        output: "[main abc1234] Initial commit created.",
         hint: 'Create a commit with `git commit -m "Initial commit"`.',
       },
       {
-        accept: ['git branch -m main', 'git branch -M main', 'git branch -m main'],
-        output: 'Branch renamed to main.',
-        hint: 'Use `git branch -M main` for modern default naming.',
+        accept: [
+          "git branch -m main",
+          "git branch -M main",
+          "git branch -m main",
+        ],
+        output: "Branch renamed to main.",
+        hint: "Use `git branch -M main` for modern default naming.",
       },
       {
-        accept: ['git remote add origin*'],
-        output: 'Remote origin added.',
-        hint: 'Add remote URL: `git remote add origin https://github.com/you/repo.git`',
+        accept: ["git remote add origin*"],
+        output: "Remote origin added.",
+        hint: "Add remote URL: `git remote add origin https://github.com/you/repo.git`",
       },
       {
-        accept: ['git push -u origin main'],
-        output: 'Push successful. Upstream tracking is now set.',
-        hint: 'First push should be `git push -u origin main`.',
-      },
-    ],
-    githubProcedure: [
-      { title: 'Create repository', detail: 'GitHub → New repository → keep it empty if code already exists locally.' },
-      { title: 'Copy HTTPS URL', detail: 'Copy repo URL and keep it ready for `git remote add origin`.' },
-      { title: 'Push local code', detail: 'Run push commands from your terminal after commit.' },
-      { title: 'Check Files tab', detail: 'Verify README/code appears in GitHub repo.' },
-      { title: 'Create first branch PR', detail: 'Open a feature branch and create your first pull request.' },
-    ],
-    missions: [
-      { tag: 'Day 1', title: 'Create local repo', detail: 'Run init, add, commit in a sample folder.' },
-      { tag: 'Day 2', title: 'Push to GitHub', detail: 'Connect origin and complete first push.' },
-      { tag: 'Day 3', title: 'Branch + PR', detail: 'Create feature branch and open PR.' },
-    ],
-  },
-  {
-    id: 'collab',
-    label: 'Collaboration Path',
-    summary: 'Feature branches, review loops, and clean history',
-    roadmap: [
-      { title: 'Create Feature Branch', detail: 'Never code directly on main in team projects.' },
-      { title: 'Commit in Small Chunks', detail: 'Write review-friendly commits with clear messages.' },
-      { title: 'Push Branch + PR', detail: 'Open pull request with context and testing notes.' },
-      { title: 'Review & Rebase', detail: 'Resolve review comments and keep branch updated.' },
-      { title: 'Merge Cleanly', detail: 'Merge PR and cleanup local branches.' },
-    ],
-    graph: [
-      { branch: 'main', nodes: ['A', 'B', 'C', 'D'] },
-      { branch: 'feature/login', nodes: ['l1', 'l2', 'M*'] },
-    ],
-    terminal: [
-      {
-        accept: ['git checkout -b feature/login'],
-        output: 'Switched to new branch feature/login.',
-        hint: 'Start feature work with `git checkout -b feature/login`.',
-      },
-      {
-        accept: ['git add .'],
-        output: 'Changes staged.',
-        hint: 'Stage your feature updates with `git add .`.',
-      },
-      {
-        accept: ['git commit -m*'],
-        output: 'Feature commit created.',
-        hint: 'Use descriptive commit message, for example `feat: add login form`.',
-      },
-      {
-        accept: ['git push -u origin feature/login'],
-        output: 'Remote branch created and tracking set.',
-        hint: 'First branch push usually uses -u.',
-      },
-      {
-        accept: ['git pull --rebase origin main'],
-        output: 'Branch rebased on latest main.',
-        hint: 'Keep your branch fresh with `git pull --rebase origin main`.',
-      },
-      {
-        accept: ['git push --force-with-lease*', 'git push'],
-        output: 'Remote branch updated safely.',
-        hint: 'After rebase, prefer `git push --force-with-lease`.',
+        accept: ["git push -u origin main"],
+        output: "Push successful. Upstream tracking is now set.",
+        hint: "First push should be `git push -u origin main`.",
       },
     ],
     githubProcedure: [
-      { title: 'Open Pull Request', detail: 'GitHub → Compare & pull request from feature branch.' },
-      { title: 'Write strong PR summary', detail: 'Include what changed, why, and how tested.' },
-      { title: 'Request review', detail: 'Tag reviewer/team and mention risky areas.' },
-      { title: 'Resolve comments', detail: 'Push follow-up commits and mark threads resolved.' },
-      { title: 'Merge + delete branch', detail: 'Use squash/rebase policy and cleanup branch.' },
+      {
+        title: "Create repository",
+        detail:
+          "GitHub → New repository → keep it empty if code already exists locally.",
+      },
+      {
+        title: "Copy HTTPS URL",
+        detail: "Copy repo URL and keep it ready for `git remote add origin`.",
+      },
+      {
+        title: "Push local code",
+        detail: "Run push commands from your terminal after commit.",
+      },
+      {
+        title: "Check Files tab",
+        detail: "Verify README/code appears in GitHub repo.",
+      },
+      {
+        title: "Create first branch PR",
+        detail: "Open a feature branch and create your first pull request.",
+      },
     ],
     missions: [
-      { tag: 'Day 8', title: 'Feature branch flow', detail: 'Create, push, and PR one branch end-to-end.' },
-      { tag: 'Day 9', title: 'Review simulation', detail: 'Respond to 3 mock PR comments.' },
-      { tag: 'Day 10', title: 'Rebase practice', detail: 'Rebase feature branch on latest main safely.' },
+      {
+        tag: "Day 1",
+        title: "Create local repo",
+        detail: "Run init, add, commit in a sample folder.",
+      },
+      {
+        tag: "Day 2",
+        title: "Push to GitHub",
+        detail: "Connect origin and complete first push.",
+      },
+      {
+        tag: "Day 3",
+        title: "Branch + PR",
+        detail: "Create feature branch and open PR.",
+      },
     ],
   },
   {
-    id: 'recovery',
-    label: 'Recovery Path',
-    summary: 'Conflicts, rejected pushes, and safe force strategy',
+    id: "collab",
+    label: "Collaboration Path",
+    summary: "Feature branches, review loops, and clean history",
     roadmap: [
-      { title: 'Diagnose first', detail: 'Read `git status` and understand before running commands.' },
-      { title: 'Rebase conflicts', detail: 'Resolve line conflicts cleanly and continue rebase.' },
-      { title: 'Safe force push', detail: 'Use force-with-lease when history was rewritten.' },
-      { title: 'Reflog rescue', detail: 'Recover accidental resets or bad rebases quickly.' },
-      { title: 'Post-incident habits', detail: 'Add checks to avoid repeating same issues.' },
+      {
+        title: "Create Feature Branch",
+        detail: "Never code directly on main in team projects.",
+      },
+      {
+        title: "Commit in Small Chunks",
+        detail: "Write review-friendly commits with clear messages.",
+      },
+      {
+        title: "Push Branch + PR",
+        detail: "Open pull request with context and testing notes.",
+      },
+      {
+        title: "Review & Rebase",
+        detail: "Resolve review comments and keep branch updated.",
+      },
+      {
+        title: "Merge Cleanly",
+        detail: "Merge PR and cleanup local branches.",
+      },
     ],
     graph: [
-      { branch: 'main', nodes: ['A', 'B', 'C', 'D'] },
-      { branch: 'feature/payments', nodes: ['p1', 'p2', 'R', 'M*'] },
+      { branch: "main", nodes: ["A", "B", "C", "D"] },
+      { branch: "feature/login", nodes: ["l1", "l2", "M*"] },
     ],
     terminal: [
       {
-        accept: ['git status'],
-        output: 'Status checked. You know current branch and pending changes.',
-        hint: 'Always inspect state first with `git status`.',
+        accept: ["git checkout -b feature/login"],
+        output: "Switched to new branch feature/login.",
+        hint: "Start feature work with `git checkout -b feature/login`.",
       },
       {
-        accept: ['git pull --rebase origin main'],
-        output: 'Rebase started. Resolve conflicts if prompted.',
-        hint: 'Use rebase pull to replay local commits on remote changes.',
+        accept: ["git add ."],
+        output: "Changes staged.",
+        hint: "Stage your feature updates with `git add .`.",
       },
       {
-        accept: ['git add .', 'git add*'],
-        output: 'Conflict resolutions staged.',
-        hint: 'After fixing conflict files, stage them with `git add`.',
+        accept: ["git commit -m*"],
+        output: "Feature commit created.",
+        hint: "Use descriptive commit message, for example `feat: add login form`.",
       },
       {
-        accept: ['git rebase --continue'],
-        output: 'Rebase continued successfully.',
-        hint: 'Continue rebase after staging resolved files.',
+        accept: ["git push -u origin feature/login"],
+        output: "Remote branch created and tracking set.",
+        hint: "First branch push usually uses -u.",
       },
       {
-        accept: ['git push --force-with-lease*'],
-        output: 'Remote updated safely after rewritten history.',
-        hint: 'For rebased branch, use `git push --force-with-lease` not raw --force.',
+        accept: ["git pull --rebase origin main"],
+        output: "Branch rebased on latest main.",
+        hint: "Keep your branch fresh with `git pull --rebase origin main`.",
       },
       {
-        accept: ['git reflog'],
-        output: 'Reflog displayed. Recovery points identified.',
-        hint: 'Use reflog when you need to recover lost commits.',
+        accept: ["git push --force-with-lease*", "git push"],
+        output: "Remote branch updated safely.",
+        hint: "After rebase, prefer `git push --force-with-lease`.",
       },
     ],
     githubProcedure: [
-      { title: 'Check PR conflict marker', detail: 'PR page shows conflict status if branch is behind.' },
-      { title: 'Update branch from main', detail: 'Rebase/merge locally, then push updated branch.' },
-      { title: 'Verify commits in PR', detail: 'Ensure only expected commits appear after rewrite.' },
-      { title: 'Communicate force push', detail: 'Notify reviewers if branch history changed.' },
-      { title: 'Merge when checks pass', detail: 'Only merge after CI and review are green.' },
+      {
+        title: "Open Pull Request",
+        detail: "GitHub → Compare & pull request from feature branch.",
+      },
+      {
+        title: "Write strong PR summary",
+        detail: "Include what changed, why, and how tested.",
+      },
+      {
+        title: "Request review",
+        detail: "Tag reviewer/team and mention risky areas.",
+      },
+      {
+        title: "Resolve comments",
+        detail: "Push follow-up commits and mark threads resolved.",
+      },
+      {
+        title: "Merge + delete branch",
+        detail: "Use squash/rebase policy and cleanup branch.",
+      },
     ],
     missions: [
-      { tag: 'Day 18', title: 'Conflict drill', detail: 'Resolve one simulated merge conflict end-to-end.' },
-      { tag: 'Day 19', title: 'Rebase + lease', detail: 'Practice safe force update after rebase.' },
-      { tag: 'Day 20', title: 'Reflog recovery', detail: 'Recover a dropped commit in demo repo.' },
+      {
+        tag: "Day 8",
+        title: "Feature branch flow",
+        detail: "Create, push, and PR one branch end-to-end.",
+      },
+      {
+        tag: "Day 9",
+        title: "Review simulation",
+        detail: "Respond to 3 mock PR comments.",
+      },
+      {
+        tag: "Day 10",
+        title: "Rebase practice",
+        detail: "Rebase feature branch on latest main safely.",
+      },
     ],
   },
   {
-    id: 'expert',
-    label: 'Expert Ops Path',
-    summary: 'Releases, debugging history, and team automation',
+    id: "recovery",
+    label: "Recovery Path",
+    summary: "Conflicts, rejected pushes, and safe force strategy",
     roadmap: [
-      { title: 'Release versioning', detail: 'Tag stable versions and publish release notes.' },
-      { title: 'Hotfix discipline', detail: 'Patch production with minimal risk.' },
-      { title: 'Bisect debugging', detail: 'Find bad commits quickly with binary search.' },
-      { title: 'Quality gates', detail: 'Use GitHub Actions and branch rules for consistency.' },
-      { title: 'Mentor workflows', detail: 'Scale standards across teams.' },
+      {
+        title: "Diagnose first",
+        detail: "Read `git status` and understand before running commands.",
+      },
+      {
+        title: "Rebase conflicts",
+        detail: "Resolve line conflicts cleanly and continue rebase.",
+      },
+      {
+        title: "Safe force push",
+        detail: "Use force-with-lease when history was rewritten.",
+      },
+      {
+        title: "Reflog rescue",
+        detail: "Recover accidental resets or bad rebases quickly.",
+      },
+      {
+        title: "Post-incident habits",
+        detail: "Add checks to avoid repeating same issues.",
+      },
     ],
     graph: [
-      { branch: 'main', nodes: ['A', 'B', 'v1.2', 'H1', 'v1.3'] },
-      { branch: 'hotfix/1.2.1', nodes: ['h1', 'M*'] },
+      { branch: "main", nodes: ["A", "B", "C", "D"] },
+      { branch: "feature/payments", nodes: ["p1", "p2", "R", "M*"] },
     ],
     terminal: [
       {
-        accept: ['git checkout main'],
-        output: 'Switched to main.',
-        hint: 'Prepare release actions from main branch.',
+        accept: ["git status"],
+        output: "Status checked. You know current branch and pending changes.",
+        hint: "Always inspect state first with `git status`.",
       },
       {
-        accept: ['git pull --rebase origin main', 'git pull origin main'],
-        output: 'Main updated from remote.',
-        hint: 'Always sync latest main before release tags.',
+        accept: ["git pull --rebase origin main"],
+        output: "Rebase started. Resolve conflicts if prompted.",
+        hint: "Use rebase pull to replay local commits on remote changes.",
       },
       {
-        accept: ['git tag -a*'],
-        output: 'Annotated release tag created.',
+        accept: ["git add .", "git add*"],
+        output: "Conflict resolutions staged.",
+        hint: "After fixing conflict files, stage them with `git add`.",
+      },
+      {
+        accept: ["git rebase --continue"],
+        output: "Rebase continued successfully.",
+        hint: "Continue rebase after staging resolved files.",
+      },
+      {
+        accept: ["git push --force-with-lease*"],
+        output: "Remote updated safely after rewritten history.",
+        hint: "For rebased branch, use `git push --force-with-lease` not raw --force.",
+      },
+      {
+        accept: ["git reflog"],
+        output: "Reflog displayed. Recovery points identified.",
+        hint: "Use reflog when you need to recover lost commits.",
+      },
+    ],
+    githubProcedure: [
+      {
+        title: "Check PR conflict marker",
+        detail: "PR page shows conflict status if branch is behind.",
+      },
+      {
+        title: "Update branch from main",
+        detail: "Rebase/merge locally, then push updated branch.",
+      },
+      {
+        title: "Verify commits in PR",
+        detail: "Ensure only expected commits appear after rewrite.",
+      },
+      {
+        title: "Communicate force push",
+        detail: "Notify reviewers if branch history changed.",
+      },
+      {
+        title: "Merge when checks pass",
+        detail: "Only merge after CI and review are green.",
+      },
+    ],
+    missions: [
+      {
+        tag: "Day 18",
+        title: "Conflict drill",
+        detail: "Resolve one simulated merge conflict end-to-end.",
+      },
+      {
+        tag: "Day 19",
+        title: "Rebase + lease",
+        detail: "Practice safe force update after rebase.",
+      },
+      {
+        tag: "Day 20",
+        title: "Reflog recovery",
+        detail: "Recover a dropped commit in demo repo.",
+      },
+    ],
+  },
+  {
+    id: "expert",
+    label: "Expert Ops Path",
+    summary: "Releases, debugging history, and team automation",
+    roadmap: [
+      {
+        title: "Release versioning",
+        detail: "Tag stable versions and publish release notes.",
+      },
+      {
+        title: "Hotfix discipline",
+        detail: "Patch production with minimal risk.",
+      },
+      {
+        title: "Bisect debugging",
+        detail: "Find bad commits quickly with binary search.",
+      },
+      {
+        title: "Quality gates",
+        detail: "Use GitHub Actions and branch rules for consistency.",
+      },
+      { title: "Mentor workflows", detail: "Scale standards across teams." },
+    ],
+    graph: [
+      { branch: "main", nodes: ["A", "B", "v1.2", "H1", "v1.3"] },
+      { branch: "hotfix/1.2.1", nodes: ["h1", "M*"] },
+    ],
+    terminal: [
+      {
+        accept: ["git checkout main"],
+        output: "Switched to main.",
+        hint: "Prepare release actions from main branch.",
+      },
+      {
+        accept: ["git pull --rebase origin main", "git pull origin main"],
+        output: "Main updated from remote.",
+        hint: "Always sync latest main before release tags.",
+      },
+      {
+        accept: ["git tag -a*"],
+        output: "Annotated release tag created.",
         hint: 'Create release tag like `git tag -a v1.2.0 -m "Release v1.2.0"`.',
       },
       {
-        accept: ['git push origin --tags', 'git push origin v1.2.0'],
-        output: 'Release tag pushed to remote.',
-        hint: 'Push tags to publish release markers.',
+        accept: ["git push origin --tags", "git push origin v1.2.0"],
+        output: "Release tag pushed to remote.",
+        hint: "Push tags to publish release markers.",
       },
       {
-        accept: ['git bisect start'],
-        output: 'Bisect session started.',
-        hint: 'Use bisect for fast root-cause search in commit history.',
+        accept: ["git bisect start"],
+        output: "Bisect session started.",
+        hint: "Use bisect for fast root-cause search in commit history.",
       },
       {
-        accept: ['git bisect reset'],
-        output: 'Bisect ended and branch restored.',
-        hint: 'Always reset after bisect is done.',
+        accept: ["git bisect reset"],
+        output: "Bisect ended and branch restored.",
+        hint: "Always reset after bisect is done.",
       },
     ],
     githubProcedure: [
-      { title: 'Create GitHub Release', detail: 'GitHub → Releases → Draft new release from pushed tag.' },
-      { title: 'Attach changelog', detail: 'Add highlights, breaking changes, migration notes.' },
-      { title: 'Protect main branch', detail: 'Require PR reviews and status checks.' },
-      { title: 'Configure CI rules', detail: 'Block merge on failed tests/lint checks.' },
-      { title: 'Track incident fixes', detail: 'Link hotfix PRs to issues for audit trail.' },
+      {
+        title: "Create GitHub Release",
+        detail: "GitHub → Releases → Draft new release from pushed tag.",
+      },
+      {
+        title: "Attach changelog",
+        detail: "Add highlights, breaking changes, migration notes.",
+      },
+      {
+        title: "Protect main branch",
+        detail: "Require PR reviews and status checks.",
+      },
+      {
+        title: "Configure CI rules",
+        detail: "Block merge on failed tests/lint checks.",
+      },
+      {
+        title: "Track incident fixes",
+        detail: "Link hotfix PRs to issues for audit trail.",
+      },
     ],
     missions: [
-      { tag: 'Day 26', title: 'Release tag', detail: 'Tag and publish a demo release with notes.' },
-      { tag: 'Day 27', title: 'Hotfix branch', detail: 'Create and merge a hotfix flow.' },
-      { tag: 'Day 28', title: 'Bisect session', detail: 'Find a broken commit using bisect.' },
+      {
+        tag: "Day 26",
+        title: "Release tag",
+        detail: "Tag and publish a demo release with notes.",
+      },
+      {
+        tag: "Day 27",
+        title: "Hotfix branch",
+        detail: "Create and merge a hotfix flow.",
+      },
+      {
+        tag: "Day 28",
+        title: "Bisect session",
+        detail: "Find a broken commit using bisect.",
+      },
     ],
   },
 ];
 
 const gitignorePresets = {
   common: [
-    '# OS files',
-    '.DS_Store',
-    'Thumbs.db',
-    '',
-    '# Editor and local settings',
-    '.idea/',
-    '.vscode/*',
-    '!.vscode/extensions.json',
-    '!.vscode/settings.json',
-    '',
-    '# Environment files',
-    '.env',
-    '.env.*',
-    '!.env.example',
+    "# OS files",
+    ".DS_Store",
+    "Thumbs.db",
+    "",
+    "# Editor and local settings",
+    ".idea/",
+    ".vscode/*",
+    "!.vscode/extensions.json",
+    "!.vscode/settings.json",
+    "",
+    "# Environment files",
+    ".env",
+    ".env.*",
+    "!.env.example",
   ],
-  node: ['node_modules/', 'npm-debug.log*', 'yarn-debug.log*', 'pnpm-debug.log*', 'dist/', 'coverage/'],
-  react: ['build/', '.eslintcache'],
-  nextjs: ['.next/', 'out/'],
-  python: ['__pycache__/', '*.py[cod]', '.venv/', 'venv/', '.pytest_cache/', '.mypy_cache/'],
-  java: ['*.class', '*.jar', '.gradle/', 'build/', 'target/'],
-  go: ['bin/', 'pkg/', '*.test', 'coverage.out'],
-  rust: ['target/', 'Cargo.lock'],
-  flutter: ['.dart_tool/', '.packages', '.flutter-plugins', '.flutter-plugins-dependencies', 'build/'],
+  node: [
+    "node_modules/",
+    "npm-debug.log*",
+    "yarn-debug.log*",
+    "pnpm-debug.log*",
+    "dist/",
+    "coverage/",
+  ],
+  react: ["build/", ".eslintcache"],
+  nextjs: [".next/", "out/"],
+  python: [
+    "__pycache__/",
+    "*.py[cod]",
+    ".venv/",
+    "venv/",
+    ".pytest_cache/",
+    ".mypy_cache/",
+  ],
+  java: ["*.class", "*.jar", ".gradle/", "build/", "target/"],
+  go: ["bin/", "pkg/", "*.test", "coverage.out"],
+  rust: ["target/", "Cargo.lock"],
+  flutter: [
+    ".dart_tool/",
+    ".packages",
+    ".flutter-plugins",
+    ".flutter-plugins-dependencies",
+    "build/",
+  ],
 };
 
 const stackLabels = {
-  node: 'Node.js',
-  react: 'React',
-  nextjs: 'Next.js',
-  python: 'Python',
-  java: 'Java',
-  go: 'Go',
-  rust: 'Rust',
-  flutter: 'Flutter',
+  node: "Node.js",
+  react: "React",
+  nextjs: "Next.js",
+  python: "Python",
+  java: "Java",
+  go: "Go",
+  rust: "Rust",
+  flutter: "Flutter",
 };
 
 let currentVisualTrack = visualTracks[0];
 let sandboxStepIndex = 0;
 
 function normalizeCommand(cmd) {
-  return cmd.trim().replace(/\s+/g, ' ').toLowerCase();
+  return cmd.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
 function matchCommand(input, rule) {
   const normalizedInput = normalizeCommand(input);
   const normalizedRule = normalizeCommand(rule);
-  if (normalizedRule.endsWith('*')) return normalizedInput.startsWith(normalizedRule.slice(0, -1));
+  if (normalizedRule.endsWith("*"))
+    return normalizedInput.startsWith(normalizedRule.slice(0, -1));
   return normalizedInput === normalizedRule;
 }
 
 function renderVisualTrackTabs() {
-  const tabs = document.getElementById('visualTrackTabs');
+  const tabs = document.getElementById("visualTrackTabs");
   tabs.innerHTML = visualTracks
     .map(
       (track) => `
-    <button class="visual-track-btn ${track.id === currentVisualTrack.id ? 'active' : ''}" data-visual-track="${track.id}">
+    <button class="visual-track-btn ${track.id === currentVisualTrack.id ? "active" : ""}" data-visual-track="${track.id}">
       ${track.label}
     </button>
-  `
+  `,
     )
-    .join('');
+    .join("");
 
-  tabs.querySelectorAll('[data-visual-track]').forEach((btn) => {
-    btn.addEventListener('click', () => setVisualTrack(btn.dataset.visualTrack));
+  tabs.querySelectorAll("[data-visual-track]").forEach((btn) => {
+    btn.addEventListener("click", () =>
+      setVisualTrack(btn.dataset.visualTrack),
+    );
   });
 }
 
 function renderVisualRoadmap(track) {
-  const el = document.getElementById('visualRoadmap');
+  const el = document.getElementById("visualRoadmap");
   const activeIndex = Math.min(sandboxStepIndex, track.roadmap.length - 1);
   el.innerHTML = track.roadmap
     .map(
       (step, index) => `
-    <div class="roadmap-step ${index === activeIndex ? 'active' : ''}">
+    <div class="roadmap-step ${index === activeIndex ? "active" : ""}">
       <div class="roadmap-index">${index + 1}</div>
       <div class="roadmap-content">
         <h3>${escapeHtml(step.title)}</h3>
         <p>${escapeHtml(step.detail)}</p>
       </div>
     </div>
-  `
+  `,
     )
-    .join('');
+    .join("");
 }
 
 function renderVisualGraph(track) {
-  const graph = document.getElementById('visualGraph');
+  const graph = document.getElementById("visualGraph");
   graph.innerHTML = track.graph
     .map(
       (lane) => `
@@ -1037,18 +1566,21 @@ function renderVisualGraph(track) {
       <div class="graph-branch">${escapeHtml(lane.branch)}</div>
       <div class="graph-nodes">
         ${lane.nodes
-          .map((node) => `<div class="graph-node ${node.includes('*') ? 'merge' : ''}">${escapeHtml(node.replace('*', ''))}</div>`)
-          .join('')}
+          .map(
+            (node) =>
+              `<div class="graph-node ${node.includes("*") ? "merge" : ""}">${escapeHtml(node.replace("*", ""))}</div>`,
+          )
+          .join("")}
       </div>
     </div>
-  `
+  `,
     )
-    .join('');
+    .join("");
 }
 
-function appendSandboxLine(text, type = 'ok') {
-  const screen = document.getElementById('sandboxOutput');
-  const line = document.createElement('div');
+function appendSandboxLine(text, type = "ok") {
+  const screen = document.getElementById("sandboxOutput");
+  const line = document.createElement("div");
   line.className = `terminal-line ${type}`;
   line.textContent = text;
   screen.appendChild(line);
@@ -1057,52 +1589,63 @@ function appendSandboxLine(text, type = 'ok') {
 
 function resetTerminalTrainer(track = currentVisualTrack) {
   sandboxStepIndex = 0;
-  const screen = document.getElementById('sandboxOutput');
-  screen.innerHTML = '';
-  appendSandboxLine(`Track: ${track.label} — ${track.summary}`, 'ok');
-  appendSandboxLine(`Step 1/${track.terminal.length}: ${track.terminal[0].hint}`, 'ok');
+  const screen = document.getElementById("sandboxOutput");
+  screen.innerHTML = "";
+  appendSandboxLine(`Track: ${track.label} — ${track.summary}`, "ok");
+  appendSandboxLine(
+    `Step 1/${track.terminal.length}: ${track.terminal[0].hint}`,
+    "ok",
+  );
   renderVisualRoadmap(track);
 }
 
 function runSandboxCommand() {
-  const input = document.getElementById('sandboxInput');
+  const input = document.getElementById("sandboxInput");
   const rawCommand = input.value.trim();
   if (!rawCommand) return;
 
   const currentStep = currentVisualTrack.terminal[sandboxStepIndex];
-  appendSandboxLine(`$ ${rawCommand}`, 'command');
+  appendSandboxLine(`$ ${rawCommand}`, "command");
 
-  const isValid = currentStep.accept.some((rule) => matchCommand(rawCommand, rule));
+  const isValid = currentStep.accept.some((rule) =>
+    matchCommand(rawCommand, rule),
+  );
   if (!isValid) {
-    appendSandboxLine(`Not yet. Hint: ${currentStep.hint}`, 'error');
-    input.value = '';
+    appendSandboxLine(`Not yet. Hint: ${currentStep.hint}`, "error");
+    input.value = "";
     return;
   }
 
-  appendSandboxLine(currentStep.output, 'ok');
+  appendSandboxLine(currentStep.output, "ok");
   sandboxStepIndex += 1;
 
   if (sandboxStepIndex >= currentVisualTrack.terminal.length) {
-    appendSandboxLine('✅ Track complete. You can switch to another track or reset and practice again.', 'ok');
+    appendSandboxLine(
+      "✅ Track complete. You can switch to another track or reset and practice again.",
+      "ok",
+    );
     renderVisualRoadmap(currentVisualTrack);
-    input.value = '';
+    input.value = "";
     return;
   }
 
   const nextStep = currentVisualTrack.terminal[sandboxStepIndex];
-  appendSandboxLine(`Next Step ${sandboxStepIndex + 1}/${currentVisualTrack.terminal.length}: ${nextStep.hint}`, 'ok');
+  appendSandboxLine(
+    `Next Step ${sandboxStepIndex + 1}/${currentVisualTrack.terminal.length}: ${nextStep.hint}`,
+    "ok",
+  );
   renderVisualRoadmap(currentVisualTrack);
-  input.value = '';
+  input.value = "";
 }
 
 function showSandboxHint() {
   const currentStep = currentVisualTrack.terminal[sandboxStepIndex];
   if (!currentStep) return;
-  appendSandboxLine(`Hint: ${currentStep.hint}`, 'ok');
+  appendSandboxLine(`Hint: ${currentStep.hint}`, "ok");
 }
 
 function renderGithubProcedure(track) {
-  const container = document.getElementById('githubProcedure');
+  const container = document.getElementById("githubProcedure");
   container.innerHTML = track.githubProcedure
     .map(
       (step, index) => `
@@ -1113,26 +1656,29 @@ function renderGithubProcedure(track) {
         <p>${escapeHtml(step.detail)}</p>
       </div>
     </label>
-  `
+  `,
     )
-    .join('');
+    .join("");
 
   container.querySelectorAll('input[type="checkbox"]').forEach((check) => {
-    check.addEventListener('change', updateProcedureProgress);
+    check.addEventListener("change", updateProcedureProgress);
   });
   updateProcedureProgress();
 }
 
 function updateProcedureProgress() {
-  const checks = Array.from(document.querySelectorAll('#githubProcedure input[type="checkbox"]'));
+  const checks = Array.from(
+    document.querySelectorAll('#githubProcedure input[type="checkbox"]'),
+  );
   if (checks.length === 0) return;
   const done = checks.filter((c) => c.checked).length;
   const percentage = Math.round((done / checks.length) * 100);
-  document.getElementById('procedureProgressBar').style.width = `${percentage}%`;
+  document.getElementById("procedureProgressBar").style.width =
+    `${percentage}%`;
 }
 
 function renderMissions(track) {
-  const list = document.getElementById('missionList');
+  const list = document.getElementById("missionList");
   list.innerHTML = track.missions
     .map(
       (mission) => `
@@ -1146,13 +1692,15 @@ function renderMissions(track) {
         <input type="checkbox" style="accent-color: var(--accent);margin-right:6px" /> Mark complete
       </p>
     </label>
-  `
+  `,
     )
-    .join('');
+    .join("");
 }
 
 function updateGitignorePreview() {
-  const selectedStacks = Array.from(document.querySelectorAll('#gitignoreStacks input:checked')).map((input) => input.value);
+  const selectedStacks = Array.from(
+    document.querySelectorAll("#gitignoreStacks input:checked"),
+  ).map((input) => input.value);
   const finalLines = [];
   const seen = new Set();
 
@@ -1163,25 +1711,28 @@ function updateGitignorePreview() {
     finalLines.push(line);
   };
 
-  pushUnique('# Generated by GitVora');
-  pushUnique('');
+  pushUnique("# Generated by GitVora");
+  pushUnique("");
   gitignorePresets.common.forEach(pushUnique);
   selectedStacks.forEach((stack) => {
-    pushUnique('');
+    pushUnique("");
     pushUnique(`# ${stackLabels[stack]} stack`);
     gitignorePresets[stack].forEach(pushUnique);
   });
 
   if (selectedStacks.length === 0) {
-    pushUnique('');
-    pushUnique('# Tip: Select one or more stacks above for framework-specific entries.');
+    pushUnique("");
+    pushUnique(
+      "# Tip: Select one or more stacks above for framework-specific entries.",
+    );
   }
 
-  document.getElementById('gitignorePreview').textContent = finalLines.join('\n');
+  document.getElementById("gitignorePreview").textContent =
+    finalLines.join("\n");
 }
 
 function renderGitignoreStacks() {
-  const container = document.getElementById('gitignoreStacks');
+  const container = document.getElementById("gitignoreStacks");
   container.innerHTML = Object.entries(stackLabels)
     .map(
       ([key, label]) => `
@@ -1189,12 +1740,12 @@ function renderGitignoreStacks() {
       <input type="checkbox" value="${key}" />
       ${label}
     </label>
-  `
+  `,
     )
-    .join('');
+    .join("");
 
   container.querySelectorAll('input[type="checkbox"]').forEach((check) => {
-    check.addEventListener('change', updateGitignorePreview);
+    check.addEventListener("change", updateGitignorePreview);
   });
   updateGitignorePreview();
 }
@@ -1212,24 +1763,34 @@ function setVisualTrack(trackId) {
 }
 
 function initVisualMasterclass() {
-  if (!document.getElementById('panel-visual')) return;
+  if (!document.getElementById("panel-visual")) return;
 
   renderGitignoreStacks();
   setVisualTrack(currentVisualTrack.id);
 
-  document.getElementById('sandboxRunBtn').addEventListener('click', runSandboxCommand);
-  document.getElementById('sandboxHintBtn').addEventListener('click', showSandboxHint);
-  document.getElementById('sandboxResetBtn').addEventListener('click', () => resetTerminalTrainer(currentVisualTrack));
-  document.getElementById('sandboxInput').addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      runSandboxCommand();
-    }
-  });
+  document
+    .getElementById("sandboxRunBtn")
+    .addEventListener("click", runSandboxCommand);
+  document
+    .getElementById("sandboxHintBtn")
+    .addEventListener("click", showSandboxHint);
+  document
+    .getElementById("sandboxResetBtn")
+    .addEventListener("click", () => resetTerminalTrainer(currentVisualTrack));
+  document
+    .getElementById("sandboxInput")
+    .addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        runSandboxCommand();
+      }
+    });
 
-  document.getElementById('copyGitignoreBtn').addEventListener('click', function () {
-    copyText(document.getElementById('gitignorePreview').textContent, this);
-  });
+  document
+    .getElementById("copyGitignoreBtn")
+    .addEventListener("click", function () {
+      copyText(document.getElementById("gitignorePreview").textContent, this);
+    });
 }
 
 initVisualMasterclass();
@@ -1240,8 +1801,8 @@ initVisualMasterclass();
 // ============================================================
 const allErrors = [
   {
-    tag: 'NON-FAST-FORWARD PUSH',
-    title: 'Push rejected: your branch is behind remote',
+    tag: "NON-FAST-FORWARD PUSH",
+    title: "Push rejected: your branch is behind remote",
     patterns: [
       /!\s*\[rejected\].*non-fast-forward/i,
       /non-fast-forward/i,
@@ -1252,38 +1813,41 @@ const allErrors = [
       /use \'git pull\' before pushing again/i,
       /note about fast-forwards/i,
     ],
-    cause: 'Remote branch has commits your local branch does not include yet.',
-    fix: '1) git status\n2) git pull --rebase origin <branch>\n3) Resolve conflicts if asked, then git add <file> and git rebase --continue\n4) git push\n5) If you intentionally rebased your own branch: git push --force-with-lease',
-    prevent: 'Pull with rebase before starting new work and push in smaller batches.',
+    cause: "Remote branch has commits your local branch does not include yet.",
+    fix: "1) git status\n2) git pull --rebase origin <branch>\n3) Resolve conflicts if asked, then git add <file> and git rebase --continue\n4) git push\n5) If you intentionally rebased your own branch: git push --force-with-lease",
+    prevent:
+      "Pull with rebase before starting new work and push in smaller batches.",
   },
   {
-    tag: 'LINE ENDING WARNING',
-    title: 'LF/CRLF conversion warning',
+    tag: "LINE ENDING WARNING",
+    title: "LF/CRLF conversion warning",
     patterns: [/lf will be replaced by crlf/i, /crlf will be replaced by lf/i],
-    cause: 'Your operating system line endings and repository line endings differ.',
-    fix: 'This is usually a warning, not a blocker.\nFor Windows:\n1) git config --global core.autocrlf true\nFor macOS/Linux:\n2) git config --global core.autocrlf input\nOptional: add .gitattributes with explicit line-ending rules.',
-    prevent: 'Set core.autocrlf once and keep a shared .gitattributes in the repo.',
-    response: 'explain',
+    cause:
+      "Your operating system line endings and repository line endings differ.",
+    fix: "This is usually a warning, not a blocker.\nFor Windows:\n1) git config --global core.autocrlf true\nFor macOS/Linux:\n2) git config --global core.autocrlf input\nOptional: add .gitattributes with explicit line-ending rules.",
+    prevent:
+      "Set core.autocrlf once and keep a shared .gitattributes in the repo.",
+    response: "explain",
   },
   {
-    tag: 'NOT A GIT REPOSITORY',
-    title: 'fatal: not a git repository',
+    tag: "NOT A GIT REPOSITORY",
+    title: "fatal: not a git repository",
     patterns: [/not a git repository/i],
-    cause: 'Command was run outside a Git repository.',
-    fix: '1) cd /path/to/your/project\n2) git status\n3) If project is not initialized yet: git init',
-    prevent: 'Run git commands inside your project root where .git exists.',
+    cause: "Command was run outside a Git repository.",
+    fix: "1) cd /path/to/your/project\n2) git status\n3) If project is not initialized yet: git init",
+    prevent: "Run git commands inside your project root where .git exists.",
   },
   {
-    tag: 'GIT NOT INSTALLED / PATH ISSUE',
-    title: 'git: command not found',
+    tag: "GIT NOT INSTALLED / PATH ISSUE",
+    title: "git: command not found",
     patterns: [/git: command not found/i, /'git' is not recognized/i],
-    cause: 'Git is not installed or not available in system PATH.',
-    fix: '1) Install Git from git-scm.com/downloads\n2) Restart terminal\n3) Verify with: git --version',
-    prevent: 'After install, verify PATH and restart terminal shell.',
+    cause: "Git is not installed or not available in system PATH.",
+    fix: "1) Install Git from git-scm.com/downloads\n2) Restart terminal\n3) Verify with: git --version",
+    prevent: "After install, verify PATH and restart terminal shell.",
   },
   {
-    tag: 'REPOSITORY URL / ACCESS ISSUE',
-    title: 'fatal: repository not found / unable to access',
+    tag: "REPOSITORY URL / ACCESS ISSUE",
+    title: "fatal: repository not found / unable to access",
     patterns: [
       /fatal: repository .* not found/i,
       /repository not found/i,
@@ -1291,53 +1855,66 @@ const allErrors = [
       /couldn\'t find remote ref/i,
       /remote: repository not found/i,
     ],
-    cause: 'Remote URL is wrong, repo is private/inaccessible, or branch/ref does not exist.',
-    fix: '1) git remote -v\n2) If wrong URL: git remote set-url origin <correct-url>\n3) Verify repo exists and you have access\n4) Verify branch/ref name exists on remote',
-    prevent: 'Copy remote URL directly from GitHub repo page and verify with git remote -v.',
+    cause:
+      "Remote URL is wrong, repo is private/inaccessible, or branch/ref does not exist.",
+    fix: "1) git remote -v\n2) If wrong URL: git remote set-url origin <correct-url>\n3) Verify repo exists and you have access\n4) Verify branch/ref name exists on remote",
+    prevent:
+      "Copy remote URL directly from GitHub repo page and verify with git remote -v.",
   },
   {
-    tag: 'AUTHENTICATION FAILED',
-    title: 'fatal: Authentication failed',
-    patterns: [/authentication failed/i, /http basic: access denied/i, /invalid username or password/i],
-    cause: 'Credentials are invalid or outdated for remote access.',
-    fix: '1) Use GitHub Personal Access Token (PAT) instead of password\n2) Or switch remote to SSH and configure SSH key\n3) Clear old credentials from your credential manager',
-    prevent: 'Use PAT/SSH and rotate credentials cleanly when tokens expire.',
+    tag: "AUTHENTICATION FAILED",
+    title: "fatal: Authentication failed",
+    patterns: [
+      /authentication failed/i,
+      /http basic: access denied/i,
+      /invalid username or password/i,
+    ],
+    cause: "Credentials are invalid or outdated for remote access.",
+    fix: "1) Use GitHub Personal Access Token (PAT) instead of password\n2) Or switch remote to SSH and configure SSH key\n3) Clear old credentials from your credential manager",
+    prevent: "Use PAT/SSH and rotate credentials cleanly when tokens expire.",
   },
   {
-    tag: 'PASSWORD AUTH REMOVED',
-    title: 'remote: Support for password authentication was removed',
+    tag: "PASSWORD AUTH REMOVED",
+    title: "remote: Support for password authentication was removed",
     patterns: [/support for password authentication was removed/i],
-    cause: 'GitHub does not allow account password auth for Git operations.',
-    fix: '1) Create GitHub PAT (Settings → Developer settings → Tokens)\n2) Use PAT as password when prompted\nOR\n3) Configure SSH key and use git@github.com URL',
-    prevent: 'Prefer SSH or PAT from the start.',
+    cause: "GitHub does not allow account password auth for Git operations.",
+    fix: "1) Create GitHub PAT (Settings → Developer settings → Tokens)\n2) Use PAT as password when prompted\nOR\n3) Configure SSH key and use git@github.com URL",
+    prevent: "Prefer SSH or PAT from the start.",
   },
   {
-    tag: 'SSH PUBLIC KEY ISSUE',
-    title: 'Permission denied (publickey)',
-    patterns: [/permission denied \(publickey\)/i, /host key verification failed/i],
-    cause: 'SSH key is missing, not loaded, or host trust is not set.',
+    tag: "SSH PUBLIC KEY ISSUE",
+    title: "Permission denied (publickey)",
+    patterns: [
+      /permission denied \(publickey\)/i,
+      /host key verification failed/i,
+    ],
+    cause: "SSH key is missing, not loaded, or host trust is not set.",
     fix: '1) ssh -T git@github.com\n2) ssh-keygen -t ed25519 -C "you@example.com" (if needed)\n3) ssh-add ~/.ssh/id_ed25519\n4) Add public key to GitHub → SSH and GPG keys',
-    prevent: 'Keep one active SSH key loaded in agent and verify with ssh -T.',
+    prevent: "Keep one active SSH key loaded in agent and verify with ssh -T.",
   },
   {
-    tag: 'REMOTE CONFIGURATION ISSUE',
-    title: 'remote origin already exists / no such remote',
+    tag: "REMOTE CONFIGURATION ISSUE",
+    title: "remote origin already exists / no such remote",
     patterns: [/remote origin already exists/i, /no such remote \'origin\'/i],
-    cause: 'Remote setup command conflicts with existing or missing remote.',
-    fix: 'If remote exists:\n1) git remote -v\n2) git remote set-url origin <new-url>\nIf remote missing:\n1) git remote add origin <url>',
-    prevent: 'Check remotes before changing them: git remote -v.',
+    cause: "Remote setup command conflicts with existing or missing remote.",
+    fix: "If remote exists:\n1) git remote -v\n2) git remote set-url origin <new-url>\nIf remote missing:\n1) git remote add origin <url>",
+    prevent: "Check remotes before changing them: git remote -v.",
   },
   {
-    tag: 'AUTHOR IDENTITY UNKNOWN',
-    title: 'Please tell me who you are',
-    patterns: [/unable to auto-detect email address/i, /please tell me who you are/i, /author identity unknown/i],
-    cause: 'Git user.name and/or user.email are not configured.',
+    tag: "AUTHOR IDENTITY UNKNOWN",
+    title: "Please tell me who you are",
+    patterns: [
+      /unable to auto-detect email address/i,
+      /please tell me who you are/i,
+      /author identity unknown/i,
+    ],
+    cause: "Git user.name and/or user.email are not configured.",
     fix: '1) git config --global user.name "Your Name"\n2) git config --global user.email "you@example.com"\n3) Retry commit',
-    prevent: 'Configure identity once immediately after installing Git.',
+    prevent: "Configure identity once immediately after installing Git.",
   },
   {
-    tag: 'WORKING TREE STATUS (NOT STAGED)',
-    title: 'Changes not staged / no changes added to commit',
+    tag: "WORKING TREE STATUS (NOT STAGED)",
+    title: "Changes not staged / no changes added to commit",
     patterns: [
       /changes not staged for commit/i,
       /no changes added to commit/i,
@@ -1345,36 +1922,45 @@ const allErrors = [
       /modified:\s+/i,
       /use "git add <file>\.\.\." to update what will be committed/i,
     ],
-    cause: 'This is a status report, not a crash. Your files changed, but they are not staged for commit yet.',
+    cause:
+      "This is a status report, not a crash. Your files changed, but they are not staged for commit yet.",
     fix: 'Optional next steps:\n1) Review current state: git status\n2) Stage updates: git add . (or specific files)\n3) Commit: git commit -m "your message"\n4) Push if needed: git push',
-    prevent: 'Run git status before commit so you know what is staged vs unstaged.',
-    response: 'explain',
+    prevent:
+      "Run git status before commit so you know what is staged vs unstaged.",
+    response: "explain",
   },
   {
-    tag: 'STATUS: CLEAN OR ALREADY SYNCED',
-    title: 'nothing to commit / already up to date',
-    patterns: [/nothing to commit, working tree clean/i, /everything up-to-date/i, /already up to date/i, /no local changes to save/i],
-    cause: 'Git is informing you there is nothing new to commit, stash, or push right now.',
-    fix: 'If you expected changes:\n1) Verify file edits are saved\n2) Run git status\n3) Stage files with git add .\nIf you just pulled/pushed, this message is normal.',
-    prevent: 'No action needed unless you expected different output.',
-    response: 'explain',
+    tag: "STATUS: CLEAN OR ALREADY SYNCED",
+    title: "nothing to commit / already up to date",
+    patterns: [
+      /nothing to commit, working tree clean/i,
+      /everything up-to-date/i,
+      /already up to date/i,
+      /no local changes to save/i,
+    ],
+    cause:
+      "Git is informing you there is nothing new to commit, stash, or push right now.",
+    fix: "If you expected changes:\n1) Verify file edits are saved\n2) Run git status\n3) Stage files with git add .\nIf you just pulled/pushed, this message is normal.",
+    prevent: "No action needed unless you expected different output.",
+    response: "explain",
   },
   {
-    tag: 'REFSPEC / PATHSPEC ISSUE',
-    title: 'pathspec or refspec does not match',
+    tag: "REFSPEC / PATHSPEC ISSUE",
+    title: "pathspec or refspec does not match",
     patterns: [
       /pathspec .* did not match any file/i,
       /src refspec .* does not match any/i,
       /fatal: needed a single revision/i,
       /unknown revision or path not in working tree/i,
     ],
-    cause: 'Branch/tag/file reference does not exist locally or name is mistyped.',
+    cause:
+      "Branch/tag/file reference does not exist locally or name is mistyped.",
     fix: '1) git branch -a\n2) git tag\n3) Verify name and spelling\n4) Create commit before pushing new branch: git add . && git commit -m "init"',
-    prevent: 'List existing branches/tags first before checkout/push.',
+    prevent: "List existing branches/tags first before checkout/push.",
   },
   {
-    tag: 'BRANCH STATE ISSUE',
-    title: 'branch exists / not found / invalid branch',
+    tag: "BRANCH STATE ISSUE",
+    title: "branch exists / not found / invalid branch",
     patterns: [
       /branch named .* already exists/i,
       /branch .* not found/i,
@@ -1382,13 +1968,13 @@ const allErrors = [
       /branch is already checked out/i,
       /cannot delete branch checked out/i,
     ],
-    cause: 'Branch operation conflicts with current branch state.',
-    fix: '1) git branch -a\n2) Switch branch if needed: git checkout <branch>\n3) Delete safely from another branch: git branch -d <name>\n4) Use a valid branch name format (letters, numbers, /, -, _).',
-    prevent: 'Check current branch before create/delete actions.',
+    cause: "Branch operation conflicts with current branch state.",
+    fix: "1) git branch -a\n2) Switch branch if needed: git checkout <branch>\n3) Delete safely from another branch: git branch -d <name>\n4) Use a valid branch name format (letters, numbers, /, -, _).",
+    prevent: "Check current branch before create/delete actions.",
   },
   {
-    tag: 'HEAD / REVISION ISSUE',
-    title: 'bad revision / ambiguous HEAD / no commits yet',
+    tag: "HEAD / REVISION ISSUE",
+    title: "bad revision / ambiguous HEAD / no commits yet",
     patterns: [
       /invalid reference/i,
       /bad revision/i,
@@ -1399,13 +1985,14 @@ const allErrors = [
       /invalid object name head/i,
       /invalid upstream/i,
     ],
-    cause: 'HEAD or revision reference is invalid, often because repository has no commits or wrong commit hash is used.',
+    cause:
+      "HEAD or revision reference is invalid, often because repository has no commits or wrong commit hash is used.",
     fix: '1) git status\n2) If no commits yet: git add . && git commit -m "Initial commit"\n3) Verify revision with: git log --oneline --all\n4) Retry command with valid hash/branch',
-    prevent: 'Create initial commit early and copy hashes from git log output.',
+    prevent: "Create initial commit early and copy hashes from git log output.",
   },
   {
-    tag: 'NETWORK / DNS ISSUE',
-    title: 'Could not resolve host / timeout / disconnect',
+    tag: "NETWORK / DNS ISSUE",
+    title: "Could not resolve host / timeout / disconnect",
     patterns: [
       /could not resolve host/i,
       /connection timed out/i,
@@ -1414,29 +2001,30 @@ const allErrors = [
       /remote end hung up unexpectedly/i,
       /early eof/i,
     ],
-    cause: 'Network instability, VPN/proxy issue, or DNS resolution failure interrupted Git connection.',
-    fix: '1) Check internet and VPN/proxy settings\n2) Retry: git fetch --all\n3) If large push: git config --global http.postBuffer 524288000\n4) Try SSH instead of HTTPS (or vice versa)',
-    prevent: 'Use stable network and avoid very large single pushes.',
+    cause:
+      "Network instability, VPN/proxy issue, or DNS resolution failure interrupted Git connection.",
+    fix: "1) Check internet and VPN/proxy settings\n2) Retry: git fetch --all\n3) If large push: git config --global http.postBuffer 524288000\n4) Try SSH instead of HTTPS (or vice versa)",
+    prevent: "Use stable network and avoid very large single pushes.",
   },
   {
-    tag: 'SSL CERTIFICATE ISSUE',
-    title: 'SSL certificate problem',
+    tag: "SSL CERTIFICATE ISSUE",
+    title: "SSL certificate problem",
     patterns: [/ssl certificate problem/i],
-    cause: 'TLS certificate trust chain failed on this machine/network.',
-    fix: '1) Update Git and OS certificate store\n2) Verify corporate proxy certificates if on enterprise network\n3) Do NOT disable SSL verification globally unless temporary emergency on trusted network',
-    prevent: 'Keep Git and certificate store updated.',
+    cause: "TLS certificate trust chain failed on this machine/network.",
+    fix: "1) Update Git and OS certificate store\n2) Verify corporate proxy certificates if on enterprise network\n3) Do NOT disable SSL verification globally unless temporary emergency on trusted network",
+    prevent: "Keep Git and certificate store updated.",
   },
   {
-    tag: 'UNRELATED HISTORIES',
-    title: 'fatal: refusing to merge unrelated histories',
+    tag: "UNRELATED HISTORIES",
+    title: "fatal: refusing to merge unrelated histories",
     patterns: [/refusing to merge unrelated histories/i],
-    cause: 'Local and remote repositories started from different root commits.',
-    fix: '1) git pull origin <branch> --allow-unrelated-histories\n2) Resolve conflicts if shown\n3) git push',
-    prevent: 'Start local from clone, or keep one single initial history.',
+    cause: "Local and remote repositories started from different root commits.",
+    fix: "1) git pull origin <branch> --allow-unrelated-histories\n2) Resolve conflicts if shown\n3) git push",
+    prevent: "Start local from clone, or keep one single initial history.",
   },
   {
-    tag: 'MERGE CONFLICT / UNFINISHED MERGE',
-    title: 'Automatic merge failed or merge still in progress',
+    tag: "MERGE CONFLICT / UNFINISHED MERGE",
+    title: "Automatic merge failed or merge still in progress",
     patterns: [
       /automatic merge failed/i,
       /conflict \(content\)/i,
@@ -1447,13 +2035,14 @@ const allErrors = [
       /your local changes would be overwritten by merge/i,
       /cannot do a partial commit during merge/i,
     ],
-    cause: 'Git needs manual conflict resolution or merge cleanup before continuing.',
-    fix: '1) git status\n2) Open conflicted files and resolve markers\n3) git add <resolved-files>\n4) git commit (or git merge --continue)\n5) If you want to cancel merge: git merge --abort',
-    prevent: 'Pull/rebase frequently and keep commits small.',
+    cause:
+      "Git needs manual conflict resolution or merge cleanup before continuing.",
+    fix: "1) git status\n2) Open conflicted files and resolve markers\n3) git add <resolved-files>\n4) git commit (or git merge --continue)\n5) If you want to cancel merge: git merge --abort",
+    prevent: "Pull/rebase frequently and keep commits small.",
   },
   {
-    tag: 'REBASE STATE ISSUE',
-    title: 'Rebase in progress / cannot rebase with unstaged changes',
+    tag: "REBASE STATE ISSUE",
+    title: "Rebase in progress / cannot rebase with unstaged changes",
     patterns: [
       /rebase in progress/i,
       /no rebase in progress/i,
@@ -1463,159 +2052,199 @@ const allErrors = [
       /could not apply/i,
       /skipped previously applied commit/i,
     ],
-    cause: 'Repository is in an active rebase state or local unstaged changes block rebase.',
-    fix: '1) git status\n2) If unstaged changes: git add . && git stash (if needed)\n3) Continue: git rebase --continue\n4) Cancel: git rebase --abort\n5) End stale state: git rebase --quit',
-    prevent: 'Start rebase with clean working tree.',
+    cause:
+      "Repository is in an active rebase state or local unstaged changes block rebase.",
+    fix: "1) git status\n2) If unstaged changes: git add . && git stash (if needed)\n3) Continue: git rebase --continue\n4) Cancel: git rebase --abort\n5) End stale state: git rebase --quit",
+    prevent: "Start rebase with clean working tree.",
   },
   {
-    tag: 'TRACKING / UPSTREAM ISSUE',
-    title: 'No tracking information or push destination',
+    tag: "TRACKING / UPSTREAM ISSUE",
+    title: "No tracking information or push destination",
     patterns: [
       /no tracking information/i,
       /current branch .* has no upstream branch/i,
       /no configured push destination/i,
       /no upstream branch/i,
     ],
-    cause: 'Current branch is not linked to remote tracking branch.',
-    fix: '1) git push -u origin <branch-name>\n2) Future pushes can use: git push\n3) Verify tracking: git branch -vv',
-    prevent: 'Use -u on first push for every new branch.',
+    cause: "Current branch is not linked to remote tracking branch.",
+    fix: "1) git push -u origin <branch-name>\n2) Future pushes can use: git push\n3) Verify tracking: git branch -vv",
+    prevent: "Use -u on first push for every new branch.",
   },
   {
-    tag: 'REMOTE POLICY BLOCKED',
-    title: 'remote rejected / hook declined / protected branch',
-    patterns: [/remote rejected/i, /pre-receive hook declined/i, /protected branch hook declined/i, /refusing to update checked out branch/i],
-    cause: 'Server policy rejected push (branch protection, checks, or hook rules).',
-    fix: '1) Read rejection reason in output\n2) Push to feature branch and open PR\n3) Satisfy required checks/reviews\n4) Ask repo admin if policy update is needed',
-    prevent: 'Use PR workflow for protected branches.',
+    tag: "REMOTE POLICY BLOCKED",
+    title: "remote rejected / hook declined / protected branch",
+    patterns: [
+      /remote rejected/i,
+      /pre-receive hook declined/i,
+      /protected branch hook declined/i,
+      /refusing to update checked out branch/i,
+    ],
+    cause:
+      "Server policy rejected push (branch protection, checks, or hook rules).",
+    fix: "1) Read rejection reason in output\n2) Push to feature branch and open PR\n3) Satisfy required checks/reviews\n4) Ask repo admin if policy update is needed",
+    prevent: "Use PR workflow for protected branches.",
   },
   {
-    tag: 'DETACHED HEAD',
-    title: 'You are in detached HEAD state',
-    patterns: [/detached head state/i, /head detached at/i, /you are in detached head state/i],
-    cause: 'You checked out a commit instead of a branch.',
-    fix: '1) To keep work: git checkout -b rescue-branch\n2) To return: git checkout main',
-    prevent: 'Checkout named branches for normal work.',
+    tag: "DETACHED HEAD",
+    title: "You are in detached HEAD state",
+    patterns: [
+      /detached head state/i,
+      /head detached at/i,
+      /you are in detached head state/i,
+    ],
+    cause: "You checked out a commit instead of a branch.",
+    fix: "1) To keep work: git checkout -b rescue-branch\n2) To return: git checkout main",
+    prevent: "Checkout named branches for normal work.",
   },
   {
-    tag: 'LOCK FILE / GIT PROCESS ISSUE',
-    title: 'index.lock / cannot lock ref / another git process running',
+    tag: "LOCK FILE / GIT PROCESS ISSUE",
+    title: "index.lock / cannot lock ref / another git process running",
     patterns: [
       /unable to create \'.*index\.lock\': file exists/i,
       /cannot lock ref/i,
       /another git process seems to be running/i,
       /unable to write new index file/i,
     ],
-    cause: 'Interrupted command left lock files or another Git process is still running.',
-    fix: '1) Close running Git tools/terminals\n2) Delete stale lock file: .git/index.lock (only if no git process is active)\n3) Retry original command',
-    prevent: 'Avoid force-closing Git operations mid-process.',
+    cause:
+      "Interrupted command left lock files or another Git process is still running.",
+    fix: "1) Close running Git tools/terminals\n2) Delete stale lock file: .git/index.lock (only if no git process is active)\n3) Retry original command",
+    prevent: "Avoid force-closing Git operations mid-process.",
   },
   {
-    tag: 'FILESYSTEM PERMISSION ISSUE',
-    title: 'Permission denied / cannot mkdir .git / unable to unlink',
-    patterns: [/permission denied/i, /cannot mkdir \.git/i, /unable to unlink old file/i, /cannot stat file/i],
-    cause: 'OS permissions or file locks prevent Git file operations.',
-    fix: '1) Close apps using the files\n2) Run terminal with proper permissions\n3) Check file/folder ownership and read/write access\n4) Retry command',
-    prevent: 'Work inside writable project directories.',
+    tag: "FILESYSTEM PERMISSION ISSUE",
+    title: "Permission denied / cannot mkdir .git / unable to unlink",
+    patterns: [
+      /permission denied/i,
+      /cannot mkdir \.git/i,
+      /unable to unlink old file/i,
+      /cannot stat file/i,
+    ],
+    cause: "OS permissions or file locks prevent Git file operations.",
+    fix: "1) Close apps using the files\n2) Run terminal with proper permissions\n3) Check file/folder ownership and read/write access\n4) Retry command",
+    prevent: "Work inside writable project directories.",
   },
   {
-    tag: 'PATH LENGTH ISSUE',
-    title: 'filename too long / path too long',
+    tag: "PATH LENGTH ISSUE",
+    title: "filename too long / path too long",
     patterns: [/filename too long/i, /path too long/i],
-    cause: 'Windows path length limit was exceeded.',
-    fix: '1) Enable long paths in Windows\n2) Use shorter repo path (e.g., C:\\src\\project)\n3) Avoid deeply nested folders',
-    prevent: 'Keep repository path short on Windows.',
+    cause: "Windows path length limit was exceeded.",
+    fix: "1) Enable long paths in Windows\n2) Use shorter repo path (e.g., C:\\src\\project)\n3) Avoid deeply nested folders",
+    prevent: "Keep repository path short on Windows.",
   },
   {
-    tag: 'UNTRACKED FILE OVERWRITE RISK',
-    title: 'Untracked file would be overwritten',
+    tag: "UNTRACKED FILE OVERWRITE RISK",
+    title: "Untracked file would be overwritten",
     patterns: [
       /following untracked files would be overwritten/i,
       /untracked working tree file would be overwritten/i,
     ],
-    cause: 'Checkout/merge would overwrite local untracked files.',
-    fix: '1) Backup or move untracked files\n2) Or stash including untracked: git stash -u\n3) Retry checkout/merge\n4) Restore files if needed',
-    prevent: 'Keep working tree clean before switching branches.',
+    cause: "Checkout/merge would overwrite local untracked files.",
+    fix: "1) Backup or move untracked files\n2) Or stash including untracked: git stash -u\n3) Retry checkout/merge\n4) Restore files if needed",
+    prevent: "Keep working tree clean before switching branches.",
   },
   {
-    tag: 'SUBMODULE ISSUE',
-    title: 'Embedded repository / submodule mapping failed',
-    patterns: [/adding embedded git repository/i, /submodule path failed/i, /no submodule mapping found/i],
-    cause: 'Nested repository is treated as submodule incorrectly or submodule config is broken.',
-    fix: '1) If intended submodule: git submodule add <url> <path>\n2) If not intended: remove nested .git folder inside subdir\n3) Check .gitmodules consistency',
-    prevent: 'Decide clearly between normal folder and submodule usage.',
+    tag: "SUBMODULE ISSUE",
+    title: "Embedded repository / submodule mapping failed",
+    patterns: [
+      /adding embedded git repository/i,
+      /submodule path failed/i,
+      /no submodule mapping found/i,
+    ],
+    cause:
+      "Nested repository is treated as submodule incorrectly or submodule config is broken.",
+    fix: "1) If intended submodule: git submodule add <url> <path>\n2) If not intended: remove nested .git folder inside subdir\n3) Check .gitmodules consistency",
+    prevent: "Decide clearly between normal folder and submodule usage.",
   },
   {
-    tag: 'CLONE DESTINATION ISSUE',
-    title: 'destination path exists / clone failed / unable checkout',
+    tag: "CLONE DESTINATION ISSUE",
+    title: "destination path exists / clone failed / unable checkout",
     patterns: [
       /destination path .* already exists/i,
       /clone of repository failed/i,
       /unable to checkout working tree/i,
       /fatal: failed to resolve tag/i,
     ],
-    cause: 'Target folder conflicts or clone/checkout process failed.',
-    fix: '1) Choose a new empty folder\n2) Retry clone\n3) If tag/branch is missing, verify remote refs first',
-    prevent: 'Clone into clean empty directories.',
+    cause: "Target folder conflicts or clone/checkout process failed.",
+    fix: "1) Choose a new empty folder\n2) Retry clone\n3) If tag/branch is missing, verify remote refs first",
+    prevent: "Clone into clean empty directories.",
   },
   {
-    tag: 'TAG ISSUE',
-    title: 'Tag already exists or invalid tag refspec',
-    patterns: [/tag already exists/i, /failed to resolve tag/i, /src refspec v\d+.* does not match any/i],
-    cause: 'Tag name conflict or tag/reference does not exist locally.',
+    tag: "TAG ISSUE",
+    title: "Tag already exists or invalid tag refspec",
+    patterns: [
+      /tag already exists/i,
+      /failed to resolve tag/i,
+      /src refspec v\d+.* does not match any/i,
+    ],
+    cause: "Tag name conflict or tag/reference does not exist locally.",
     fix: '1) List tags: git tag\n2) Create tag if missing: git tag -a v1.0.0 -m "Release"\n3) Push tag: git push origin v1.0.0',
-    prevent: 'Verify tag names before creation/push.',
+    prevent: "Verify tag names before creation/push.",
   },
   {
-    tag: 'STASH ISSUE',
-    title: 'No stash entries / stash apply conflicts',
-    patterns: [/no stash entries found/i, /no local changes to save/i, /conflicts when applying stash/i],
-    cause: 'No stash exists yet or stash apply created conflicts.',
-    fix: '1) Check stashes: git stash list\n2) Apply specific stash: git stash apply stash@{0}\n3) Resolve conflicts, then git add and commit',
+    tag: "STASH ISSUE",
+    title: "No stash entries / stash apply conflicts",
+    patterns: [
+      /no stash entries found/i,
+      /no local changes to save/i,
+      /conflicts when applying stash/i,
+    ],
+    cause: "No stash exists yet or stash apply created conflicts.",
+    fix: "1) Check stashes: git stash list\n2) Apply specific stash: git stash apply stash@{0}\n3) Resolve conflicts, then git add and commit",
     prevent: 'Name stashes clearly with git stash push -m "message".',
   },
   {
-    tag: 'CHERRY-PICK / REVERT ISSUE',
-    title: 'cherry-pick failed / revert failed / merge commit requires -m',
-    patterns: [/cherry-pick failed/i, /revert failed/i, /commit is a merge but no -m option was given/i],
-    cause: 'Cherry-pick/revert encountered conflicts or merge-commit parent was not specified.',
-    fix: '1) git status\n2) Resolve conflicts and git add files\n3) Continue: git cherry-pick --continue or git revert --continue\n4) For merge commit revert: git revert -m 1 <merge-commit-hash>',
-    prevent: 'Inspect commit type with git show before revert/cherry-pick.',
+    tag: "CHERRY-PICK / REVERT ISSUE",
+    title: "cherry-pick failed / revert failed / merge commit requires -m",
+    patterns: [
+      /cherry-pick failed/i,
+      /revert failed/i,
+      /commit is a merge but no -m option was given/i,
+    ],
+    cause:
+      "Cherry-pick/revert encountered conflicts or merge-commit parent was not specified.",
+    fix: "1) git status\n2) Resolve conflicts and git add files\n3) Continue: git cherry-pick --continue or git revert --continue\n4) For merge commit revert: git revert -m 1 <merge-commit-hash>",
+    prevent: "Inspect commit type with git show before revert/cherry-pick.",
   },
   {
-    tag: 'PULL STRATEGY WARNING',
-    title: 'Pulling without specifying reconcile strategy',
-    patterns: [/pulling without specifying how to reconcile divergent branches/i],
-    cause: 'Git wants explicit pull strategy (merge, rebase, ff-only).',
-    fix: 'Set preferred default once:\n1) git config --global pull.rebase true   # rebase style\nOR\n2) git config --global pull.ff only       # fast-forward only\nThen run pull again.',
-    prevent: 'Set pull strategy globally to avoid repeated warnings.',
+    tag: "PULL STRATEGY WARNING",
+    title: "Pulling without specifying reconcile strategy",
+    patterns: [
+      /pulling without specifying how to reconcile divergent branches/i,
+    ],
+    cause: "Git wants explicit pull strategy (merge, rebase, ff-only).",
+    fix: "Set preferred default once:\n1) git config --global pull.rebase true   # rebase style\nOR\n2) git config --global pull.ff only       # fast-forward only\nThen run pull again.",
+    prevent: "Set pull strategy globally to avoid repeated warnings.",
   },
   {
-    tag: 'EDITOR CONFIG ISSUE',
-    title: 'cannot run editor / EDITOR unset',
+    tag: "EDITOR CONFIG ISSUE",
+    title: "cannot run editor / EDITOR unset",
     patterns: [/cannot run editor/i, /terminal is dumb, but editor unset/i],
-    cause: 'Git cannot open editor for commit/rebase messages.',
+    cause: "Git cannot open editor for commit/rebase messages.",
     fix: '1) Set editor:\n   git config --global core.editor "code --wait"\n   OR git config --global core.editor "notepad"\n2) Retry command',
-    prevent: 'Configure core.editor once for your machine.',
+    prevent: "Configure core.editor once for your machine.",
   },
   {
-    tag: 'SPARSE CHECKOUT ISSUE',
-    title: 'sparse checkout leaves no entry',
+    tag: "SPARSE CHECKOUT ISSUE",
+    title: "sparse checkout leaves no entry",
     patterns: [/sparse checkout leaves no entry/i],
-    cause: 'Sparse checkout patterns currently exclude all files.',
-    fix: '1) Check sparse patterns: .git/info/sparse-checkout\n2) Add valid include paths\n3) Re-apply: git sparse-checkout reapply',
-    prevent: 'Validate sparse paths before applying.',
+    cause: "Sparse checkout patterns currently exclude all files.",
+    fix: "1) Check sparse patterns: .git/info/sparse-checkout\n2) Add valid include paths\n3) Re-apply: git sparse-checkout reapply",
+    prevent: "Validate sparse paths before applying.",
   },
   {
-    tag: 'SAFE DIRECTORY / OWNERSHIP ISSUE',
-    title: 'detected dubious ownership / unsafe repository',
-    patterns: [/detected dubious ownership in repository/i, /unsafe repository/i],
-    cause: 'Repository ownership differs from current OS user.',
-    fix: 'If repo is trusted:\n1) git config --global --add safe.directory <full-repo-path>\n2) Retry command',
-    prevent: 'Use repos owned by current user where possible.',
+    tag: "SAFE DIRECTORY / OWNERSHIP ISSUE",
+    title: "detected dubious ownership / unsafe repository",
+    patterns: [
+      /detected dubious ownership in repository/i,
+      /unsafe repository/i,
+    ],
+    cause: "Repository ownership differs from current OS user.",
+    fix: "If repo is trusted:\n1) git config --global --add safe.directory <full-repo-path>\n2) Retry command",
+    prevent: "Use repos owned by current user where possible.",
   },
   {
-    tag: 'REPO CORRUPTION / OBJECT ISSUE',
-    title: 'pack/object/config format problem',
+    tag: "REPO CORRUPTION / OBJECT ISSUE",
+    title: "pack/object/config format problem",
     patterns: [
       /pack has bad object/i,
       /object file is empty/i,
@@ -1623,14 +2252,15 @@ const allErrors = [
       /bad config file .*\.git\/config/i,
       /warning: templates not found/i,
     ],
-    cause: 'Repository metadata or object files may be corrupted or incompatible.',
-    fix: '1) Backup local changes immediately\n2) Run: git fsck --full\n3) If severe, clone fresh copy and re-apply local changes\n4) Restore/repair config from backup if needed',
-    prevent: 'Avoid abrupt shutdown during Git writes and keep backups.',
+    cause:
+      "Repository metadata or object files may be corrupted or incompatible.",
+    fix: "1) Backup local changes immediately\n2) Run: git fsck --full\n3) If severe, clone fresh copy and re-apply local changes\n4) Restore/repair config from backup if needed",
+    prevent: "Avoid abrupt shutdown during Git writes and keep backups.",
   },
 ];
 
 function detectErrorMatches(input) {
-  const text = input || '';
+  const text = input || "";
   if (!text.trim()) return [];
   const unique = new Set();
   const matches = [];
@@ -1645,48 +2275,80 @@ function detectErrorMatches(input) {
 }
 
 const ISSUE_LINKS = {
-  'NON-FAST-FORWARD PUSH': [
-    { label: 'GitHub: Non-fast-forward', url: 'https://docs.github.com/en/get-started/using-git/dealing-with-non-fast-forward-errors' },
-  ],
-  'LINE ENDING WARNING': [
+  "NON-FAST-FORWARD PUSH": [
     {
-      label: 'GitHub: Configure line endings',
-      url: 'https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings',
+      label: "GitHub: Non-fast-forward",
+      url: "https://docs.github.com/en/get-started/using-git/dealing-with-non-fast-forward-errors",
     },
   ],
-  'AUTHENTICATION FAILED': [
-    { label: 'GitHub: PAT authentication', url: 'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token' },
+  "LINE ENDING WARNING": [
+    {
+      label: "GitHub: Configure line endings",
+      url: "https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings",
+    },
   ],
-  'PASSWORD AUTH REMOVED': [
-    { label: 'GitHub: Token authentication', url: 'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token' },
+  "AUTHENTICATION FAILED": [
+    {
+      label: "GitHub: PAT authentication",
+      url: "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token",
+    },
   ],
-  'SSH PUBLIC KEY ISSUE': [
-    { label: 'GitHub: SSH setup', url: 'https://docs.github.com/en/authentication/connecting-to-github-with-ssh' },
+  "PASSWORD AUTH REMOVED": [
+    {
+      label: "GitHub: Token authentication",
+      url: "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token",
+    },
   ],
-  'MERGE CONFLICT / UNFINISHED MERGE': [{ label: 'GitHub: Resolve conflicts', url: 'https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts' }],
-  'REBASE STATE ISSUE': [{ label: 'Git: rebase docs', url: 'https://git-scm.com/docs/git-rebase' }],
-  'TRACKING / UPSTREAM ISSUE': [{ label: 'Git push docs', url: 'https://git-scm.com/docs/git-push' }],
+  "SSH PUBLIC KEY ISSUE": [
+    {
+      label: "GitHub: SSH setup",
+      url: "https://docs.github.com/en/authentication/connecting-to-github-with-ssh",
+    },
+  ],
+  "MERGE CONFLICT / UNFINISHED MERGE": [
+    {
+      label: "GitHub: Resolve conflicts",
+      url: "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts",
+    },
+  ],
+  "REBASE STATE ISSUE": [
+    { label: "Git: rebase docs", url: "https://git-scm.com/docs/git-rebase" },
+  ],
+  "TRACKING / UPSTREAM ISSUE": [
+    { label: "Git push docs", url: "https://git-scm.com/docs/git-push" },
+  ],
 };
 
 function shouldAnalyzeLine(line) {
   return /error|fatal|warning|rejected|failed|conflict|denied|unable|not found|could not|refspec|detached|hook|timed out|ssl|lock|overwritten|unmerged|rebase|stash|cherry-pick|revert|unsafe|dubious|up[\s-]*to[\s-]*date/i.test(
-    line || ''
+    line || "",
   );
 }
 
 function getIssueLinks(tag, seedText) {
   const specific = ISSUE_LINKS[tag] || [];
-  const query = encodeURIComponent((seedText || tag || 'git error').slice(0, 180));
+  const query = encodeURIComponent(
+    (seedText || tag || "git error").slice(0, 180),
+  );
   const generic = [
-    { label: 'Search GitHub Docs', url: `https://docs.github.com/en/search?query=${query}` },
-    { label: 'Search Stack Overflow', url: `https://stackoverflow.com/search?q=${query}` },
-    { label: 'Search Git Docs', url: `https://git-scm.com/search/results?search=${query}` },
+    {
+      label: "Search GitHub Docs",
+      url: `https://docs.github.com/en/search?query=${query}`,
+    },
+    {
+      label: "Search Stack Overflow",
+      url: `https://stackoverflow.com/search?q=${query}`,
+    },
+    {
+      label: "Search Git Docs",
+      url: `https://git-scm.com/search/results?search=${query}`,
+    },
   ];
   return [...specific, ...generic].slice(0, 4);
 }
 
 function analyzeErrorsDetailed(input) {
-  const source = input || '';
+  const source = input || "";
   const lines = source
     .split(/\r?\n/)
     .map((line) => line.trim())
@@ -1707,8 +2369,10 @@ function analyzeErrorsDetailed(input) {
 
   // Combined output matching
   detectErrorMatches(source).forEach((rule) => {
-    const combinedHits = rule.patterns.filter((pattern) => pattern.test(source)).length;
-    addIssue(rule, '(combined terminal output)', Math.max(combinedHits, 1));
+    const combinedHits = rule.patterns.filter((pattern) =>
+      pattern.test(source),
+    ).length;
+    addIssue(rule, "(combined terminal output)", Math.max(combinedHits, 1));
   });
 
   // Per-line matching so users get individual solutions
@@ -1720,7 +2384,9 @@ function analyzeErrorsDetailed(input) {
       return;
     }
     lineMatches.forEach((rule) => {
-      const lineHits = rule.patterns.filter((pattern) => pattern.test(line)).length;
+      const lineHits = rule.patterns.filter((pattern) =>
+        pattern.test(line),
+      ).length;
       addIssue(rule, line, Math.max(lineHits, 1));
     });
   });
@@ -1742,32 +2408,42 @@ function detectErrorFromInput(input) {
 }
 
 function getSelectedErrorMode() {
-  return document.querySelector('input[name="errorMode"]:checked')?.value || 'auto';
+  return (
+    document.querySelector('input[name="errorMode"]:checked')?.value || "auto"
+  );
 }
 
 function shouldExplainOnly(mode, match) {
-  if (mode === 'explain') return true;
-  if (mode === 'solve') return false;
-  return match?.response === 'explain';
+  if (mode === "explain") return true;
+  if (mode === "solve") return false;
+  return match?.response === "explain";
 }
 
 function validateErrorInput(text) {
   const warnings = [];
-  const lines = (text || '').split(/\r?\n/).filter((line) => line.trim().length > 0);
+  const lines = (text || "")
+    .split(/\r?\n/)
+    .filter((line) => line.trim().length > 0);
   if (lines.length < 3) {
-    warnings.push('For best accuracy, paste full terminal output including command line + error + hint lines.');
+    warnings.push(
+      "For best accuracy, paste full terminal output including command line + error + hint lines.",
+    );
   }
   if (!/git\s+[a-z]/i.test(text)) {
-    warnings.push('I could not see an explicit git command line. Include it if possible.');
+    warnings.push(
+      "I could not see an explicit git command line. Include it if possible.",
+    );
   }
   if (!shouldAnalyzeLine(text) && !/git status|on branch/i.test(text)) {
-    warnings.push('This text looks non-error informational. Use Explain Only mode if you only want interpretation.');
+    warnings.push(
+      "This text looks non-error informational. Use Explain Only mode if you only want interpretation.",
+    );
   }
   return warnings;
 }
 
 function extractFixCommands(fixText) {
-  const lines = (fixText || '').split(/\r?\n/);
+  const lines = (fixText || "").split(/\r?\n/);
   const commands = [];
   const seen = new Set();
   lines.forEach((line) => {
@@ -1784,25 +2460,25 @@ function extractFixCommands(fixText) {
 
 function buildFixStepButtons(fixText, issueKey) {
   const commands = extractFixCommands(fixText);
-  if (commands.length === 0) return '';
+  if (commands.length === 0) return "";
   return `
     <div class="er-step-actions">
       ${commands
         .map(
           (command, idx) =>
-            `<button class="er-step-btn" data-fix-cmd="${encodeURIComponent(command)}" data-fix-id="${issueKey}-${idx}">Copy: ${escapeHtml(command)}</button>`
+            `<button class="er-step-btn" data-fix-cmd="${encodeURIComponent(command)}" data-fix-id="${issueKey}-${idx}">Copy: ${escapeHtml(command)}</button>`,
         )
-        .join('')}
+        .join("")}
     </div>
   `;
 }
 
 function renderErrorCatalogue() {
-  const list = document.getElementById('errorsCatList');
-  list.innerHTML = '';
+  const list = document.getElementById("errorsCatList");
+  list.innerHTML = "";
   allErrors.forEach((e) => {
-    const el = document.createElement('div');
-    el.className = 'ecat-item';
+    const el = document.createElement("div");
+    el.className = "ecat-item";
     el.innerHTML = `
       <div class="ecat-header">
         <span class="ecat-tag">${e.tag}</span>
@@ -1814,21 +2490,23 @@ function renderErrorCatalogue() {
         <div class="ecat-fix">${escapeHtml(e.fix)}</div>
       </div>
     `;
-    el.querySelector('.ecat-header').addEventListener('click', () => el.classList.toggle('open'));
+    el.querySelector(".ecat-header").addEventListener("click", () =>
+      el.classList.toggle("open"),
+    );
     list.appendChild(el);
   });
 }
 
 renderErrorCatalogue();
 
-document.getElementById('detectBtn').addEventListener('click', () => {
-  const inputValue = document.getElementById('errorPasteBox').value.trim();
-  const result = document.getElementById('errorResult');
+document.getElementById("detectBtn").addEventListener("click", () => {
+  const inputValue = document.getElementById("errorPasteBox").value.trim();
+  const result = document.getElementById("errorResult");
   const mode = getSelectedErrorMode();
   const validationWarnings = validateErrorInput(inputValue);
 
   if (!inputValue) {
-    result.style.display = 'none';
+    result.style.display = "none";
     return;
   }
 
@@ -1837,8 +2515,8 @@ document.getElementById('detectBtn').addEventListener('click', () => {
 
   if (primary) {
     const validatorHtml = validationWarnings.length
-      ? `<div class="er-validator">${validationWarnings.map((w) => `• ${escapeHtml(w)}`).join('<br>')}</div>`
-      : '';
+      ? `<div class="er-validator">${validationWarnings.map((w) => `• ${escapeHtml(w)}`).join("<br>")}</div>`
+      : "";
     const issuesHtml = analysis.issues
       .slice(0, 8)
       .map((entry, index) => {
@@ -1846,13 +2524,16 @@ document.getElementById('detectBtn').addEventListener('click', () => {
         const explainOnly = shouldExplainOnly(mode, match);
         const confidence = Math.min(99, Math.max(45, 55 + entry.score * 7));
         const evidenceLines = entry.evidence
-          .filter((line) => line !== '(combined terminal output)')
+          .filter((line) => line !== "(combined terminal output)")
           .slice(0, 3)
           .map((line) => `• ${escapeHtml(line)}`)
-          .join('<br>');
+          .join("<br>");
         const links = getIssueLinks(match.tag, entry.evidence[0] || match.title)
-          .map((link) => `<a class="er-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`)
-          .join('');
+          .map(
+            (link) =>
+              `<a class="er-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`,
+          )
+          .join("");
 
         return `
           <div class="er-issue">
@@ -1864,14 +2545,14 @@ document.getElementById('detectBtn').addEventListener('click', () => {
                      <div class="er-label">Matched lines</div>
                      <div class="er-text">${evidenceLines}</div>
                    </div>`
-                : ''
+                : ""
             }
             <div class="er-section">
               <div class="er-label">What this means</div>
               <div class="er-text">${escapeHtml(match.cause)}</div>
             </div>
             <div class="er-section">
-              <div class="er-label">${explainOnly ? 'Optional next steps' : 'Calm fix steps'}</div>
+              <div class="er-label">${explainOnly ? "Optional next steps" : "Calm fix steps"}</div>
               <div class="er-fix">${escapeHtml(match.fix)}</div>
               ${buildFixStepButtons(match.fix, `issue-${index + 1}`)}
             </div>
@@ -1882,50 +2563,58 @@ document.getElementById('detectBtn').addEventListener('click', () => {
                     <div class="er-label">How to avoid it next time</div>
                     <div class="er-text">${escapeHtml(match.prevent)}</div>
                   </div>`
-                : ''
+                : ""
             }
             <div class="er-links">${links}</div>
           </div>
         `;
       })
-      .join('');
+      .join("");
 
     const unmatchedHtml = analysis.unmatchedLines.length
       ? `
           <div class="er-issue">
             <div class="er-tag">Unmatched lines</div>
             <div class="er-text">
-              ${analysis.unmatchedLines.slice(0, 5).map((line) => `• ${escapeHtml(line)}`).join('<br>')}
+              ${analysis.unmatchedLines
+                .slice(0, 5)
+                .map((line) => `• ${escapeHtml(line)}`)
+                .join("<br>")}
             </div>
             <div class="er-text" style="margin-top:8px">I could not map these lines confidently, so here are direct external search links:</div>
             <div class="er-links">
-              ${getIssueLinks('GENERIC', analysis.unmatchedLines[0]).map((link) => `<a class="er-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`).join('')}
+              ${getIssueLinks("GENERIC", analysis.unmatchedLines[0])
+                .map(
+                  (link) =>
+                    `<a class="er-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`,
+                )
+                .join("")}
             </div>
           </div>
         `
-      : '';
+      : "";
 
-    result.style.display = 'block';
+    result.style.display = "block";
     result.innerHTML = `
-      <div class="er-tag">🎯 DETECTED ${analysis.issues.length} issue${analysis.issues.length > 1 ? 's' : ''}</div>
+      <div class="er-tag">🎯 DETECTED ${analysis.issues.length} issue${analysis.issues.length > 1 ? "s" : ""}</div>
       <div class="er-title">${escapeHtml(primary.rule.title)}</div>
       ${validatorHtml}
       ${issuesHtml}
       ${unmatchedHtml}
     `;
 
-    result.querySelectorAll('[data-fix-cmd]').forEach((button) => {
-      button.addEventListener('click', function () {
+    result.querySelectorAll("[data-fix-cmd]").forEach((button) => {
+      button.addEventListener("click", function () {
         const decoded = decodeURIComponent(this.dataset.fixCmd);
         copyText(decoded, this);
       });
     });
   } else {
-    const fallbackLinks = getIssueLinks('GENERIC', inputValue);
+    const fallbackLinks = getIssueLinks("GENERIC", inputValue);
     const validatorHtml = validationWarnings.length
-      ? `<div class="er-validator">${validationWarnings.map((w) => `• ${escapeHtml(w)}`).join('<br>')}</div>`
-      : '';
-    result.style.display = 'block';
+      ? `<div class="er-validator">${validationWarnings.map((w) => `• ${escapeHtml(w)}`).join("<br>")}</div>`
+      : "";
+    result.style.display = "block";
     result.innerHTML = `
       <div class="er-tag">🤔 NOT RECOGNIZED YET</div>
       <div class="er-title">I could not confidently classify this output.</div>
@@ -1934,21 +2623,21 @@ document.getElementById('detectBtn').addEventListener('click', () => {
         <div class="er-text">No stress — below are reliable external links for this exact output, or send it to AI Assistant for a guided fix path.</div>
       </div>
       <div class="er-links">
-        ${fallbackLinks.map((link) => `<a class="er-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`).join('')}
+        ${fallbackLinks.map((link) => `<a class="er-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`).join("")}
       </div>
       <div style="margin-top:14px">
         <button class="btn-detect" id="askAiFromError">Ask AI Assistant →</button>
       </div>
     `;
-    result.querySelector('#askAiFromError').addEventListener('click', () => {
-      showPanel('chat');
-      chatInput.value = `I got this Git output:\n${inputValue}\nPlease ${mode === 'explain' ? 'explain what it means' : 'explain calmly and give step-by-step fix commands'}.`;
-      chatInput.dispatchEvent(new Event('input'));
+    result.querySelector("#askAiFromError").addEventListener("click", () => {
+      showPanel("chat");
+      chatInput.value = `I got this Git output:\n${inputValue}\nPlease ${mode === "explain" ? "explain what it means" : "explain calmly and give step-by-step fix commands"}.`;
+      chatInput.dispatchEvent(new Event("input"));
       sendMessage(chatInput.value);
     });
   }
 
-  const errorPanel = document.getElementById('panel-errors');
+  const errorPanel = document.getElementById("panel-errors");
   scrollPanelTo(errorPanel, result);
 });
 
@@ -1957,188 +2646,194 @@ document.getElementById('detectBtn').addEventListener('click', () => {
 // ============================================================
 const refData = [
   {
-    cat: '⚙️ Setup & Config',
+    cat: "⚙️ Setup & Config",
     items: [
       {
         cmd: 'git config --global user.name "Name"',
-        desc: 'Set your name',
-        detail: 'This appears in every commit. Run once after Git install.',
+        desc: "Set your name",
+        detail: "This appears in every commit. Run once after Git install.",
         example: '$ git config --global user.name "Jane Doe"',
       },
       {
         cmd: 'git config --global user.email "email"',
-        desc: 'Set your email',
-        detail: 'Use the email connected to GitHub for contribution tracking.',
+        desc: "Set your email",
+        detail: "Use the email connected to GitHub for contribution tracking.",
         example: '$ git config --global user.email "jane@example.com"',
       },
       {
-        cmd: 'git config --list',
-        desc: 'View all config',
-        detail: 'Inspect current Git config values.',
-        example: '$ git config --list',
+        cmd: "git config --list",
+        desc: "View all config",
+        detail: "Inspect current Git config values.",
+        example: "$ git config --list",
       },
     ],
   },
   {
-    cat: '📁 Repository',
+    cat: "📁 Repository",
     items: [
       {
-        cmd: 'git init',
-        desc: 'Create new repository',
-        detail: 'Initializes a new Git repository in current folder.',
-        example: '$ git init',
+        cmd: "git init",
+        desc: "Create new repository",
+        detail: "Initializes a new Git repository in current folder.",
+        example: "$ git init",
       },
       {
-        cmd: 'git clone <url>',
-        desc: 'Copy remote repository',
-        detail: 'Downloads remote repository and full history.',
-        example: '$ git clone https://github.com/user/repo.git',
+        cmd: "git clone <url>",
+        desc: "Copy remote repository",
+        detail: "Downloads remote repository and full history.",
+        example: "$ git clone https://github.com/user/repo.git",
       },
       {
-        cmd: 'git status',
-        desc: 'Show working tree',
-        detail: 'Most useful command for daily work.',
-        example: '$ git status',
+        cmd: "git status",
+        desc: "Show working tree",
+        detail: "Most useful command for daily work.",
+        example: "$ git status",
       },
     ],
   },
   {
-    cat: '📝 Staging & Committing',
+    cat: "📝 Staging & Committing",
     items: [
       {
-        cmd: 'git add <file>',
-        desc: 'Stage specific file',
-        detail: 'Adds selected file to staging area.',
-        example: '$ git add README.md',
+        cmd: "git add <file>",
+        desc: "Stage specific file",
+        detail: "Adds selected file to staging area.",
+        example: "$ git add README.md",
       },
       {
-        cmd: 'git add .',
-        desc: 'Stage all changes',
-        detail: 'Stages all tracked and untracked files from current folder.',
-        example: '$ git add .',
+        cmd: "git add .",
+        desc: "Stage all changes",
+        detail: "Stages all tracked and untracked files from current folder.",
+        example: "$ git add .",
       },
       {
         cmd: 'git commit -m "msg"',
-        desc: 'Commit staged changes',
-        detail: 'Creates commit snapshot from staged files.',
+        desc: "Commit staged changes",
+        detail: "Creates commit snapshot from staged files.",
         example: '$ git commit -m "feat: add authentication"',
       },
       {
-        cmd: 'git commit --amend',
-        desc: 'Modify last commit',
-        detail: 'Edit last commit message or include missed files.',
-        example: '$ git add forgotten.js\n$ git commit --amend',
+        cmd: "git commit --amend",
+        desc: "Modify last commit",
+        detail: "Edit last commit message or include missed files.",
+        example: "$ git add forgotten.js\n$ git commit --amend",
       },
     ],
   },
   {
-    cat: '🌿 Branching',
+    cat: "🌿 Branching",
     items: [
       {
-        cmd: 'git branch',
-        desc: 'List branches',
-        detail: 'Shows local branches. Use -a for local + remote.',
-        example: '$ git branch -a',
+        cmd: "git branch",
+        desc: "List branches",
+        detail: "Shows local branches. Use -a for local + remote.",
+        example: "$ git branch -a",
       },
       {
-        cmd: 'git checkout -b <name>',
-        desc: 'Create and switch branch',
-        detail: 'Shortcut to create and switch in one command.',
-        example: '$ git checkout -b feature/new-ui',
+        cmd: "git checkout -b <name>",
+        desc: "Create and switch branch",
+        detail: "Shortcut to create and switch in one command.",
+        example: "$ git checkout -b feature/new-ui",
       },
       {
-        cmd: 'git switch <branch>',
-        desc: 'Switch branch (modern)',
-        detail: 'Modern alternative to checkout for branch switching.',
-        example: '$ git switch main',
+        cmd: "git switch <branch>",
+        desc: "Switch branch (modern)",
+        detail: "Modern alternative to checkout for branch switching.",
+        example: "$ git switch main",
       },
       {
-        cmd: 'git merge <branch>',
-        desc: 'Merge into current branch',
-        detail: 'Combines changes from another branch.',
-        example: '$ git merge feature/new-ui',
+        cmd: "git merge <branch>",
+        desc: "Merge into current branch",
+        detail: "Combines changes from another branch.",
+        example: "$ git merge feature/new-ui",
       },
     ],
   },
   {
-    cat: '☁️ Remote',
+    cat: "☁️ Remote",
     items: [
       {
-        cmd: 'git remote add origin <url>',
-        desc: 'Add remote',
-        detail: 'Connect local repository to remote GitHub URL.',
-        example: '$ git remote add origin https://github.com/user/repo.git',
+        cmd: "git remote add origin <url>",
+        desc: "Add remote",
+        detail: "Connect local repository to remote GitHub URL.",
+        example: "$ git remote add origin https://github.com/user/repo.git",
       },
       {
-        cmd: 'git push -u origin main',
-        desc: 'First push and set upstream',
-        detail: 'Sets tracking so future pushes can use plain `git push`.',
-        example: '$ git push -u origin main\n$ git push',
+        cmd: "git push -u origin main",
+        desc: "First push and set upstream",
+        detail: "Sets tracking so future pushes can use plain `git push`.",
+        example: "$ git push -u origin main\n$ git push",
       },
       {
-        cmd: 'git push --force-with-lease',
-        desc: 'Safe force push',
-        detail: 'Use when your branch history changed (for example, after rebase). Safer than --force.',
-        example: '$ git pull --rebase origin main\n$ git push --force-with-lease origin feature/my-branch',
+        cmd: "git push --force-with-lease",
+        desc: "Safe force push",
+        detail:
+          "Use when your branch history changed (for example, after rebase). Safer than --force.",
+        example:
+          "$ git pull --rebase origin main\n$ git push --force-with-lease origin feature/my-branch",
       },
       {
-        cmd: 'git pull --rebase',
-        desc: 'Update branch cleanly',
-        detail: 'Pull and replay your commits on top of remote updates.',
-        example: '$ git pull --rebase origin main',
+        cmd: "git pull --rebase",
+        desc: "Update branch cleanly",
+        detail: "Pull and replay your commits on top of remote updates.",
+        example: "$ git pull --rebase origin main",
       },
       {
-        cmd: 'git fetch',
-        desc: 'Download remote changes only',
-        detail: 'Gets updates without merging. Safe for inspection.',
-        example: '$ git fetch origin',
+        cmd: "git fetch",
+        desc: "Download remote changes only",
+        detail: "Gets updates without merging. Safe for inspection.",
+        example: "$ git fetch origin",
       },
     ],
   },
   {
-    cat: '⏮️ Undo & Recovery',
+    cat: "⏮️ Undo & Recovery",
     items: [
       {
-        cmd: 'git restore <file>',
-        desc: 'Discard file changes',
-        detail: 'Reverts file to last committed state.',
-        example: '$ git restore index.html',
+        cmd: "git restore <file>",
+        desc: "Discard file changes",
+        detail: "Reverts file to last committed state.",
+        example: "$ git restore index.html",
       },
       {
-        cmd: 'git reset HEAD <file>',
-        desc: 'Unstage file',
-        detail: 'Removes file from staging area.',
-        example: '$ git reset HEAD src/config.js',
+        cmd: "git reset HEAD <file>",
+        desc: "Unstage file",
+        detail: "Removes file from staging area.",
+        example: "$ git reset HEAD src/config.js",
       },
       {
-        cmd: 'git revert <hash>',
-        desc: 'Undo commit safely',
-        detail: 'Creates new commit that reverses an existing one.',
-        example: '$ git revert abc1234',
+        cmd: "git revert <hash>",
+        desc: "Undo commit safely",
+        detail: "Creates new commit that reverses an existing one.",
+        example: "$ git revert abc1234",
       },
       {
-        cmd: 'git reflog',
-        desc: 'Recover lost commits',
-        detail: 'Shows where HEAD moved so you can recover states.',
-        example: '$ git reflog',
+        cmd: "git reflog",
+        desc: "Recover lost commits",
+        detail: "Shows where HEAD moved so you can recover states.",
+        example: "$ git reflog",
       },
     ],
   },
 ];
 
-function renderReference(filter = '') {
-  const container = document.getElementById('refCategories');
-  container.innerHTML = '';
+function renderReference(filter = "") {
+  const container = document.getElementById("refCategories");
+  container.innerHTML = "";
 
   refData.forEach((category) => {
     const items = filter
-      ? category.items.filter((item) => item.cmd.toLowerCase().includes(filter) || item.desc.toLowerCase().includes(filter))
+      ? category.items.filter(
+          (item) =>
+            item.cmd.toLowerCase().includes(filter) ||
+            item.desc.toLowerCase().includes(filter),
+        )
       : category.items;
 
     if (items.length === 0) return;
 
-    const catEl = document.createElement('div');
-    catEl.className = 'ref-cat';
+    const catEl = document.createElement("div");
+    catEl.className = "ref-cat";
     catEl.innerHTML = `
       <div class="ref-cat-title">${category.cat}</div>
       <div class="ref-items">
@@ -2156,21 +2851,23 @@ function renderReference(filter = '') {
               <div class="ref-example">${escapeHtml(item.example)}</div>
             </div>
           </div>
-        `
+        `,
           )
-          .join('')}
+          .join("")}
       </div>
     `;
 
-    catEl.querySelectorAll('.ref-item').forEach((item) => {
-      item.querySelector('.ref-item-header').addEventListener('click', () => item.classList.toggle('open'));
+    catEl.querySelectorAll(".ref-item").forEach((item) => {
+      item
+        .querySelector(".ref-item-header")
+        .addEventListener("click", () => item.classList.toggle("open"));
     });
 
     container.appendChild(catEl);
   });
 }
 
-document.getElementById('refSearch').addEventListener('input', (e) => {
+document.getElementById("refSearch").addEventListener("input", (e) => {
   renderReference(e.target.value.toLowerCase().trim());
 });
 renderReference();
@@ -2180,8 +2877,8 @@ renderReference();
 // ============================================================
 const handbookCorePages = [
   {
-    section: 'Foundation',
-    title: 'What is Git?',
+    section: "Foundation",
+    title: "What is Git?",
     body: `Git is a distributed version control system.
 
 Why it matters:
@@ -2193,8 +2890,8 @@ Memory tip:
 - Think of Git as a "time machine + teamwork safety net".`,
   },
   {
-    section: 'Foundation',
-    title: 'What is GitHub?',
+    section: "Foundation",
+    title: "What is GitHub?",
     body: `GitHub is a cloud platform for hosting Git repositories.
 
 What GitHub adds:
@@ -2207,8 +2904,8 @@ Memory tip:
 - Git = engine. GitHub = collaboration platform built around that engine.`,
   },
   {
-    section: 'History',
-    title: 'Who Built Git and When?',
+    section: "History",
+    title: "Who Built Git and When?",
     body: `Git was created by Linus Torvalds in 2005.
 
 Context:
@@ -2221,8 +2918,8 @@ Why developers still use it:
 - Works both solo and at enterprise team scale.`,
   },
   {
-    section: 'Foundation',
-    title: 'Git vs GitHub in One Minute',
+    section: "Foundation",
+    title: "Git vs GitHub in One Minute",
     body: `Git:
 - Local + distributed version control.
 - Commands like \`git add\`, \`git commit\`, \`git branch\`.
@@ -2236,8 +2933,8 @@ Use both together:
 2) Share and review on GitHub`,
   },
   {
-    section: 'Model',
-    title: 'The Three Areas You Must Remember',
+    section: "Model",
+    title: "The Three Areas You Must Remember",
     body: `Every day Git flow depends on 3 areas:
 - Working Directory: where you edit files
 - Staging Area (Index): what will go into next commit
@@ -2247,8 +2944,8 @@ Memory formula:
 Edit -> Stage -> Commit -> Push`,
   },
   {
-    section: 'Model',
-    title: 'How to Remember Commands Faster',
+    section: "Model",
+    title: "How to Remember Commands Faster",
     body: `Command memory strategy:
 1) Learn by intent, not by alphabetical order.
 2) Group commands by workflow: create, inspect, branch, share, recover.
@@ -2260,8 +2957,8 @@ Examples:
 - Share: \`git pull --rebase\`, \`git push\``,
   },
   {
-    section: 'Workflow',
-    title: 'Beginner Safe Daily Workflow',
+    section: "Workflow",
+    title: "Beginner Safe Daily Workflow",
     body: `Safe daily loop:
 1) \`git status\`
 2) \`git pull --rebase origin main\`
@@ -2276,8 +2973,8 @@ If conflict appears:
 - \`git rebase --continue\``,
   },
   {
-    section: 'Workflow',
-    title: 'Professional Branch Workflow',
+    section: "Workflow",
+    title: "Professional Branch Workflow",
     body: `Feature branch method:
 1) \`git checkout -b feature/something\`
 2) Commit in small chunks
@@ -2292,8 +2989,8 @@ Why this is important:
 - Better review quality`,
   },
   {
-    section: 'Safety',
-    title: 'When to Use --force-with-lease',
+    section: "Safety",
+    title: "When to Use --force-with-lease",
     body: `Use \`git push --force-with-lease\` only if:
 - You rebased/squashed your own branch history
 - You understand the branch is safe to rewrite
@@ -2304,8 +3001,8 @@ Memory tip:
 - "Lease checks before force" -> safer for teams.`,
   },
   {
-    section: 'GitHub',
-    title: 'GitHub Pull Request Procedure',
+    section: "GitHub",
+    title: "GitHub Pull Request Procedure",
     body: `Pull request checklist:
 1) Clear title and summary
 2) Why this change is needed
@@ -2316,8 +3013,8 @@ Memory tip:
 Strong PRs reduce back-and-forth and speed up merging.`,
   },
   {
-    section: 'Troubleshooting',
-    title: 'How to Read Git Errors Calmly',
+    section: "Troubleshooting",
+    title: "How to Read Git Errors Calmly",
     body: `Read Git output in this order:
 1) fatal/error line
 2) hint lines
@@ -2330,8 +3027,8 @@ Then decide:
 Never panic-run random commands from internet snippets.`,
   },
   {
-    section: 'Recall',
-    title: '30-Second Recall Framework',
+    section: "Recall",
+    title: "30-Second Recall Framework",
     body: `When stuck, ask:
 - Where am I? (\`git status\`)
 - What changed? (\`git diff\`)
@@ -2349,7 +3046,7 @@ function buildHandbookPages() {
   refData.forEach((category) => {
     category.items.forEach((item) => {
       pages.push({
-        section: 'Commands',
+        section: "Commands",
         title: `Meaning of ${item.cmd}`,
         body: `Command: \`${item.cmd}\`
 
@@ -2367,7 +3064,7 @@ How to remember:
       });
 
       pages.push({
-        section: 'Memory',
+        section: "Memory",
         title: `Remembering ${item.cmd}`,
         body: `Quick memory card:
 - Intent: ${item.desc}
@@ -2376,7 +3073,7 @@ How to remember:
 
 Practice drill:
 1) Open a demo repo
-2) Run \`${item.cmd.replace(/<[^>]+>/g, 'value')}\`
+2) Run \`${item.cmd.replace(/<[^>]+>/g, "value")}\`
 3) Explain in one sentence what changed`,
       });
     });
@@ -2385,12 +3082,12 @@ Practice drill:
   // Workflow pages
   workflows.forEach((wf) => {
     pages.push({
-      section: 'Workflow',
+      section: "Workflow",
       title: `${wf.title} — Step Notes`,
       body: `Workflow goal: ${wf.desc}
 
 Commands in order:
-${wf.steps.map((step, i) => `${i + 1}. ${step.cmd} — ${step.desc || 'run as needed'}`).join('\n')}
+${wf.steps.map((step, i) => `${i + 1}. ${step.cmd} — ${step.desc || "run as needed"}`).join("\n")}
 
 Where this is used:
 - Team projects, practical daily Git operations, and controlled releases.`,
@@ -2400,7 +3097,7 @@ Where this is used:
   // Error explanation pages
   allErrors.forEach((issue) => {
     pages.push({
-      section: 'Troubleshooting',
+      section: "Troubleshooting",
       title: `${issue.tag} — Why and How`,
       body: `Detected issue family:
 - ${issue.title}
@@ -2412,29 +3109,29 @@ Calm handling:
 ${issue.fix}
 
 Prevention:
-- ${issue.prevent || 'Use git status and smaller commit/push batches.'}`,
+- ${issue.prevent || "Use git status and smaller commit/push batches."}`,
     });
   });
 
   // Fill to 155+ with focused drill pages
   const drillTopics = [
-    'Inspect state before action',
-    'Staging discipline',
-    'Commit message quality',
-    'Branch naming standards',
-    'Safe rebase habits',
-    'Conflict resolution confidence',
-    'Remote tracking hygiene',
-    'Release tagging discipline',
-    'Recovery with reflog',
-    'PR review communication',
+    "Inspect state before action",
+    "Staging discipline",
+    "Commit message quality",
+    "Branch naming standards",
+    "Safe rebase habits",
+    "Conflict resolution confidence",
+    "Remote tracking hygiene",
+    "Release tagging discipline",
+    "Recovery with reflog",
+    "PR review communication",
   ];
 
   let drillIndex = 1;
   while (pages.length < 155) {
     const topic = drillTopics[(drillIndex - 1) % drillTopics.length];
     pages.push({
-      section: 'Practice',
+      section: "Practice",
       title: `Practice Page ${drillIndex}: ${topic}`,
       body: `Micro lesson:
 - Topic: ${topic}
@@ -2485,7 +3182,11 @@ function scoreHandbookPage(page, query) {
 
 function searchHandbookPages(query, limit = 5) {
   const ranked = handbookPages
-    .map((page, index) => ({ page, index, score: scoreHandbookPage(page, query) }))
+    .map((page, index) => ({
+      page,
+      index,
+      score: scoreHandbookPage(page, query),
+    }))
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score);
   return ranked.slice(0, limit);
@@ -2493,26 +3194,26 @@ function searchHandbookPages(query, limit = 5) {
 
 function formatBookBody(text) {
   return escapeHtml(text)
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\n/g, '<br>');
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\n/g, "<br>");
 }
 
 function renderHandbookToc() {
-  const toc = document.getElementById('handbookToc');
+  const toc = document.getElementById("handbookToc");
   if (!toc) return;
   toc.innerHTML = handbookFilteredIndexes
     .slice(0, 200)
     .map((realIndex) => {
       const page = handbookPages[realIndex];
-      const active = realIndex === currentHandbookIndex ? 'active' : '';
+      const active = realIndex === currentHandbookIndex ? "active" : "";
       return `<button class="handbook-toc-item ${active}" data-handbook-index="${realIndex}">
         <strong>Pg ${page.page}:</strong> ${escapeHtml(page.title)}
       </button>`;
     })
-    .join('');
+    .join("");
 
-  toc.querySelectorAll('[data-handbook-index]').forEach((btn) => {
-    btn.addEventListener('click', () => {
+  toc.querySelectorAll("[data-handbook-index]").forEach((btn) => {
+    btn.addEventListener("click", () => {
       currentHandbookIndex = parseInt(btn.dataset.handbookIndex, 10);
       renderHandbookPage();
       renderHandbookToc();
@@ -2529,8 +3230,8 @@ function getFilteredPositionInfo() {
 }
 
 function renderHandbookPage() {
-  const pageEl = document.getElementById('handbookPage');
-  const pageInfo = document.getElementById('handbookPageInfo');
+  const pageEl = document.getElementById("handbookPage");
+  const pageInfo = document.getElementById("handbookPageInfo");
   if (!pageEl || !pageInfo) return;
 
   const page = handbookPages[currentHandbookIndex];
@@ -2563,7 +3264,10 @@ function applyHandbookFilter(query) {
   if (!query.trim()) {
     handbookFilteredIndexes = handbookPages.map((_, idx) => idx);
   } else {
-    handbookFilteredIndexes = searchHandbookPages(query, handbookPages.length).map((entry) => entry.index);
+    handbookFilteredIndexes = searchHandbookPages(
+      query,
+      handbookPages.length,
+    ).map((entry) => entry.index);
   }
 
   if (handbookFilteredIndexes.length === 0) {
@@ -2579,16 +3283,16 @@ function applyHandbookFilter(query) {
 }
 
 function initHandbook() {
-  if (!document.getElementById('panel-handbook')) return;
+  if (!document.getElementById("panel-handbook")) return;
 
-  const searchInput = document.getElementById('handbookSearch');
-  const prevBtn = document.getElementById('handbookPrev');
-  const nextBtn = document.getElementById('handbookNext');
+  const searchInput = document.getElementById("handbookSearch");
+  const prevBtn = document.getElementById("handbookPrev");
+  const nextBtn = document.getElementById("handbookNext");
 
-  prevBtn?.addEventListener('click', () => moveHandbookPage(-1));
-  nextBtn?.addEventListener('click', () => moveHandbookPage(1));
+  prevBtn?.addEventListener("click", () => moveHandbookPage(-1));
+  nextBtn?.addEventListener("click", () => moveHandbookPage(1));
 
-  searchInput?.addEventListener('input', () => {
+  searchInput?.addEventListener("input", () => {
     applyHandbookFilter(searchInput.value);
   });
 
@@ -2606,9 +3310,9 @@ initHandbook();
 // ============================================================
 // AI ASSISTANT (Reliable local-first mode)
 // ============================================================
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
 const conversationHistory = [];
 
 function formatMessage(text) {
@@ -2616,40 +3320,51 @@ function formatMessage(text) {
   let safe = escapeHtml(text);
 
   // Links
-  safe = safe.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  safe = safe.replace(
+    /(https?:\/\/[^\s<]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+  );
 
   // Code blocks
-  safe = safe.replace(/```([\s\S]*?)```/g, (_, block) => `<pre>${block.trim()}</pre>`);
+  safe = safe.replace(
+    /```([\s\S]*?)```/g,
+    (_, block) => `<pre>${block.trim()}</pre>`,
+  );
 
   // Inline code
-  safe = safe.replace(/`([^`]+)`/g, '<code>$1</code>');
+  safe = safe.replace(/`([^`]+)`/g, "<code>$1</code>");
 
   // Bold and italics
-  safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  safe = safe.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  safe = safe.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  safe = safe.replace(/\*(.*?)\*/g, "<em>$1</em>");
 
   // Paragraphs + lists
-  const blocks = safe.split(/\n{2,}/).map((chunk) => chunk.trim()).filter(Boolean);
+  const blocks = safe
+    .split(/\n{2,}/)
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
   return blocks
     .map((chunk) => {
-      const lines = chunk.split('\n');
-      const isList = lines.every((line) => line.trim().startsWith('- '));
+      const lines = chunk.split("\n");
+      const isList = lines.every((line) => line.trim().startsWith("- "));
       if (isList) {
-        const listItems = lines.map((line) => `<li>${line.trim().slice(2)}</li>`).join('');
+        const listItems = lines
+          .map((line) => `<li>${line.trim().slice(2)}</li>`)
+          .join("");
         return `<ul>${listItems}</ul>`;
       }
-      return `<p>${chunk.replace(/\n/g, '<br>')}</p>`;
+      return `<p>${chunk.replace(/\n/g, "<br>")}</p>`;
     })
-    .join('');
+    .join("");
 }
 
 function addMessage(role, text) {
-  const el = document.createElement('div');
+  const el = document.createElement("div");
   el.className = `chat-msg ${role}`;
   el.innerHTML = `
-    <div class="msg-avatar">${role === 'ai' ? '⬡' : '👤'}</div>
+    <div class="msg-avatar">${role === "ai" ? "⬡" : "👤"}</div>
     <div class="msg-content">
-      <div class="msg-name">${role === 'ai' ? 'GitVora AI' : 'You'}</div>
+      <div class="msg-name">${role === "ai" ? "GitVora AI" : "You"}</div>
       <div class="msg-text">${formatMessage(text)}</div>
     </div>
   `;
@@ -2662,32 +3377,34 @@ function getErrorHelpReply(userText) {
   const primary = analysis.issues[0];
   if (!primary) {
     if (!shouldAnalyzeLine(userText)) return null;
-    const links = getIssueLinks('GENERIC', userText);
+    const links = getIssueLinks("GENERIC", userText);
     return `I could not confidently map this output yet.
 
 You can check these reliable resources:
-- ${links.map((l) => `${l.label}: ${l.url}`).join('\n- ')}
+- ${links.map((l) => `${l.label}: ${l.url}`).join("\n- ")}
 
 If you paste the full terminal output including command + hints, I can guide you step-by-step.`;
   }
 
   const match = primary.rule;
-  const explainOnly = match.response === 'explain';
-  const alsoDetected = analysis.issues.slice(1, 4).map((issue) => issue.rule.tag);
+  const explainOnly = match.response === "explain";
+  const alsoDetected = analysis.issues
+    .slice(1, 4)
+    .map((issue) => issue.rule.tag);
   return `I recognized this as **${match.tag}**.
 
 **Why this happens**
 - ${match.cause}
 
-**${explainOnly ? 'Optional next steps' : 'Fix steps'}**
+**${explainOnly ? "Optional next steps" : "Fix steps"}**
 \`\`\`
 ${match.fix}
 \`\`\`
 
 ${
   alsoDetected.length
-    ? `**Also detected in your output**\n- ${alsoDetected.join('\n- ')}\n`
-    : ''
+    ? `**Also detected in your output**\n- ${alsoDetected.join("\n- ")}\n`
+    : ""
 }
 
 If you want, paste your exact terminal output and I will tailor these commands to your repo state.`;
@@ -2697,7 +3414,10 @@ function getCommandHelpReply(userText) {
   const lower = userText.toLowerCase();
   const allItems = refData.flatMap((cat) => cat.items);
   const matched = allItems.find((item) => {
-    const cleanCmd = item.cmd.toLowerCase().replace(/<[^>]+>/g, '').trim();
+    const cleanCmd = item.cmd
+      .toLowerCase()
+      .replace(/<[^>]+>/g, "")
+      .trim();
     const parts = cleanCmd.split(/\s+/);
     const primary = parts.length > 1 ? `git ${parts[1]}` : cleanCmd;
     return lower.includes(primary) || lower.includes(cleanCmd);
@@ -2769,50 +3489,59 @@ git push --force-with-lease
 function getHandbookReply(userText) {
   const lower = userText.toLowerCase();
   const handbookIntent =
-    /\b(what is|who built|when|why|meaning|notes|book|handbook|history|remember|all commands|github procedure|explain)\b/i.test(lower) ||
-    lower.includes('git command meaning') ||
-    lower.includes('how to remember');
+    /\b(what is|who built|when|why|meaning|notes|book|handbook|history|remember|all commands|github procedure|explain)\b/i.test(
+      lower,
+    ) ||
+    lower.includes("git command meaning") ||
+    lower.includes("how to remember");
 
   if (!handbookIntent) return null;
 
   const bestPage = getBestHandbookMatch(userText);
   if (!bestPage) return null;
-  const related = searchHandbookPages(userText, 3).map((entry) => handbookPages[entry.index]);
+  const related = searchHandbookPages(userText, 3).map(
+    (entry) => handbookPages[entry.index],
+  );
 
   return `From **GitVora Handbook**:
 
 **Page ${bestPage.page}: ${bestPage.title}**
 - Section: ${bestPage.section}
-- Core note: ${bestPage.body.split('\n').slice(0, 6).join(' ').slice(0, 320)}...
+- Core note: ${bestPage.body.split("\n").slice(0, 6).join(" ").slice(0, 320)}...
 
 Open full notes in **Git Handbook panel** (shortcut: key 5).  
 This panel has ${handbookPages.length}+ pages in book-paper style for beginner to expert learning.
 
 Related pages:
-- ${related.map((page) => `Page ${page.page}: ${page.title}`).join('\n- ')}`;
+- ${related.map((page) => `Page ${page.page}: ${page.title}`).join("\n- ")}`;
 }
 
 function localAssistantReply(userText) {
   const lower = userText.toLowerCase();
-  const mentionsPullRequest = lower.includes('pull request') || lower.includes('create pr');
+  const mentionsPullRequest =
+    lower.includes("pull request") || lower.includes("create pr");
   const asksPullGuide =
     !mentionsPullRequest &&
     (/\bpull\b/.test(lower) ||
-      lower.includes('latest changes') ||
-      lower.includes('sync from github') ||
-      lower.includes('update from github'));
+      lower.includes("latest changes") ||
+      lower.includes("sync from github") ||
+      lower.includes("update from github"));
   const asksPushGuide = /\bpush\b/.test(lower);
   const asksDailyUpdate =
-    lower.includes('project update') ||
-    lower.includes('after first push') ||
-    lower.includes('after once starting push') ||
-    lower.includes('pull and push');
+    lower.includes("project update") ||
+    lower.includes("after first push") ||
+    lower.includes("after once starting push") ||
+    lower.includes("pull and push");
 
   if (/\b(hi|hello|hey)\b/.test(lower)) {
-    return 'Hi! I am GitVora AI. Ask me any Git/GitHub question and I will give you step-by-step commands.';
+    return "Hi! I am GitVora AI. Ask me any Git/GitHub question and I will give you step-by-step commands.";
   }
 
-  if ((lower.includes('first push') || lower.includes('push my code first time')) && !asksDailyUpdate) {
+  if (
+    (lower.includes("first push") ||
+      lower.includes("push my code first time")) &&
+    !asksDailyUpdate
+  ) {
     return `Use this first-push flow:
 
 \`\`\`
@@ -2838,7 +3567,11 @@ git push
     return getPullGuideReply();
   }
 
-  if (lower.includes('--force') || lower.includes('force push') || lower.includes('force')) {
+  if (
+    lower.includes("--force") ||
+    lower.includes("force push") ||
+    lower.includes("force")
+  ) {
     return `Use force push carefully:
 
 - Preferred: \`git push --force-with-lease\`
@@ -2852,11 +3585,20 @@ git push --force-with-lease origin <branch>
 \`\`\``;
   }
 
-  if (lower.includes('beginner') || lower.includes('expert') || lower.includes('roadmap') || lower.includes('learn git')) {
+  if (
+    lower.includes("beginner") ||
+    lower.includes("expert") ||
+    lower.includes("roadmap") ||
+    lower.includes("learn git")
+  ) {
     return getRoadmapReply();
   }
 
-  if (lower.includes('github procedure') || lower.includes('visual') || lower.includes('teach me git')) {
+  if (
+    lower.includes("github procedure") ||
+    lower.includes("visual") ||
+    lower.includes("teach me git")
+  ) {
     return `Open the **Visual Coach** panel (shortcut: key 4).
 
 It gives you:
@@ -2878,7 +3620,7 @@ Tell me your level and I can recommend the exact track to start with.`;
   const cmdReply = getCommandHelpReply(userText);
   if (cmdReply) return cmdReply;
 
-  if (lower.includes('merge conflict')) {
+  if (lower.includes("merge conflict")) {
     return `To resolve merge conflicts:
 
 \`\`\`
@@ -2903,12 +3645,12 @@ Share your exact goal or terminal error, and I will give precise next commands.`
 
 async function getAssistantResponse(userText) {
   // Optional external endpoint support.
-  const endpoint = window.GITVORA_AI_ENDPOINT || '';
+  const endpoint = window.GITVORA_AI_ENDPOINT || "";
   if (endpoint) {
     try {
       const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: userText,
           history: conversationHistory.slice(-8),
@@ -2917,7 +3659,7 @@ async function getAssistantResponse(userText) {
 
       if (response.ok) {
         const data = await response.json();
-        if (data?.reply && typeof data.reply === 'string') return data.reply;
+        if (data?.reply && typeof data.reply === "string") return data.reply;
       }
     } catch {
       // Fall back to reliable local mode.
@@ -2930,14 +3672,14 @@ async function getAssistantResponse(userText) {
 async function sendMessage(userText) {
   if (!userText.trim() || sendBtn.disabled) return;
 
-  addMessage('user', userText);
-  conversationHistory.push({ role: 'user', content: userText });
-  chatInput.value = '';
-  chatInput.style.height = 'auto';
+  addMessage("user", userText);
+  conversationHistory.push({ role: "user", content: userText });
+  chatInput.value = "";
+  chatInput.style.height = "auto";
   sendBtn.disabled = true;
 
-  const typingEl = document.createElement('div');
-  typingEl.className = 'chat-msg ai';
+  const typingEl = document.createElement("div");
+  typingEl.className = "chat-msg ai";
   typingEl.innerHTML = `
     <div class="msg-avatar">⬡</div>
     <div class="msg-content">
@@ -2954,29 +3696,32 @@ async function sendMessage(userText) {
   try {
     await new Promise((resolve) => setTimeout(resolve, 420));
     const aiText = await getAssistantResponse(userText);
-    conversationHistory.push({ role: 'assistant', content: aiText });
+    conversationHistory.push({ role: "assistant", content: aiText });
     typingEl.remove();
-    addMessage('ai', aiText);
+    addMessage("ai", aiText);
   } catch {
     typingEl.remove();
-    addMessage('ai', 'I hit an unexpected issue, but I am still here. Please retry your question and I will guide you step-by-step.');
+    addMessage(
+      "ai",
+      "I hit an unexpected issue, but I am still here. Please retry your question and I will guide you step-by-step.",
+    );
   }
 
   sendBtn.disabled = false;
   chatInput.focus();
 }
 
-sendBtn.addEventListener('click', () => sendMessage(chatInput.value));
+sendBtn.addEventListener("click", () => sendMessage(chatInput.value));
 
-chatInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
+chatInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
     sendMessage(chatInput.value);
   }
 });
 
-chatInput.addEventListener('input', () => {
-  chatInput.style.height = 'auto';
+chatInput.addEventListener("input", () => {
+  chatInput.style.height = "auto";
   chatInput.style.height = `${Math.min(chatInput.scrollHeight, 120)}px`;
 });
 

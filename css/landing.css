@@ -86,16 +86,20 @@ section[id] {
 .logo {
   font-family: var(--font-head);
   font-weight: 800;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--text);
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  transition: transform 0.2s;
+}
+.logo:hover {
+  transform: scale(1.05);
 }
 .logo-icon {
   color: var(--accent);
-  font-size: 1.4rem;
+  font-size: 2rem;
 }
 .nav-links {
   list-style: none;
@@ -936,6 +940,153 @@ section[id] {
   text-align: center;
   border-top: 1px solid var(--border);
   padding-top: 20px;
+}
+
+/* ---- INSTALL POPUP ---- */
+.install-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.install-popup-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.install-popup-content {
+  position: relative;
+  z-index: 1001;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 32px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.install-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 4px 8px;
+}
+
+.install-close:hover {
+  color: var(--text);
+}
+
+.install-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.install-logo-img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 255, 136, 0.2);
+}
+
+.install-header h2 {
+  font-family: var(--font-head);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 8px 0;
+}
+
+.install-header p {
+  color: var(--text2);
+  font-size: 0.95rem;
+}
+
+.install-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--bg3);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.benefit {
+  color: var(--text);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.install-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-install {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-install:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+}
+
+.btn-cancel {
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* RESPONSIVE */

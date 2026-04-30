@@ -2,8 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>GitVora — Git & GitHub Mastery Hub</title>
+    <meta
+      name="description"
+      content="Master Git & GitHub with guided workflows, error solutions, and interactive learning paths"
+    />
+    <meta name="theme-color" content="#00ff88" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="GitVora" />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="apple-touch-icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230a0c10' width='180' height='180'/><text x='90' y='115' font-size='100' font-weight='bold' fill='%2300ff88' text-anchor='middle' font-family='system-ui'>⬡</text></svg>"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0c10' width='100' height='100'/><text x='50' y='65' font-size='60' font-weight='bold' fill='%2300ff88' text-anchor='middle' font-family='system-ui'>⬡</text></svg>"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap"
@@ -157,8 +181,14 @@
             <div class="feature-icon">📋</div>
             <h3>Step-by-Step Push Guide</h3>
             <p>
-              From <code>git init</code> to successful push with recovery steps
-              for upstream and branch mismatches.
+              From <code>git init</code> to successful push, with recovery steps for upstream and branch mismatches.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⬇️</div>
+            <h3>Step-by-Step Pull Guide</h3>
+            <p>
+              Master <code>git pull --rebase</code>, synchronize with upstream repos, and resolve complex merge conflicts safely.
             </p>
           </div>
           <div class="feature-card">
@@ -371,6 +401,39 @@
       </div>
     </footer>
 
+    <!-- INSTALL APP POPUP -->
+    <div class="install-popup" id="installPopup" style="display: none">
+      <div class="install-popup-overlay" id="installOverlay"></div>
+      <div class="install-popup-content">
+        <button class="install-close" id="installClose">✕</button>
+        <div class="install-header">
+          <img src="img/logo.svg" alt="GitVora Logo" class="install-logo-img">
+          <h2>Install GitVora</h2>
+          <p>Get instant access with one click</p>
+        </div>
+        <div class="install-benefits">
+          <div class="benefit">✓ Works offline</div>
+          <div class="benefit">✓ Fast loading</div>
+          <div class="benefit">✓ Home screen access</div>
+        </div>
+        <div class="install-buttons">
+          <button class="btn-install" id="installBtn">Install App</button>
+          <button class="btn-cancel" id="skipInstall">Skip</button>
+        </div>
+      </div>
+    </div>
+
     <script src="js/landing.js"></script>
+    <script>
+      // Register Service Worker for PWA
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then((registration) => console.log("Service Worker registered"))
+          .catch((error) =>
+            console.log("Service Worker registration failed:", error),
+          );
+      }
+    </script>
   </body>
 </html>

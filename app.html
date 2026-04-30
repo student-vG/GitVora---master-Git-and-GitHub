@@ -2,8 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>GitVora App — Git Mastery Assistant</title>
+    <meta
+      name="description"
+      content="Master Git & GitHub with guided workflows, error solutions, and interactive learning paths"
+    />
+    <meta name="theme-color" content="#00ff88" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="GitVora" />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="apple-touch-icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230a0c10' width='180' height='180'/><text x='90' y='115' font-size='100' font-weight='bold' fill='%2300ff88' text-anchor='middle' font-family='system-ui'>⬡</text></svg>"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0c10' width='100' height='100'/><text x='50' y='65' font-size='60' font-weight='bold' fill='%2300ff88' text-anchor='middle' font-family='system-ui'>⬡</text></svg>"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
@@ -14,7 +38,7 @@
   <body>
     <div class="launch-splash is-hidden" id="launchSplash" aria-hidden="true">
       <div class="launch-splash-card">
-        <div class="launch-splash-logo">⬡</div>
+        <img src="img/logo.svg" alt="GitVora Logo" class="launch-splash-logo-img">
         <div class="launch-splash-name">GitVora</div>
         <div class="launch-splash-sub">Loading your Git guide...</div>
       </div>
@@ -31,6 +55,9 @@
       <nav class="sidebar-nav">
         <a href="#" class="nav-item active" data-panel="push"
           ><span>🚀</span> Push Guide</a
+        >
+        <a href="#" class="nav-item" data-panel="pull"
+          ><span>⬇️</span> Pull Guide</a
         >
         <a href="#" class="nav-item" data-panel="workflow"
           ><span>🔄</span> Workflow Builder</a
@@ -116,6 +143,50 @@
               💡 <strong>Pro Tip:</strong> Always run
               <code>git status</code> before committing so you know exactly
               what's being staged.
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== PULL GUIDE PANEL ===== -->
+        <div class="panel" id="panel-pull">
+          <div class="panel-header">
+            <h1>⬇️ Step-by-Step Pull Guide</h1>
+            <p>
+              Master pulling updates safely and handling merge conflicts with
+              ease.
+            </p>
+          </div>
+          <div class="scenario-selector">
+            <div class="scenario-label">What's your situation?</div>
+            <div class="scenario-btns">
+              <button class="scenario-btn active" data-scenario="pull-fresh">
+                Fresh Pull (Clean Working)
+              </button>
+              <button class="scenario-btn" data-scenario="pull-local-changes">
+                Pull with Local Changes
+              </button>
+              <button class="scenario-btn" data-scenario="pull-conflict">
+                Handle Conflicts
+              </button>
+              <button class="scenario-btn" data-scenario="pull-upstream">
+                Sync Fork with Upstream
+              </button>
+              <button class="scenario-btn" data-scenario="pull-rebase">
+                Pull with Rebase
+              </button>
+            </div>
+          </div>
+          <div class="steps-container" id="pullSteps"></div>
+          <div class="pull-tips">
+            <div class="tip-card">
+              💡 <strong>Pro Tip:</strong> Always pull before starting new work
+              to avoid conflicts. Use <code>git pull --rebase</code> to keep a
+              clean history.
+            </div>
+            <div class="tip-card">
+              ⚠️ <strong>Tip:</strong> If you have uncommitted changes, use
+              <code>git stash</code> before pulling, then
+              <code>git stash pop</code> after.
             </div>
           </div>
         </div>
@@ -516,5 +587,16 @@
     </div>
 
     <script src="js/app.js"></script>
+    <script>
+      // Register Service Worker for PWA
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then((registration) => console.log("Service Worker registered"))
+          .catch((error) =>
+            console.log("Service Worker registration failed:", error),
+          );
+      }
+    </script>
   </body>
 </html>

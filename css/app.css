@@ -94,11 +94,12 @@ body.splash-active {
   text-align: center;
   box-shadow: 0 24px 50px rgba(0, 0, 0, 0.36);
 }
-.launch-splash-logo {
-  font-size: 2.1rem;
-  color: var(--accent);
-  line-height: 1;
-  margin-bottom: 8px;
+.launch-splash-logo-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 30px rgba(0, 255, 136, 0.3);
   animation: splashPulse 0.95s ease-in-out infinite;
 }
 .launch-splash-name {

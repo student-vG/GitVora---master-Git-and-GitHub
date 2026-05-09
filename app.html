@@ -34,6 +34,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/app.css" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
   <body>
     <div class="launch-splash is-hidden" id="launchSplash" aria-hidden="true">
@@ -54,36 +55,48 @@
       </div>
       <nav class="sidebar-nav">
         <a href="#" class="nav-item active" data-panel="push"
-          ><span>🚀</span> Push Guide</a
+          ><span><i class="ph ph-rocket"></i></span> Push Guide</a
         >
         <a href="#" class="nav-item" data-panel="pull"
-          ><span>⬇️</span> Pull Guide</a
+          ><span><i class="ph ph-download-simple"></i></span> Pull Guide</a
         >
         <a href="#" class="nav-item" data-panel="workflow"
-          ><span>🔄</span> Workflow Builder</a
+          ><span><i class="ph ph-arrows-clockwise"></i></span> Workflow Builder</a
         >
         <a href="#" class="nav-item" data-panel="academy"
-          ><span>🧠</span> Skill Path</a
+          ><span><i class="ph ph-brain"></i></span> Skill Path</a
         >
         <a href="#" class="nav-item" data-panel="visual"
-          ><span>🛰️</span> Visual Coach</a
+          ><span><i class="ph ph-planet"></i></span> Visual Coach</a
         >
         <a href="#" class="nav-item" data-panel="handbook"
-          ><span>📘</span> Git Handbook</a
+          ><span><i class="ph ph-book-open-text"></i></span> Git Handbook</a
         >
         <a href="#" class="nav-item" data-panel="errors"
-          ><span>🔧</span> Error Detective</a
+          ><span><i class="ph ph-wrench"></i></span> Error Detective</a
         >
-        <a href="#" class="nav-item" data-panel="reference"
-          ><span>📚</span> Command Ref</a
+        <a href="#" class="nav-item" data-panel="setup"
+          ><span><i class="ph ph-graduation-cap"></i></span> Pro Setup Guide</a
+        >
+        <a href="#" class="nav-item" data-panel="commitlint"
+          ><span><i class="ph ph-check-square"></i></span> Commit Validator</a
+        >
+        <a href="#" class="nav-item" data-panel="actions"
+          ><span><i class="ph ph-lightning"></i></span> GitHub Actions</a
+        >
+        <a href="#" class="nav-item" data-panel="mergestrat"
+          ><span><i class="ph ph-git-merge"></i></span> Merge Strategy</a
+        >
+        <a href="#" class="nav-item" data-panel="signedcommits"
+          ><span><i class="ph ph-seal-check"></i></span> Signed Commits</a
         >
         <a href="#" class="nav-item" data-panel="chat"
-          ><span>🤖</span> AI Assistant</a
+          ><span><i class="ph ph-robot"></i></span> AI Assistant</a
         >
       </nav>
       <div class="sidebar-footer">
         <a href="index.html" class="sidebar-link">← Back to Landing</a>
-        <div class="sidebar-version">v2.5.0 • GitVora</div>
+        <div class="sidebar-version">v3.0.0 • GitVora</div>
       </div>
     </aside>
 
@@ -92,17 +105,17 @@
       <!-- TOP BAR -->
       <header class="topbar">
         <button class="menu-btn" id="menuBtn">☰</button>
-        <div class="topbar-title" id="topbarTitle">🚀 Push Guide</div>
+        <div class="topbar-title" id="topbarTitle"><i class="ph ph-rocket"></i> Push Guide</div>
         <div class="topbar-actions">
           <button
             class="icon-btn"
             title="Toggle light mode"
             id="themeToggleApp"
           >
-            ☀️
+            <i class="ph ph-sun"></i>
           </button>
           <button class="icon-btn" title="Keyboard shortcuts" id="shortcutsBtn">
-            ⌨️
+            <i class="ph ph-keyboard"></i>
           </button>
         </div>
       </header>
@@ -112,7 +125,7 @@
         <!-- ===== PUSH GUIDE PANEL ===== -->
         <div class="panel active" id="panel-push">
           <div class="panel-header">
-            <h1>🚀 Step-by-Step Push Guide</h1>
+            <h1><i class="ph ph-rocket"></i> Step-by-Step Push Guide</h1>
             <p>
               Follow these steps to push your code to GitHub without errors.
             </p>
@@ -120,7 +133,10 @@
           <div class="scenario-selector">
             <div class="scenario-label">What's your situation?</div>
             <div class="scenario-btns">
-              <button class="scenario-btn active" data-scenario="first">
+              <button class="scenario-btn active" data-scenario="quick-setup">
+                <i class="ph ph-magic-wand"></i> Quick Setup (New Repo)
+              </button>
+              <button class="scenario-btn" data-scenario="first">
                 First Push Ever
               </button>
               <button class="scenario-btn" data-scenario="regular">
@@ -137,10 +153,20 @@
               </button>
             </div>
           </div>
+          <div class="quick-setup-block" id="quickSetupBlock" style="display: none;">
+            <div class="quick-setup-card">
+              <h3><i class="ph ph-link"></i> Paste your GitHub Repository URL</h3>
+              <p>Just created a repository on GitHub? Paste the URL below to generate your exact commands.</p>
+              <div class="repo-input-group">
+                <input type="url" id="repoUrlInput" placeholder="https://github.com/username/repository.git" autocomplete="off" />
+                <button id="generateRepoBtn" class="btn-detect">Generate Guide</button>
+              </div>
+            </div>
+          </div>
           <div class="steps-container" id="pushSteps"></div>
           <div class="push-tips">
             <div class="tip-card">
-              💡 <strong>Pro Tip:</strong> Always run
+              <i class="ph ph-lightbulb"></i> <strong>Pro Tip:</strong> Always run
               <code>git status</code> before committing so you know exactly
               what's being staged.
             </div>
@@ -150,7 +176,7 @@
         <!-- ===== PULL GUIDE PANEL ===== -->
         <div class="panel" id="panel-pull">
           <div class="panel-header">
-            <h1>⬇️ Step-by-Step Pull Guide</h1>
+            <h1><i class="ph ph-download-simple"></i> Step-by-Step Pull Guide</h1>
             <p>
               Master pulling updates safely and handling merge conflicts with
               ease.
@@ -179,12 +205,12 @@
           <div class="steps-container" id="pullSteps"></div>
           <div class="pull-tips">
             <div class="tip-card">
-              💡 <strong>Pro Tip:</strong> Always pull before starting new work
+              <i class="ph ph-lightbulb"></i> <strong>Pro Tip:</strong> Always pull before starting new work
               to avoid conflicts. Use <code>git pull --rebase</code> to keep a
               clean history.
             </div>
             <div class="tip-card">
-              ⚠️ <strong>Tip:</strong> If you have uncommitted changes, use
+              <i class="ph ph-warning"></i> <strong>Tip:</strong> If you have uncommitted changes, use
               <code>git stash</code> before pulling, then
               <code>git stash pop</code> after.
             </div>
@@ -194,7 +220,7 @@
         <!-- ===== WORKFLOW BUILDER PANEL ===== -->
         <div class="panel" id="panel-workflow">
           <div class="panel-header">
-            <h1>🔄 Workflow Builder</h1>
+            <h1><i class="ph ph-arrows-clockwise"></i> Workflow Builder</h1>
             <p>
               Tell me what you want to do. I'll give you the exact commands.
             </p>
@@ -218,7 +244,7 @@
         <!-- ===== SKILL PATH PANEL ===== -->
         <div class="panel" id="panel-academy">
           <div class="panel-header">
-            <h1>🧠 Beginner to Expert Skill Path</h1>
+            <h1><i class="ph ph-brain"></i> Beginner to Expert Skill Path</h1>
             <p>
               Follow this roadmap to become a strong and practical Git/GitHub
               developer.
@@ -234,33 +260,12 @@
             </div>
           </div>
           <div class="academy-grid" id="academyGrid"></div>
-          <div class="academy-checklist">
-            <h2>Daily 15-Minute Practice Blueprint</h2>
-            <ul>
-              <li>
-                <strong>Day 1-7:</strong> Practice status/add/commit/push and
-                read your own commit history.
-              </li>
-              <li>
-                <strong>Day 8-14:</strong> Create branches, open PRs, resolve
-                one simulated conflict.
-              </li>
-              <li>
-                <strong>Day 15-21:</strong> Use rebase, stash, and cherry-pick
-                on a test repo.
-              </li>
-              <li>
-                <strong>Day 22-30:</strong> Tag releases, recover from mistakes
-                with reflog, and run bisect.
-              </li>
-            </ul>
-          </div>
         </div>
 
         <!-- ===== GIT HANDBOOK PANEL ===== -->
         <div class="panel" id="panel-handbook">
           <div class="panel-header">
-            <h1>📘 Git + GitHub Handbook (155+ Pages)</h1>
+            <h1><i class="ph ph-book-open-text"></i> Git + GitHub Handbook (155+ Pages)</h1>
             <p>
               Book-style learning notes for beginners to experts: what, why, who
               built Git, when, command meanings, usage, memory tips, and
@@ -269,11 +274,13 @@
           </div>
 
           <div class="handbook-toolbar">
-            <input
-              id="handbookSearch"
-              class="ref-search"
-              placeholder="Search page title or topic..."
-            />
+            <div class="handbook-search-wrap">
+              <input
+                id="handbookSearch"
+                class="ref-search"
+                placeholder="Search page title or topic..."
+              />
+            </div>
             <button id="handbookPrev" class="icon-btn" title="Previous page">
               ←
             </button>
@@ -287,14 +294,17 @@
 
           <div class="handbook-layout">
             <aside class="handbook-toc" id="handbookToc"></aside>
-            <article class="book-paper" id="handbookPage"></article>
+            <div class="book-spread">
+              <article class="book-paper book-page-left" id="handbookPageLeft"></article>
+              <article class="book-paper book-page-right" id="handbookPageRight"></article>
+            </div>
           </div>
         </div>
 
         <!-- ===== VISUAL MASTERCLASS PANEL ===== -->
         <div class="panel" id="panel-visual">
           <div class="panel-header">
-            <h1>🛰️ Visual Git + GitHub Masterclass</h1>
+            <h1><i class="ph ph-planet"></i> Visual Git + GitHub Masterclass</h1>
             <p>
               Learn everything in one place: visual roadmap, terminal training,
               GitHub procedure, and practical missions from beginner to expert.
@@ -339,7 +349,7 @@
                     id="sandboxHintBtn"
                     title="Show hint"
                   >
-                    💡
+                  <i class="ph ph-lightbulb"></i>
                   </button>
                   <button
                     class="icon-btn visual-action-btn"
@@ -391,7 +401,7 @@
         <!-- ===== ERROR DETECTIVE PANEL ===== -->
         <div class="panel" id="panel-errors">
           <div class="panel-header">
-            <h1>🔧 Error Detective</h1>
+            <h1><i class="ph ph-wrench"></i> Error Detective</h1>
             <p>
               Paste full terminal output (single-line or multi-line). GitVora
               detects 100+ common Git issues and gives calm step-by-step fixes.
@@ -417,7 +427,7 @@
                 Explain + Solve
               </label>
             </div>
-            <button class="btn-detect" id="detectBtn">🔍 Detect & Guide</button>
+            <button class="btn-detect" id="detectBtn"><i class="ph ph-magnifying-glass"></i> Detect & Guide</button>
           </div>
           <div
             class="error-result"
@@ -425,32 +435,64 @@
             style="display: none"
           ></div>
           <div class="errors-catalogue">
-            <div class="cat-title">📋 Browse All Common Errors</div>
+            <div class="cat-title"><i class="ph ph-clipboard"></i> Browse All Common Errors</div>
             <div class="errors-cat-list" id="errorsCatList"></div>
           </div>
         </div>
 
-        <!-- ===== COMMAND REFERENCE PANEL ===== -->
-        <div class="panel" id="panel-reference">
+        <!-- ===== PRO SETUP GUIDE PANEL ===== -->
+        <div class="panel" id="panel-setup">
           <div class="panel-header">
-            <h1>📚 Command Reference</h1>
-            <p>Every Git command explained with examples.</p>
+            <h1><i class="ph ph-graduation-cap"></i> Beginner to Pro Setup Wizard</h1>
+            <p>Generate a personalized, step-by-step guide to mastering Git & GitHub.</p>
           </div>
-          <div class="ref-search-bar">
-            <input
-              type="text"
-              id="refSearch"
-              placeholder="Search commands..."
-              class="ref-search"
-            />
+          
+          <!-- State 1: Form -->
+          <div class="setup-wizard-form" id="setupWizardForm">
+            <div class="setup-wizard-card">
+              <h2><i class="ph ph-magic-wand"></i> Personalize Your Guide</h2>
+              <p>Tell us a bit about yourself to generate exact commands for your system.</p>
+              
+              <div class="form-group">
+                <label>Your Full Name</label>
+                <input type="text" id="setupName" placeholder="e.g. John Doe" />
+              </div>
+              <div class="form-group">
+                <label>Your Email Address</label>
+                <input type="email" id="setupEmail" placeholder="e.g. john@example.com" />
+              </div>
+              <div class="form-group">
+                <label>Desired GitHub Username</label>
+                <input type="text" id="setupUsername" placeholder="e.g. johndoe99" />
+              </div>
+              <div class="form-group">
+                <label>Operating System</label>
+                <div class="os-selector">
+                  <label class="os-btn"><input type="radio" name="setupOs" value="windows" checked /> <i class="ph ph-windows-logo"></i> Windows</label>
+                  <label class="os-btn"><input type="radio" name="setupOs" value="mac" /> <i class="ph ph-apple-logo"></i> macOS</label>
+                  <label class="os-btn"><input type="radio" name="setupOs" value="linux" /> <i class="ph ph-linux-logo"></i> Linux</label>
+                </div>
+              </div>
+              <button class="btn-detect" id="generateSetupBtn"><i class="ph ph-sparkle"></i> Generate My Pro Guide</button>
+            </div>
           </div>
-          <div class="ref-categories" id="refCategories"></div>
+
+          <!-- State 2: Guide -->
+          <div class="setup-wizard-guide" id="setupWizardGuide" style="display: none;">
+            <div class="setup-guide-header">
+              <h2>Your Personalized Masterclass</h2>
+              <button class="icon-btn" id="resetSetupBtn" title="Edit details"><i class="ph ph-pencil-simple"></i></button>
+            </div>
+            <div class="steps-container" id="setupStepsContainer">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
         </div>
 
         <!-- ===== AI CHAT PANEL ===== -->
         <div class="panel" id="panel-chat">
           <div class="panel-header">
-            <h1>🤖 AI Git Assistant</h1>
+            <h1><i class="ph ph-robot"></i> AI Git Assistant</h1>
             <p>
               Ask anything about Git, GitHub, or errors. Works even when
               internet is unstable.
@@ -463,7 +505,7 @@
                 <div class="msg-content">
                   <div class="msg-name">GitVora AI</div>
                   <div class="msg-text">
-                    👋 Hi! I'm your Git assistant. I can help you with:
+                    <i class="ph ph-hand-waving"></i> Hi! I'm your Git assistant. I can help you with:
                     <ul>
                       <li>Fixing push/pull errors</li>
                       <li>Daily project update flow (pull then push)</li>
@@ -559,6 +601,42 @@
             </div>
           </div>
         </div>
+        <!-- ===== COMMIT VALIDATOR PANEL ===== -->
+        <div class="panel" id="panel-commitlint">
+          <div class="panel-header">
+            <h1><i class="ph ph-check-square"></i> Commit Message Validator</h1>
+            <p>Write a commit message and get instant real-world feedback based on the Conventional Commits standard used by Google, Microsoft, and most top companies.</p>
+          </div>
+          <div id="commitlintApp"></div>
+        </div>
+
+        <!-- ===== GITHUB ACTIONS PANEL ===== -->
+        <div class="panel" id="panel-actions">
+          <div class="panel-header">
+            <h1><i class="ph ph-lightning"></i> GitHub Actions Guide</h1>
+            <p>Automate your entire workflow — testing, building, and deploying — triggered automatically when you push code. The #1 most in-demand GitHub skill.</p>
+          </div>
+          <div id="actionsApp"></div>
+        </div>
+
+        <!-- ===== MERGE STRATEGY PANEL ===== -->
+        <div class="panel" id="panel-mergestrat">
+          <div class="panel-header">
+            <h1><i class="ph ph-git-merge"></i> Merge Strategy Guide</h1>
+            <p>GitHub asks you EVERY time you merge a PR: Merge Commit, Squash, or Rebase. Here's exactly when to use which — and why it matters.</p>
+          </div>
+          <div id="mergeStratApp"></div>
+        </div>
+
+        <!-- ===== SIGNED COMMITS PANEL ===== -->
+        <div class="panel" id="panel-signedcommits">
+          <div class="panel-header">
+            <h1><i class="ph ph-seal-check"></i> Signed Commits Guide</h1>
+            <p>GitHub shows "Unverified" on unsigned commits. Many companies require verified commits. Learn how to sign your commits with SSH (the modern way) in minutes.</p>
+          </div>
+          <div id="signedCommitsApp"></div>
+        </div>
+
       </main>
     </div>
 
@@ -566,7 +644,7 @@
     <div class="modal-overlay" id="shortcutsModal" style="display: none">
       <div class="modal">
         <div class="modal-header">
-          ⌨️ Keyboard Shortcuts
+          <i class="ph ph-keyboard"></i> Keyboard Shortcuts
           <button class="modal-close" id="shortcutsClose">✕</button>
         </div>
         <div class="modal-body">
@@ -576,7 +654,7 @@
           <div class="shortcut-row"><kbd>4</kbd> Visual Coach</div>
           <div class="shortcut-row"><kbd>5</kbd> Git Handbook</div>
           <div class="shortcut-row"><kbd>6</kbd> Error Detective</div>
-          <div class="shortcut-row"><kbd>7</kbd> Command Ref</div>
+          <div class="shortcut-row"><kbd>7</kbd> Pro Setup Guide</div>
           <div class="shortcut-row"><kbd>8</kbd> AI Assistant</div>
           <div class="shortcut-row"><kbd>Enter</kbd> Send chat message</div>
           <div class="shortcut-row">
@@ -587,6 +665,10 @@
     </div>
 
     <script src="js/app.js"></script>
+    <script src="js/setup-wizard.js"></script>
+    <script src="js/skill-tree.js"></script>
+    <script src="js/features.js"></script>
+    <script src="js/ai-assistant.js"></script>
     <script>
       // Register Service Worker for PWA
       if ("serviceWorker" in navigator) {

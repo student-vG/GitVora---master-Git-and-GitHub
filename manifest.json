@@ -2,7 +2,7 @@
     "name": "GitVora — Git & GitHub Mastery Hub",
     "short_name": "GitVora",
     "description": "Master Git & GitHub with guided workflows, error solutions, and interactive learning paths",
-    "start_url": "/",
+    "start_url": "/app.html",
     "scope": "/",
     "display": "standalone",
     "orientation": "portrait-primary",
@@ -24,9 +24,9 @@
     ],
     "screenshots": [
         {
-            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230a0c10' width='540' height='720'/><text x='270' y='360' font-size='200' font-weight='bold' fill='%2300ff88' text-anchor='middle' font-family='system-ui'>GitVora</text></svg>",
+            "src": "img/git.png",
             "sizes": "540x720",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "form_factor": "narrow"
         }
     ],

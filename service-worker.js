@@ -3,7 +3,7 @@
 // Enables offline support and PWA functionality
 // ============================================================
 
-const CACHE_NAME = "gitvora-v2";
+const CACHE_NAME = "gitvora-v7";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -12,7 +12,12 @@ const urlsToCache = [
   "/css/app.css",
   "/js/landing.js",
   "/js/app.js",
+  "/js/setup-wizard.js",
+  "/js/skill-tree.js",
+  "/js/features.js",
+  "/js/ai-assistant.js",
   "/img/logo.svg",
+  "https://unpkg.com/@phosphor-icons/web",
   "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap",
 ];
 
@@ -45,7 +50,7 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - Network-First with Cache Fallback
 self.addEventListener("fetch", (event) => {
   // Skip non-GET requests
   if (event.request.method !== "GET") {
@@ -53,35 +58,27 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches
-      .match(event.request)
+    fetch(event.request, { cache: "no-store" }) // Force network to bypass browser cache
       .then((response) => {
-        // Return cached version if available
-        if (response) {
-          return response;
-        }
-        // Otherwise fetch from network
-        return fetch(event.request).then((response) => {
-          // Don't cache if not a success response
-          if (
-            !response ||
-            response.status !== 200 ||
-            response.type === "error"
-          ) {
-            return response;
-          }
-          // Clone and cache successful responses
+        // Clone and cache successful responses
+        if (response && response.status === 200 && response.type !== "error") {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
-          return response;
-        });
+        }
+        return response;
       })
       .catch(() => {
-        // Fallback for offline - could serve offline page here
-        return new Response("Offline - cached version may not be available", {
-          status: 503,
+        // Fallback to cache if network fails (offline)
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return new Response("Offline - cached version may not be available", {
+            status: 503,
+            headers: { "Content-Type": "text/plain" },
+          });
         });
       }),
   );

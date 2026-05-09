@@ -12,7 +12,7 @@ function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   const isLight = theme === "light";
   if (themeToggleApp) {
-    themeToggleApp.textContent = isLight ? "🌙" : "☀️";
+    themeToggleApp.innerHTML = isLight ? '<i class="ph ph-moon"></i>' : '<i class="ph ph-sun"></i>';
     themeToggleApp.title = isLight
       ? "Switch to dark mode"
       : "Switch to light mode";
@@ -70,15 +70,15 @@ const navItems = document.querySelectorAll(".nav-item");
 const topbarTitle = document.getElementById("topbarTitle");
 
 const panelTitles = {
-  push: "🚀 Push Guide",
-  pull: "⬇️ Pull Guide",
-  workflow: "🔄 Workflow Builder",
-  academy: "🧠 Skill Path",
-  visual: "🛰️ Visual Coach",
-  handbook: "📘 Git Handbook",
-  errors: "🔧 Error Detective",
-  reference: "📚 Command Reference",
-  chat: "🤖 AI Assistant",
+  push: '<i class="ph ph-rocket"></i> Push Guide',
+  pull: '<i class="ph ph-download-simple"></i> Pull Guide',
+  workflow: '<i class="ph ph-arrows-clockwise"></i> Workflow Builder',
+  academy: '<i class="ph ph-brain"></i> Skill Path',
+  visual: '<i class="ph ph-planet"></i> Visual Coach',
+  handbook: '<i class="ph ph-book-open-text"></i> Git Handbook',
+  errors: '<i class="ph ph-wrench"></i> Error Detective',
+  setup: '<i class="ph ph-graduation-cap"></i> Pro Setup Guide',
+  chat: '<i class="ph ph-robot"></i> AI Assistant',
 };
 
 function showPanel(name) {
@@ -86,7 +86,7 @@ function showPanel(name) {
   navItems.forEach((n) => n.classList.remove("active"));
   document.getElementById(`panel-${name}`)?.classList.add("active");
   document.querySelector(`[data-panel="${name}"]`)?.classList.add("active");
-  topbarTitle.textContent = panelTitles[name] || "GitVora";
+  topbarTitle.innerHTML = panelTitles[name] || "GitVora";
   document.getElementById("sidebar").classList.remove("open");
   const panelEl = document.getElementById(`panel-${name}`);
   if (panelEl) panelEl.scrollTo({ top: 0, behavior: "smooth" });
@@ -122,7 +122,7 @@ document.addEventListener("keydown", (e) => {
     "visual",
     "handbook",
     "errors",
-    "reference",
+    "setup",
     "chat",
   ];
   if (e.key >= "1" && e.key <= "8") {
@@ -156,6 +156,13 @@ function copyText(text, btn) {
     if (!btn) return;
     btn.textContent = "✓ Copied!";
     btn.classList.add("copied");
+    
+    // Auto-check step card if it exists
+    const stepCard = btn.closest(".step-card");
+    if (stepCard) {
+      stepCard.classList.add("done");
+    }
+
     setTimeout(() => {
       btn.textContent = "Copy";
       btn.classList.remove("copied");
@@ -254,7 +261,7 @@ const scenarios = {
       cmd: "git branch -M main",
     },
     {
-      title: "🚀 Push and set upstream",
+      title: '<i class="ph ph-rocket"></i> Push and set upstream',
       explanation:
         "This links local main to origin/main. After this, future pushes are just `git push`.",
       cmd: "git push -u origin main\n# next time:\n# git push",
@@ -415,10 +422,66 @@ const scenarios = {
   ],
 };
 
+function generateDynamicSetup(url) {
+  const defaultUrl = "https://github.com/username/repository.git";
+  const displayUrl = url || defaultUrl;
+  
+  let repoName = "new-project";
+  if (url) {
+    try {
+      const parts = url.split("/");
+      repoName = parts[parts.length - 1].replace(".git", "");
+    } catch (e) {}
+  }
+
+  return [
+    {
+      title: "Option 1: Create a new repository on the command line",
+      explanation: "Use this if you are starting a completely new project.",
+      cmd: `echo "# ${repoName}" >> README.md\ngit init\ngit add README.md\ngit commit -m "first commit"\ngit branch -M main\ngit remote add origin ${displayUrl}\ngit push -u origin main`,
+      note: "This initializes Git, creates a README, connects to GitHub, and pushes your first commit."
+    },
+    {
+      title: "Option 2: Push an existing repository",
+      explanation: "Use this if you already have local files and just need to connect them to GitHub.",
+      cmd: `git remote add origin ${displayUrl}\ngit branch -M main\ngit push -u origin main`,
+      note: "This assumes you have already run `git init`, `git add .`, and `git commit` locally."
+    }
+  ];
+}
+
+const quickSetupBlock = document.getElementById("quickSetupBlock");
+const repoUrlInput = document.getElementById("repoUrlInput");
+const generateRepoBtn = document.getElementById("generateRepoBtn");
+
+if (generateRepoBtn && repoUrlInput) {
+  generateRepoBtn.addEventListener("click", () => {
+    renderPushSteps("quick-setup");
+  });
+  repoUrlInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") renderPushSteps("quick-setup");
+  });
+}
+
 function renderPushSteps(scenario) {
   const container = document.getElementById("pushSteps");
   container.innerHTML = "";
-  scenarios[scenario].forEach((step, i) => {
+  
+  if (quickSetupBlock) {
+    quickSetupBlock.style.display = scenario === "quick-setup" ? "block" : "none";
+  }
+
+  let stepsToRender = [];
+  if (scenario === "quick-setup") {
+    const url = repoUrlInput ? repoUrlInput.value.trim() : "";
+    stepsToRender = generateDynamicSetup(url);
+  } else {
+    stepsToRender = scenarios[scenario];
+  }
+
+  if (!stepsToRender) return;
+
+  stepsToRender.forEach((step, i) => {
     const card = document.createElement("div");
     card.className = "step-card";
     card.innerHTML = `
@@ -433,7 +496,7 @@ function renderPushSteps(scenario) {
           <span class="step-cmd-text">${step.cmd}</span>
           <button class="copy-btn" data-cmd="${encodeURIComponent(step.cmd)}">Copy</button>
         </div>
-        ${step.note ? `<div class="step-note">⚠️ ${step.note}</div>` : ""}
+        ${step.note ? `<div class="step-note"><i class="ph ph-warning"></i> ${step.note}</div>` : ""}
       </div>
     `;
     card.querySelector(".step-card-done").addEventListener("click", () => {
@@ -446,16 +509,16 @@ function renderPushSteps(scenario) {
   });
 }
 
-document.querySelectorAll(".scenario-btn").forEach((btn) => {
+document.querySelectorAll("#panel-push .scenario-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     document
-      .querySelectorAll(".scenario-btn")
+      .querySelectorAll("#panel-push .scenario-btn")
       .forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
     renderPushSteps(btn.dataset.scenario);
   });
 });
-renderPushSteps("first");
+renderPushSteps("quick-setup");
 
 // ============================================================
 // PULL GUIDE
@@ -662,7 +725,7 @@ function renderPullSteps(scenario) {
           <span class="step-cmd-text">${step.cmd}</span>
           <button class="copy-btn" data-cmd="${encodeURIComponent(step.cmd)}">Copy</button>
         </div>
-        ${step.note ? `<div class="step-note">⚠️ ${step.note}</div>` : ""}
+        ${step.note ? `<div class="step-note"><i class="ph ph-warning"></i> ${step.note}</div>` : ""}
       </div>
     `;
     card.querySelector(".step-card-done").addEventListener("click", () => {
@@ -693,7 +756,7 @@ renderPullSteps("pull-fresh");
 // ============================================================
 const workflows = [
   {
-    icon: "✨",
+    icon: '<i class="ph ph-sparkle"></i>',
     title: "Start a New Project",
     desc: "Init, connect, and push cleanly",
     steps: [
@@ -710,7 +773,7 @@ const workflows = [
     ],
   },
   {
-    icon: "⬇️",
+    icon: '<i class="ph ph-download-simple"></i>',
     title: "Pull Latest Project Updates",
     desc: "Safely sync remote changes before coding",
     steps: [
@@ -728,7 +791,7 @@ const workflows = [
     ],
   },
   {
-    icon: "🌿",
+    icon: '<i class="ph ph-git-branch"></i>',
     title: "Create & Work on Branch",
     desc: "Clean feature branch workflow",
     steps: [
@@ -742,7 +805,7 @@ const workflows = [
     ],
   },
   {
-    icon: "🔀",
+    icon: '<i class="ph ph-git-merge"></i>',
     title: "Merge a Branch",
     desc: "Safe merge into main",
     steps: [
@@ -757,7 +820,7 @@ const workflows = [
     ],
   },
   {
-    icon: "🛟",
+    icon: '<i class="ph ph-lifebuoy"></i>',
     title: "Recover from Push Rejection",
     desc: "When remote has new commits",
     steps: [
@@ -774,7 +837,7 @@ const workflows = [
     ],
   },
   {
-    icon: "↩️",
+    icon: '<i class="ph ph-arrow-u-up-left"></i>',
     title: "Undo Last Commit",
     desc: "Keep or discard changes safely",
     steps: [
@@ -794,7 +857,7 @@ const workflows = [
     ],
   },
   {
-    icon: "🔄",
+    icon: '<i class="ph ph-arrows-clockwise"></i>',
     title: "Sync Fork with Original",
     desc: "Keep fork up to date",
     steps: [
@@ -809,7 +872,7 @@ const workflows = [
     ],
   },
   {
-    icon: "💾",
+    icon: '<i class="ph ph-floppy-disk"></i>',
     title: "Stash & Switch Context",
     desc: "Pause and resume work quickly",
     steps: [
@@ -824,7 +887,7 @@ const workflows = [
     ],
   },
   {
-    icon: "🏷️",
+    icon: '<i class="ph ph-tag"></i>',
     title: "Tag a Release",
     desc: "Create and publish versions",
     steps: [
@@ -837,7 +900,7 @@ const workflows = [
     ],
   },
   {
-    icon: "🔍",
+    icon: '<i class="ph ph-magnifying-glass"></i>',
     title: "Find Bug with Bisect",
     desc: "Binary search through history",
     steps: [
@@ -1029,7 +1092,8 @@ function renderAcademy() {
   updateAcademyProgressUI(completion);
 }
 
-renderAcademy();
+// Guarded: skill-tree.js overrides this after load
+if (typeof renderSkillTree !== "function") { renderAcademy(); }
 
 // ============================================================
 // VISUAL MASTERCLASS (Git + GitHub in one place)
@@ -1492,6 +1556,108 @@ const gitignorePresets = {
     ".flutter-plugins-dependencies",
     "build/",
   ],
+  android: [
+    "*.iml",
+    ".gradle",
+    "/local.properties",
+    "/.idea/caches",
+    "/.idea/libraries",
+    "/.idea/modules.xml",
+    "/.idea/workspace.xml",
+    ".DS_Store",
+    "/build",
+    "/captures",
+    ".externalNativeBuild"
+  ],
+  ios: [
+    "*.xcuserstate",
+    "project.xcworkspace/",
+    "xcuserdata/",
+    "Pods/",
+    "Podfile.lock",
+    "build/"
+  ],
+  unity: [
+    "[Ll]ibrary/",
+    "[Tt]emp/",
+    "[Oo]bj/",
+    "[Bb]uild/",
+    "[Bb]uilds/",
+    "[Ll]ogs/",
+    "*.csproj",
+    "*.unityproj",
+    "*.sln",
+    "*.suo",
+    "*.user",
+    "*.userprefs",
+    "*.pidb",
+    "*.booproj",
+    "sysinfo.txt",
+    "*.apk",
+    "*.unitypackage"
+  ],
+  unreal: [
+    "Binaries/",
+    "Build/",
+    "DerivedDataCache/",
+    "Intermediate/",
+    "Saved/",
+    ".idea/",
+    ".vscode/",
+    ".vs/",
+    "*.VC.db",
+    "*.opendb",
+    "*.VC.opendb"
+  ],
+  cpp: [
+    "*.o",
+    "*.obj",
+    "*.so",
+    "*.dll",
+    "*.dylib",
+    "*.exe",
+    "*.out",
+    "*.app",
+    "build/",
+    "CMakeCache.txt",
+    "CMakeFiles/",
+    "CMakeScripts/",
+    "Testing/",
+    "Makefile",
+    "cmake_install.cmake",
+    "install_manifest.txt",
+    "compile_commands.json"
+  ],
+  csharp: [
+    "[Bb]in/",
+    "[Oo]bj/",
+    "[Oo]ut/",
+    "*.user",
+    "*.suo",
+    "*.dotCover",
+    ".vs/",
+    "*.swp"
+  ],
+  ruby: [
+    "*.gem",
+    "*.rbc",
+    "/.config",
+    "/coverage/",
+    "/spec/tmp",
+    "**.orig",
+    "rerun.txt",
+    "pickle-email-*.html",
+    ".ruby-version",
+    ".ruby-gemset"
+  ],
+  php: [
+    "vendor/",
+    "composer.phar",
+    "*.log",
+    ".env",
+    "phpunit.xml",
+    ".phpunit.result.cache"
+  ]
 };
 
 const stackLabels = {
@@ -1503,6 +1669,14 @@ const stackLabels = {
   go: "Go",
   rust: "Rust",
   flutter: "Flutter",
+  android: "Android",
+  ios: "iOS",
+  unity: "Unity",
+  unreal: "Unreal Engine",
+  cpp: "C++",
+  csharp: "C#",
+  ruby: "Ruby",
+  php: "PHP",
 };
 
 let currentVisualTrack = visualTracks[0];
@@ -2642,235 +2816,63 @@ document.getElementById("detectBtn").addEventListener("click", () => {
 });
 
 // ============================================================
-// COMMAND REFERENCE
+// REFERENCE DATA (Used by Handbook)
 // ============================================================
 const refData = [
   {
     cat: "⚙️ Setup & Config",
     items: [
-      {
-        cmd: 'git config --global user.name "Name"',
-        desc: "Set your name",
-        detail: "This appears in every commit. Run once after Git install.",
-        example: '$ git config --global user.name "Jane Doe"',
-      },
-      {
-        cmd: 'git config --global user.email "email"',
-        desc: "Set your email",
-        detail: "Use the email connected to GitHub for contribution tracking.",
-        example: '$ git config --global user.email "jane@example.com"',
-      },
-      {
-        cmd: "git config --list",
-        desc: "View all config",
-        detail: "Inspect current Git config values.",
-        example: "$ git config --list",
-      },
-    ],
+      { cmd: 'git config --global user.name "Name"', desc: "Set your name", detail: "This appears in every commit. Run once after Git install.", example: '$ git config --global user.name "Jane Doe"' },
+      { cmd: 'git config --global user.email "email"', desc: "Set your email", detail: "Use the email connected to GitHub for contribution tracking.", example: '$ git config --global user.email "jane@example.com"' },
+      { cmd: "git config --list", desc: "View all config", detail: "Inspect current Git config values.", example: "$ git config --list" }
+    ]
   },
   {
     cat: "📁 Repository",
     items: [
-      {
-        cmd: "git init",
-        desc: "Create new repository",
-        detail: "Initializes a new Git repository in current folder.",
-        example: "$ git init",
-      },
-      {
-        cmd: "git clone <url>",
-        desc: "Copy remote repository",
-        detail: "Downloads remote repository and full history.",
-        example: "$ git clone https://github.com/user/repo.git",
-      },
-      {
-        cmd: "git status",
-        desc: "Show working tree",
-        detail: "Most useful command for daily work.",
-        example: "$ git status",
-      },
-    ],
+      { cmd: "git init", desc: "Create new repository", detail: "Initializes a new Git repository in current folder.", example: "$ git init" },
+      { cmd: "git clone <url>", desc: "Copy remote repository", detail: "Downloads remote repository and full history.", example: "$ git clone https://github.com/user/repo.git" },
+      { cmd: "git status", desc: "Show working tree", detail: "Most useful command for daily work.", example: "$ git status" }
+    ]
   },
   {
     cat: "📝 Staging & Committing",
     items: [
-      {
-        cmd: "git add <file>",
-        desc: "Stage specific file",
-        detail: "Adds selected file to staging area.",
-        example: "$ git add README.md",
-      },
-      {
-        cmd: "git add .",
-        desc: "Stage all changes",
-        detail: "Stages all tracked and untracked files from current folder.",
-        example: "$ git add .",
-      },
-      {
-        cmd: 'git commit -m "msg"',
-        desc: "Commit staged changes",
-        detail: "Creates commit snapshot from staged files.",
-        example: '$ git commit -m "feat: add authentication"',
-      },
-      {
-        cmd: "git commit --amend",
-        desc: "Modify last commit",
-        detail: "Edit last commit message or include missed files.",
-        example: "$ git add forgotten.js\n$ git commit --amend",
-      },
-    ],
+      { cmd: "git add <file>", desc: "Stage specific file", detail: "Adds selected file to staging area.", example: "$ git add README.md" },
+      { cmd: "git add .", desc: "Stage all changes", detail: "Stages all tracked and untracked files from current folder.", example: "$ git add ." },
+      { cmd: 'git commit -m "msg"', desc: "Commit staged changes", detail: "Creates commit snapshot from staged files.", example: '$ git commit -m "feat: add authentication"' },
+      { cmd: "git commit --amend", desc: "Modify last commit", detail: "Edit last commit message or include missed files.", example: "$ git add forgotten.js\\n$ git commit --amend" }
+    ]
   },
   {
     cat: "🌿 Branching",
     items: [
-      {
-        cmd: "git branch",
-        desc: "List branches",
-        detail: "Shows local branches. Use -a for local + remote.",
-        example: "$ git branch -a",
-      },
-      {
-        cmd: "git checkout -b <name>",
-        desc: "Create and switch branch",
-        detail: "Shortcut to create and switch in one command.",
-        example: "$ git checkout -b feature/new-ui",
-      },
-      {
-        cmd: "git switch <branch>",
-        desc: "Switch branch (modern)",
-        detail: "Modern alternative to checkout for branch switching.",
-        example: "$ git switch main",
-      },
-      {
-        cmd: "git merge <branch>",
-        desc: "Merge into current branch",
-        detail: "Combines changes from another branch.",
-        example: "$ git merge feature/new-ui",
-      },
-    ],
+      { cmd: "git branch", desc: "List branches", detail: "Shows local branches. Use -a for local + remote.", example: "$ git branch -a" },
+      { cmd: "git checkout -b <name>", desc: "Create and switch branch", detail: "Shortcut to create and switch in one command.", example: "$ git checkout -b feature/new-ui" },
+      { cmd: "git switch <branch>", desc: "Switch branch (modern)", detail: "Modern alternative to checkout for branch switching.", example: "$ git switch main" },
+      { cmd: "git merge <branch>", desc: "Merge into current branch", detail: "Combines changes from another branch.", example: "$ git merge feature/new-ui" }
+    ]
   },
   {
     cat: "☁️ Remote",
     items: [
-      {
-        cmd: "git remote add origin <url>",
-        desc: "Add remote",
-        detail: "Connect local repository to remote GitHub URL.",
-        example: "$ git remote add origin https://github.com/user/repo.git",
-      },
-      {
-        cmd: "git push -u origin main",
-        desc: "First push and set upstream",
-        detail: "Sets tracking so future pushes can use plain `git push`.",
-        example: "$ git push -u origin main\n$ git push",
-      },
-      {
-        cmd: "git push --force-with-lease",
-        desc: "Safe force push",
-        detail:
-          "Use when your branch history changed (for example, after rebase). Safer than --force.",
-        example:
-          "$ git pull --rebase origin main\n$ git push --force-with-lease origin feature/my-branch",
-      },
-      {
-        cmd: "git pull --rebase",
-        desc: "Update branch cleanly",
-        detail: "Pull and replay your commits on top of remote updates.",
-        example: "$ git pull --rebase origin main",
-      },
-      {
-        cmd: "git fetch",
-        desc: "Download remote changes only",
-        detail: "Gets updates without merging. Safe for inspection.",
-        example: "$ git fetch origin",
-      },
-    ],
+      { cmd: "git remote add origin <url>", desc: "Add remote", detail: "Connect local repository to remote GitHub URL.", example: "$ git remote add origin https://github.com/user/repo.git" },
+      { cmd: "git push -u origin main", desc: "First push and set upstream", detail: "Sets tracking so future pushes can use plain `git push`.", example: "$ git push -u origin main\\n$ git push" },
+      { cmd: "git push --force-with-lease", desc: "Safe force push", detail: "Use when your branch history changed. Safer than --force.", example: "$ git pull --rebase origin main\\n$ git push --force-with-lease origin feature/my-branch" },
+      { cmd: "git pull --rebase", desc: "Update branch cleanly", detail: "Pull and replay your commits on top of remote updates.", example: "$ git pull --rebase origin main" },
+      { cmd: "git fetch", desc: "Download remote changes only", detail: "Gets updates without merging. Safe for inspection.", example: "$ git fetch origin" }
+    ]
   },
   {
     cat: "⏮️ Undo & Recovery",
     items: [
-      {
-        cmd: "git restore <file>",
-        desc: "Discard file changes",
-        detail: "Reverts file to last committed state.",
-        example: "$ git restore index.html",
-      },
-      {
-        cmd: "git reset HEAD <file>",
-        desc: "Unstage file",
-        detail: "Removes file from staging area.",
-        example: "$ git reset HEAD src/config.js",
-      },
-      {
-        cmd: "git revert <hash>",
-        desc: "Undo commit safely",
-        detail: "Creates new commit that reverses an existing one.",
-        example: "$ git revert abc1234",
-      },
-      {
-        cmd: "git reflog",
-        desc: "Recover lost commits",
-        detail: "Shows where HEAD moved so you can recover states.",
-        example: "$ git reflog",
-      },
-    ],
-  },
+      { cmd: "git restore <file>", desc: "Discard file changes", detail: "Reverts file to last committed state.", example: "$ git restore index.html" },
+      { cmd: "git reset HEAD <file>", desc: "Unstage file", detail: "Removes file from staging area.", example: "$ git reset HEAD src/config.js" },
+      { cmd: "git revert <hash>", desc: "Undo commit safely", detail: "Creates new commit that reverses an existing one.", example: "$ git revert abc1234" },
+      { cmd: "git reflog", desc: "Recover lost commits", detail: "Shows where HEAD moved so you can recover states.", example: "$ git reflog" }
+    ]
+  }
 ];
-
-function renderReference(filter = "") {
-  const container = document.getElementById("refCategories");
-  container.innerHTML = "";
-
-  refData.forEach((category) => {
-    const items = filter
-      ? category.items.filter(
-          (item) =>
-            item.cmd.toLowerCase().includes(filter) ||
-            item.desc.toLowerCase().includes(filter),
-        )
-      : category.items;
-
-    if (items.length === 0) return;
-
-    const catEl = document.createElement("div");
-    catEl.className = "ref-cat";
-    catEl.innerHTML = `
-      <div class="ref-cat-title">${category.cat}</div>
-      <div class="ref-items">
-        ${items
-          .map(
-            (item) => `
-          <div class="ref-item">
-            <div class="ref-item-header">
-              <span class="ref-cmd">${escapeHtml(item.cmd)}</span>
-              <span class="ref-desc">${escapeHtml(item.desc)}</span>
-              <span style="color:var(--text3);font-size:0.8rem">▶</span>
-            </div>
-            <div class="ref-item-body">
-              <div class="ref-detail">${escapeHtml(item.detail)}</div>
-              <div class="ref-example">${escapeHtml(item.example)}</div>
-            </div>
-          </div>
-        `,
-          )
-          .join("")}
-      </div>
-    `;
-
-    catEl.querySelectorAll(".ref-item").forEach((item) => {
-      item
-        .querySelector(".ref-item-header")
-        .addEventListener("click", () => item.classList.toggle("open"));
-    });
-
-    container.appendChild(catEl);
-  });
-}
-
-document.getElementById("refSearch").addEventListener("input", (e) => {
-  renderReference(e.target.value.toLowerCase().trim());
-});
-renderReference();
 
 // ============================================================
 // HANDBOOK (Book-style 155+ pages)
@@ -3230,31 +3232,69 @@ function getFilteredPositionInfo() {
 }
 
 function renderHandbookPage() {
-  const pageEl = document.getElementById("handbookPage");
+  const leftEl = document.getElementById("handbookPageLeft");
+  const rightEl = document.getElementById("handbookPageRight");
   const pageInfo = document.getElementById("handbookPageInfo");
-  if (!pageEl || !pageInfo) return;
+  if (!leftEl || !pageInfo) return;
 
-  const page = handbookPages[currentHandbookIndex];
-  if (!page) return;
-
-  pageEl.innerHTML = `
-    <h2 class="book-title">${escapeHtml(page.title)}</h2>
-    <div class="book-meta">
-      <span class="book-chip">Page ${page.page}</span>
-      <span class="book-chip">${escapeHtml(page.section)}</span>
-      <span class="book-chip">GitVora Book Style</span>
-    </div>
-    <div class="book-body">${formatBookBody(page.body)}</div>
-  `;
-
+  const leftPage = handbookPages[currentHandbookIndex];
+  
   const { position, total } = getFilteredPositionInfo();
-  pageInfo.textContent = `Page ${position + 1} / ${total} (Full book: ${handbookPages.length} pages)`;
+  let rightPage = null;
+  if (position + 1 < total) {
+     rightPage = handbookPages[handbookFilteredIndexes[position + 1]];
+  }
+
+  leftEl.classList.remove('turn-page-anim-left');
+  if (rightEl) rightEl.classList.remove('turn-page-anim-right');
+  
+  void leftEl.offsetWidth;
+
+  leftEl.classList.add('turn-page-anim-left');
+  if (rightEl) rightEl.classList.add('turn-page-anim-right');
+
+  leftEl.innerHTML = leftPage ? `
+    <h2 class="book-title">${escapeHtml(leftPage.title)}</h2>
+    <div class="book-meta">
+      <span class="book-chip">Page ${leftPage.page}</span>
+      <span class="book-chip">${escapeHtml(leftPage.section)}</span>
+    </div>
+    <div class="book-body">${formatBookBody(leftPage.body)}</div>
+  ` : '';
+
+  if (rightEl) {
+    rightEl.innerHTML = rightPage ? `
+      <h2 class="book-title">${escapeHtml(rightPage.title)}</h2>
+      <div class="book-meta">
+        <span class="book-chip">Page ${rightPage.page}</span>
+        <span class="book-chip">${escapeHtml(rightPage.section)}</span>
+      </div>
+      <div class="book-body">${formatBookBody(rightPage.body)}</div>
+    ` : '<div class="book-body" style="display:flex;align-items:center;justify-content:center;height:100%;color:#cabfa5;font-style:italic;">[Blank Page]</div>';
+  }
+
+  pageInfo.textContent = `Page ${position + 1}${rightPage ? '-' + (position + 2) : ''} / ${total} (Full book: ${handbookPages.length} pages)`;
 }
 
 function moveHandbookPage(delta) {
   const { position, total } = getFilteredPositionInfo();
   if (total === 0) return;
-  const nextPos = Math.max(0, Math.min(total - 1, position + delta));
+  
+  const isDesktop = window.innerWidth > 900;
+  const step = isDesktop ? delta * 2 : delta;
+  
+  let nextPos = position + step;
+  if (nextPos < 0) nextPos = 0;
+  if (nextPos >= total) nextPos = total - 1;
+  
+  // Ensure left page is an even index on desktop to maintain spread alignment (optional but cleaner)
+  if (isDesktop && nextPos % 2 !== 0 && delta > 0) {
+    nextPos -= 1;
+  } else if (isDesktop && nextPos % 2 !== 0 && delta < 0) {
+    nextPos += 1;
+  }
+  if (nextPos < 0) nextPos = 0;
+  
   currentHandbookIndex = handbookFilteredIndexes[nextPos];
   renderHandbookPage();
   renderHandbookToc();
@@ -3518,130 +3558,78 @@ Related pages:
 
 function localAssistantReply(userText) {
   const lower = userText.toLowerCase();
-  const mentionsPullRequest =
-    lower.includes("pull request") || lower.includes("create pr");
-  const asksPullGuide =
-    !mentionsPullRequest &&
-    (/\bpull\b/.test(lower) ||
-      lower.includes("latest changes") ||
-      lower.includes("sync from github") ||
-      lower.includes("update from github"));
-  const asksPushGuide = /\bpush\b/.test(lower);
-  const asksDailyUpdate =
-    lower.includes("project update") ||
-    lower.includes("after first push") ||
-    lower.includes("after once starting push") ||
-    lower.includes("pull and push");
 
   if (/\b(hi|hello|hey)\b/.test(lower)) {
-    return "Hi! I am GitVora AI. Ask me any Git/GitHub question and I will give you step-by-step commands.";
+    return "Hi! I am GitVora AI. Ask me any Git/GitHub question and I will scan my entire database (Handbook, Workflows, Commands, Errors) to give you the exact answer.";
   }
-
-  if (
-    (lower.includes("first push") ||
-      lower.includes("push my code first time")) &&
-    !asksDailyUpdate
-  ) {
-    return `Use this first-push flow:
-
-\`\`\`
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin <repo-url>
-git push -u origin main
-\`\`\`
-
-After that, use just:
-\`\`\`
-git push
-\`\`\``;
-  }
-
-  if (asksDailyUpdate || (asksPullGuide && asksPushGuide)) {
-    return getDailyUpdateReply();
-  }
-
-  if (asksPullGuide) {
-    return getPullGuideReply();
-  }
-
-  if (
-    lower.includes("--force") ||
-    lower.includes("force push") ||
-    lower.includes("force")
-  ) {
-    return `Use force push carefully:
-
-- Preferred: \`git push --force-with-lease\`
-- Avoid raw \`--force\` unless absolutely necessary
-- Use after rebase/squash on your own branch, not shared team branches
-
-Safe pattern:
-\`\`\`
-git pull --rebase origin main
-git push --force-with-lease origin <branch>
-\`\`\``;
-  }
-
-  if (
-    lower.includes("beginner") ||
-    lower.includes("expert") ||
-    lower.includes("roadmap") ||
-    lower.includes("learn git")
-  ) {
-    return getRoadmapReply();
-  }
-
-  if (
-    lower.includes("github procedure") ||
-    lower.includes("visual") ||
-    lower.includes("teach me git")
-  ) {
-    return `Open the **Visual Coach** panel (shortcut: key 4).
-
-It gives you:
-- visual roadmap from starter to expert
-- branch graph examples
-- terminal command trainer with hints
-- GitHub UI procedure checklist
-- mission ladder and .gitignore generator
-
-Tell me your level and I can recommend the exact track to start with.`;
-  }
-
-  const handbookReply = getHandbookReply(userText);
-  if (handbookReply) return handbookReply;
 
   const errorReply = getErrorHelpReply(userText);
   if (errorReply) return errorReply;
 
-  const cmdReply = getCommandHelpReply(userText);
-  if (cmdReply) return cmdReply;
+  let bestScore = 0;
+  let bestMatch = null;
 
-  if (lower.includes("merge conflict")) {
-    return `To resolve merge conflicts:
-
-\`\`\`
-git status
-# edit conflicted files and remove conflict markers
-git add <resolved-file>
-git commit -m "resolve merge conflict"
-\`\`\`
-
-If you want, paste conflict text and I will help resolve line-by-line.`;
+  const handbookMatch = searchHandbookPages(userText, 1)[0];
+  if (handbookMatch && handbookMatch.score > bestScore) {
+    bestScore = handbookMatch.score;
+    bestMatch = { type: 'handbook', data: handbookPages[handbookMatch.index] };
   }
 
-  return `I can help with:
-- push/pull problems
-- merge conflicts
-- branch and PR workflows
-- choosing correct Git commands
-- beginner-to-expert Git learning path
+  refData.flatMap(c => c.items).forEach(cmd => {
+    let score = 0;
+    const parts = cmd.cmd.toLowerCase().split(' ');
+    if (parts.length > 1 && lower.includes(parts[1])) score += 3;
+    if (lower.includes(cmd.desc.toLowerCase())) score += 5;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = { type: 'command', data: cmd };
+    }
+  });
 
-Share your exact goal or terminal error, and I will give precise next commands.`;
+  workflows.forEach(wf => {
+    let score = 0;
+    if (lower.includes(wf.title.toLowerCase())) score += 5;
+    if (lower.includes(wf.desc.toLowerCase())) score += 3;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = { type: 'workflow', data: wf };
+    }
+  });
+
+  if (bestScore >= 3 && bestMatch) {
+    if (bestMatch.type === 'handbook') {
+      return `Here is what I found in the **Git Handbook**:\n\n**${bestMatch.data.title}**\n${bestMatch.data.body.split("\n").slice(0, 6).join(" ").slice(0, 320)}...\n\n*Open the Git Handbook panel (shortcut 5) for more.*`;
+    } else if (bestMatch.type === 'command') {
+      return `I found this command reference:\n\n**${bestMatch.data.cmd}**\n${bestMatch.data.detail}\n\nExample:\n\`\`\`\n${bestMatch.data.example}\n\`\`\``;
+    } else if (bestMatch.type === 'workflow') {
+      return `Here is the step-by-step workflow for **${bestMatch.data.title}**:\n\n` + bestMatch.data.steps.map((s, i) => `${i + 1}. \`${s.cmd}\` — ${s.desc}`).join('\n');
+    }
+  }
+
+  const mentionsPullRequest = lower.includes("pull request") || lower.includes("create pr");
+  const asksPullGuide = !mentionsPullRequest && (/\bpull\b/.test(lower) || lower.includes("sync from github"));
+  const asksPushGuide = /\bpush\b/.test(lower);
+  const asksDailyUpdate = lower.includes("project update") || lower.includes("after first push");
+
+  if ((lower.includes("first push") || lower.includes("push my code first time")) && !asksDailyUpdate) {
+    return `Use this first-push flow:\n\n\`\`\`\ngit init\ngit add .\ngit commit -m "Initial commit"\ngit branch -M main\ngit remote add origin <repo-url>\ngit push -u origin main\n\`\`\`\n\nAfter that, use just:\n\`\`\`\ngit push\n\`\`\``;
+  }
+
+  if (asksDailyUpdate || (asksPullGuide && asksPushGuide)) return getDailyUpdateReply();
+  if (asksPullGuide) return getPullGuideReply();
+
+  if (lower.includes("force push") || lower.includes("--force")) {
+    return `Use force push carefully:\n\n- Preferred: \`git push --force-with-lease\`\n- Avoid raw \`--force\` unless absolutely necessary\n\nSafe pattern:\n\`\`\`\ngit pull --rebase origin main\ngit push --force-with-lease origin <branch>\n\`\`\``;
+  }
+
+  if (lower.includes("merge conflict")) {
+    return `To resolve merge conflicts:\n\n\`\`\`\ngit status\n# edit conflicted files and remove conflict markers\ngit add <resolved-file>\ngit commit -m "resolve merge conflict"\n\`\`\`\n\nIf you want, paste conflict text and I will help resolve line-by-line.`;
+  }
+
+  return `I searched my internal database but couldn't find an exact match for that. Try asking about a specific Git command, an error message you received, or a common workflow like "how to push" or "undo commit".`;
 }
+
+
 
 async function getAssistantResponse(userText) {
   // Optional external endpoint support.
@@ -3730,3 +3718,146 @@ window.sendQuickPrompt = (text) => {
   chatInput.value = text;
   sendMessage(text);
 };
+
+// ============================================================
+// PRO SETUP WIZARD
+// ============================================================
+const setupWizardForm = document.getElementById("setupWizardForm");
+const setupWizardGuide = document.getElementById("setupWizardGuide");
+const generateSetupBtn = document.getElementById("generateSetupBtn");
+const resetSetupBtn = document.getElementById("resetSetupBtn");
+const setupStepsContainer = document.getElementById("setupStepsContainer");
+
+function renderSetupWizard(userData) {
+  setupStepsContainer.innerHTML = "";
+  
+  const steps = [
+    {
+      title: "1. Install Git Step-by-Step",
+      content: userData.os === "windows" ? `
+        <p><strong>Step 1:</strong> Go to <a href="https://git-scm.com/downloads" target="_blank">git-scm.com/downloads</a> and click "Download for Windows".</p>
+        <p><strong>Step 2:</strong> Open the downloaded <code>.exe</code> file.</p>
+        <p><strong>Step 3:</strong> Keep clicking <strong>Next</strong>. It's perfectly safe to leave all the default options exactly as they are!</p>
+        <p><strong>Step 4:</strong> Once finished, open your Start menu and search for <strong>Git Bash</strong>. This is your new terminal.</p>
+      ` : userData.os === "mac" ? `
+        <p><strong>Step 1:</strong> Open your terminal (Cmd + Space, type "Terminal").</p>
+        <p><strong>Step 2:</strong> Type <code>git --version</code> and press Enter.</p>
+        <p><strong>Step 3:</strong> If it's not installed, a pop-up will ask you to install "Command Line Developer Tools". Click <strong>Install</strong>.</p>
+        <p><strong>Step 4:</strong> Alternatively, go to <a href="https://git-scm.com/downloads" target="_blank">git-scm.com/downloads</a> to get the installer.</p>
+      ` : `
+        <p><strong>Step 1:</strong> Open your terminal.</p>
+        <p><strong>Step 2:</strong> Update your packages: <code>sudo apt update</code></p>
+        <p><strong>Step 3:</strong> Install Git: <code>sudo apt install git</code></p>
+        <p><strong>Step 4:</strong> Verify installation: <code>git --version</code></p>
+      `
+    },
+    {
+      title: "2. Create Your GitHub Account",
+      content: `
+        <p>GitHub is the cloud platform where you will store your code. It is essential for every developer.</p>
+        <ul>
+          <li>Go to <a href="https://github.com" target="_blank">github.com</a> and click <strong>Sign up</strong>.</li>
+          <li>Enter your email: <strong>${userData.email || 'your email'}</strong></li>
+          <li>Create a strong password.</li>
+          <li>Choose a username (e.g., <strong>${userData.username || 'johndoe99'}</strong>). This will be public!</li>
+          <li>Solve the spiral galaxy puzzle to prove you are human.</li>
+          <li>Enter the code sent to your email to verify your account.</li>
+        </ul>
+      `
+    },
+    {
+      title: "3. Set Up a Professional Profile",
+      content: `
+        <p>A professional profile is crucial for getting hired. Here is how to stand out:</p>
+        <div class="er-fix">
+          <strong>1. Profile Picture:</strong> Upload a clear, friendly photo of your face (or a professional logo).<br><br>
+          <strong>2. Bio:</strong> Write a 1-sentence summary of what you do. E.g., "Frontend Developer specializing in React and UI/UX."<br><br>
+          <strong>3. The Secret Profile README:</strong> You can create a secret repository that acts as your portfolio homepage.
+          <ul>
+            <li>Create a new repository named exactly: <strong>${userData.username || 'username'}/${userData.username || 'username'}</strong></li>
+            <li>Check "Add a README file".</li>
+            <li>Edit this file using Markdown to add your skills, currently learning, and contact info!</li>
+          </ul>
+        </div>
+      `
+    },
+    {
+      title: "4. Create a Repository (The Options Explained)",
+      content: `
+        <p>When you click <strong>New Repository</strong>, you are faced with several confusing options. Here is exactly what to choose:</p>
+        <ul style="margin-top: 10px; line-height: 1.6;">
+          <li><strong>Repository Name:</strong> Use lowercase and dashes. (e.g., <code>ecommerce-website</code>).</li>
+          <li><strong>Description:</strong> Always add 1 sentence explaining what the project is.</li>
+          <li><strong>Public vs Private:</strong> 
+            <br>→ <em>Public:</em> Anyone on the internet can see it. Use this for portfolio projects!
+            <br>→ <em>Private:</em> Only you can see it. Use this for client work or projects with sensitive passwords.
+          </li>
+          <li><strong>Initialize with README:</strong> <strong>ALWAYS CHECK THIS.</strong> It acts as the front page/documentation for your project.</li>
+          <li><strong>Add .gitignore:</strong> This tells Git to IGNORE junk files or secret passwords. If you are coding in Python, select the Python template. If Node.js, select Node.</li>
+          <li><strong>Choose a License:</strong> This tells others what they can legally do with your code. Choose the <strong>MIT License</strong> if you want anyone to be able to use it freely.</li>
+        </ul>
+      `
+    },
+    {
+      title: "5. Link Git to GitHub (One Time Setup)",
+      content: `
+        <p>Now that Git is on your computer and your GitHub is set up, you need to introduce them. Open your terminal (or Git Bash) and run these exact commands:</p>
+        <div class="step-cmd-block" style="margin-top: 10px;">
+          <span class="step-cmd-text">git config --global user.name "${userData.name || 'Your Name'}"\ngit config --global user.email "${userData.email || 'you@email.com'}"</span>
+          <button class="copy-btn" data-cmd="git config --global user.name &quot;${userData.name || 'Your Name'}&quot;%0Agit config --global user.email &quot;${userData.email || 'you@email.com'}&quot;">Copy</button>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.85rem; color: var(--text3);">This ensures every time you save code, GitHub knows it was YOU who did it.</p>
+      `
+    }
+  ];
+
+  steps.forEach((step, i) => {
+    const card = document.createElement("div");
+    card.className = "step-card";
+    card.innerHTML = `
+      <div class="step-card-header">
+        <div class="step-num-badge">${i + 1}</div>
+        <div class="step-card-title">${step.title}</div>
+        <div class="step-card-done" title="Mark as done"></div>
+      </div>
+      <div class="step-card-body">
+        <div class="step-explanation">${step.content}</div>
+      </div>
+    `;
+    card.querySelector(".step-card-done").addEventListener("click", () => {
+      card.classList.toggle("done");
+    });
+    
+    // Add event listeners to any copy buttons inside the rich HTML content
+    card.querySelectorAll(".copy-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        copyText(decodeURIComponent(this.dataset.cmd), this);
+      });
+    });
+
+    setupStepsContainer.appendChild(card);
+  });
+}
+
+if (generateSetupBtn) {
+  generateSetupBtn.addEventListener("click", () => {
+    const userData = {
+      name: document.getElementById("setupName").value.trim(),
+      email: document.getElementById("setupEmail").value.trim(),
+      username: document.getElementById("setupUsername").value.trim(),
+      os: document.querySelector('input[name="setupOs"]:checked')?.value || "windows"
+    };
+    
+    setupWizardForm.style.display = "none";
+    setupWizardGuide.style.display = "block";
+    // skill-tree.js overrides renderSetupWizard; use whichever is loaded
+    renderSetupWizard(userData);
+  });
+}
+
+if (resetSetupBtn) {
+  resetSetupBtn.addEventListener("click", () => {
+    setupWizardGuide.style.display = "none";
+    setupWizardForm.style.display = "block";
+  });
+}

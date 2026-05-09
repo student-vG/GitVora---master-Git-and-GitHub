@@ -13,11 +13,11 @@ function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   const isLight = theme === "light";
   if (landingThemeBtn)
-    landingThemeBtn.textContent = isLight ? "🌙 Dark" : "☀️ Light";
+    landingThemeBtn.innerHTML = isLight ? '<i class="ph ph-moon"></i> Dark' : '<i class="ph ph-sun"></i> Light';
   if (landingThemeBtnMobile)
-    landingThemeBtnMobile.textContent = isLight
-      ? "🌙 Dark Mode"
-      : "☀️ Light Mode";
+    landingThemeBtnMobile.innerHTML = isLight
+      ? '<i class="ph ph-moon"></i> Dark Mode'
+      : '<i class="ph ph-sun"></i> Light Mode';
 }
 
 const savedTheme = localStorage.getItem(THEME_KEY) || "dark";

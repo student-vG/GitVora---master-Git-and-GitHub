@@ -3,7 +3,7 @@
 // Enables offline support and PWA functionality
 // ============================================================
 
-const CACHE_NAME = "gitvora-v7";
+const CACHE_NAME = "gitvora-v8";
 const urlsToCache = [
   "/",
   "/index.html",

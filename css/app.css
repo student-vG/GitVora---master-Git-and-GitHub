@@ -62,6 +62,17 @@ body.splash-active {
   overflow: hidden;
 }
 
+.app-bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ---- LAUNCH SPLASH ---- */
 .launch-splash {
   position: fixed;

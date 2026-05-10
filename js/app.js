@@ -3323,18 +3323,67 @@ function applyHandbookFilter(query) {
 }
 
 function initHandbook() {
-  if (!document.getElementById("panel-handbook")) return;
+  const panel = document.getElementById("panel-handbook");
+  if (!panel) return;
 
   const searchInput = document.getElementById("handbookSearch");
   const prevBtn = document.getElementById("handbookPrev");
   const nextBtn = document.getElementById("handbookNext");
+  const tocToggle = document.getElementById("handbookTocToggle");
+  const toc = document.getElementById("handbookToc");
+  const bookSpread = document.getElementById("bookSpread");
+  const zoneLeft = document.getElementById("turnZoneLeft");
+  const zoneRight = document.getElementById("turnZoneRight");
 
+  // Basic Button Controls
   prevBtn?.addEventListener("click", () => moveHandbookPage(-1));
   nextBtn?.addEventListener("click", () => moveHandbookPage(1));
 
+  // Turn Zones
+  zoneLeft?.addEventListener("click", () => moveHandbookPage(-1));
+  zoneRight?.addEventListener("click", () => moveHandbookPage(1));
+
+  // Mobile TOC Toggle
+  tocToggle?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toc?.classList.toggle("show-mobile");
+  });
+
+  // Close TOC when clicking outside or picking a page
+  document.addEventListener("click", () => {
+    toc?.classList.remove("show-mobile");
+  });
+  toc?.addEventListener("click", (e) => e.stopPropagation());
+
+  // Search
   searchInput?.addEventListener("input", () => {
     applyHandbookFilter(searchInput.value);
   });
+
+  // Touch / Swipe Logic
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  bookSpread?.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  bookSpread?.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        moveHandbookPage(-1); // Swipe Right -> Prev
+      } else {
+        moveHandbookPage(1);  // Swipe Left -> Next
+      }
+    }
+  }
 
   renderHandbookPage();
   renderHandbookToc();
